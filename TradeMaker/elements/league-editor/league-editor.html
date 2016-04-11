@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
+<dom-module id="league-editor">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            paper-checkbox {
+                -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+            }
+            paper-dialog {
+                width: 400px;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
+            <h2>Create a League</h2>
+            <paper-input id="league-name" label="league name" value="{{league.name}}" no-label-float></paper-input>
+            <paper-input id="league-url" label="league url" value="{{league.url}}" no-label-float></paper-input>
+            <paper-checkbox id="league-requires-login" checked="{{league.requires-login}}">
+                requires login</paper-checkbox>
+            <paper-input id="league-username" label="league username" value="{{league.username}}" 
+                disabled="{{!league.requires-login}}" no-label-float></paper-input>
+            <paper-input id="league-password" label="league password" value="{{league.password}}" 
+                disabled="{{!league.requires-login}}" no-label-float></paper-input>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm on-tap="_accept">Accept</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+    <script>
+        Polymer({
+            is: 'league-editor',
+            properties: {
+                mode: {
+                    type: String
+                },
+                league: {
+                    type: Object,
+                    notify: true,
+                    value: { name: null, url: null, selected: false }
+                }
+            },
+            showEditor: function() {
+                this.$['dialog'].open();
+            },
+            clearFields: function() {
+                this.$['league-name'].value = "";
+                this.$['league-url'].value = "";
+                this.$['league-requires-login'].checked = false;
+                this.$['league-username'].value = "";
+                this.$['league-password'].value = "";
+            },
+            _accept: function () {
+                this.fire('save-league', { league: this.league });
+            }
+        });
+    </script>
+</dom-module>

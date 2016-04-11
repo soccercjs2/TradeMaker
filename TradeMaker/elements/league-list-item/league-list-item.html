@@ -1,0 +1,60 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+
+<dom-module id="league-list-item">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            paper-card {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .title-text {
+                padding: 16px;
+                font-size: 24px;
+                margin: auto;
+            }
+            
+            paper-icon-button {
+                margin: auto;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <paper-card class="horizontal layout">
+            <div class="flex title-text" on-tap="_selectLeague">
+                <paper-ripple></paper-ripple>
+                {{league.name}}
+            </div>
+            <paper-icon-button icon="create" on-tap="_onShowEditor"></paper-icon-button>
+            <paper-icon-button icon="delete" on-tap="_onDelete"></paper-icon-button>
+        </paper-card>
+        <league-editor id="league-editor" on-add-league="_onAdd" league="[[league]]" mode="edit" on-save-league="_onEdit"></league-editor>
+    </template>
+    <script>
+        Polymer({
+            is: 'league-list-item',
+            properties: {
+                league: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            _onDelete: function() {
+                this.fire('delete-league', {league: this.league});
+            },
+            _onShowEditor: function() {
+                this.$['league-editor'].showEditor();
+            },
+            _onEdit: function(e) {
+                this.fire('edit-league', { league: e.detail.league });
+            },
+            _selectLeague: function() {
+                page.show('/league/' + this.league.__firebaseKey__);
+            }
+        });
+    </script>
+</dom-module>

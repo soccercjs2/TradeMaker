@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+
+<dom-module id="trade-maker-data">
+    <template>
+        <firebase-collection data="{{leagues}}"
+            location="{{userLocation}}"></firebase-collection>
+    </template>
+    <script>
+        Polymer({
+            is: 'trade-maker-data',
+            properties: {
+                leagues: {
+                    type: Array,
+                    notify: true
+                },
+                user: {
+                    observer: '_userChanged'
+                },
+                userLocation: {
+                    type: String
+                }
+            },
+            // Setup user ref in firebase if auth succeeds
+            _userChanged: function(user) {
+                if (user) {
+                    this.userLocation = [this.location, 'users', this.user.uid].join('/');
+                    //this.userLocation = 'asdf';
+                }
+            },
+            _selectedChanged: function(leagues) {
+                if (leagues) {
+                    this.selectedLeague = leagues.filter( function(league){return league.selected;} );
+                }
+            }
+        });
+    </script>
+</dom-module>

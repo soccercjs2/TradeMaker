@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../league-list-view/league-list-view.html">
+<link rel="import" href="../league-view/league-view.html">
+
+<dom-module id="leagues-view">
+    <template>
+        <template is="dom-if" if="{{!hasSelectedLeague}}">
+            <league-list-view leagues="{{leagues}}" on-show-league="_selectLeague"></league-list-view>
+        </template>
+        
+        <template is="dom-if" if="{{hasSelectedLeague}}">
+            <league-view league="[[selectedLeague]]"></league-view>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            is: 'leagues-view',
+            properties: {
+                leagues: {
+                    type: Array,
+                    notify: true
+                },
+                selectedLeague: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            ready: function() {
+                this.hasSelectedLeague = false;  
+            },
+            _selectLeague: function(e) {
+                this.hasSelectedLeague = true;
+                this.selectedLeague = e.detail.league;
+            }
+        });
+    </script>
+</dom-module>

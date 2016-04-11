@@ -1,0 +1,53 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../league-list-item/league-list-item.html">
+<link rel="import" href="../league-editor/league-editor.html">
+
+<dom-module id="league-list-view">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            paper-fab {
+                position: fixed;
+                right: 25px;
+                bottom: 25px;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <section id="league-list">
+            <template class="vertical layout" is="dom-repeat" items="{{leagues}}" as="league">
+                <league-list-item league="{{league}}" on-edit-league="_onEdit" on-delete-league="_onDelete"></league-list-item>
+            </template>
+            <paper-fab icon="add" on-tap="_onShowCreate"></paper-fab>
+            <league-editor id="league-creator" on-save-league="_onAdd"></league-editor>
+        </section>
+        
+    </template>
+    <script>
+        Polymer({
+            is: 'league-list-view',
+            properties: {
+                leagues: {
+                    type: Array,
+                    notify: true
+                }
+            },
+            _onShowCreate: function() {
+                this.$['league-creator'].clearFields();
+                this.$['league-creator'].showEditor();
+            },
+            _onAdd: function(e) {
+                this.push('leagues', e.detail.league);
+            },
+            _onEdit: function(e) {
+                this.set('leagues.#' + (e.model.index + 1), e.detail.league)
+            },
+            _onDelete: function(e) {
+                this.arrayDelete('leagues', e.detail.league)
+            }
+        });
+    </script>
+</dom-module>
