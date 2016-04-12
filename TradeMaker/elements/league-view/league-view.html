@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-request.html">
+
+<dom-module id="league-view">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            
+        </style>
+        <!-- local DOM goes here -->
+        <!--<iron-ajax
+            id="ajax"
+            url="../league-data.php"
+            handle-as="json"
+            on-response="hresponse"
+            method="GET">
+        </iron-ajax>-->
+        
+        <h2>{{league.name}}</h2>
+        
+    </template>
+    <script>
+        Polymer({
+            is: 'league-view',
+            properties: {
+                leagueid: {
+                    type: String,
+                    notify: true
+                },
+                leagues: {
+                    type: Array,
+                    readonly: true
+                },
+                league: {
+                    type: Object,
+                    notify: true,
+                    computed: '_getFirebaseLeague(leagues, leagueid)'
+                }
+            },
+            _getFirebaseLeague: function (leagues, leagueid) {
+                var filteredLeagues = leagues.filter( function(league){return (league.__firebaseKey__ == leagueid);} );
+                var leagueFirebase;
+                
+                if (filteredLeagues) {
+                    if (filteredLeagues.length == 1) {
+                        leagueFirebase = filteredLeagues[0];
+                        //this.$['ajax'].generateRequest();
+                    }
+                }
+
+                return leagueFirebase;
+            }
+        });
+    </script>
+</dom-module>

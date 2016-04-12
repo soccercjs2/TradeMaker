@@ -56,27 +56,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page('/about', function() {
       app.route = 'about';
     });
-    
-    page('/old-home', function() {
-      app.route = 'old-home';
-    });
 
-    page('/users', function() {
-      app.route = 'users';
+    page('/league/:name', function (data) {
+        app.route = 'league';
+        app.params = data.params;
     });
     
-    page('/league', function() {
-      app.route = 'league';
-    });
+    //page('/old-home', function() {
+    //  app.route = 'old-home';
+    //});
+
+    //page('/users', function() {
+    //  app.route = 'users';
+    //});
     
-    page('/league/:name', function(data) {
-      app.route = 'user-info';
-      app.params = data.params;
-    });
+    //page('/league', function() {
+    //  app.route = 'league';
+    //});
     
-    page('/books', function () {
-        app.route = 'books';
-    });
+    //page('/books', function () {
+    //    app.route = 'books';
+    //});
 
     // 404
     page('*', function() {

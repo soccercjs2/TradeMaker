@@ -1179,6 +1179,7 @@
     <Content Include="elements\league-editor\league-editor.html" />
     <Content Include="elements\league-list-item\league-list-item.html" />
     <Content Include="elements\league-list-view\league-list-view.html" />
+    <Content Include="elements\league-view\league-view.html" />
     <Content Include="elements\leagues-view\leagues-view.html" />
     <Content Include="elements\routing.html" />
     <Content Include="elements\trade-maker-auth\trade-maker-auth.html" />

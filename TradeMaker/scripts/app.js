@@ -62,13 +62,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var scaleBottom = 1 - yRatio;
 
     // Move/translate middleContainer
-    Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
+    //Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
 
     // Scale bottomContainer and bottom sub title to nothing and back
-    Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
+    //Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
 
     // Scale middleContainer appName
-    Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
+    //Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   });
 
   // Scroll page to top and expand header
