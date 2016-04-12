@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMaker", "TradeMaker\TradeMaker.csproj", "{A619B439-2ABC-4F56-8447-BD656D0FE361}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMakerScraper", "TradeMakerScraper\TradeMakerScraper.csproj", "{BDE40370-1BC9-4DCC-B8A6-84C75D8595A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMakerScraper", "TradeMakerScraper\TradeMakerScraper.csproj", "{B72E2F00-CA54-4F8B-A70D-659B75C9F499}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{A619B439-2ABC-4F56-8447-BD656D0FE361}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A619B439-2ABC-4F56-8447-BD656D0FE361}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A619B439-2ABC-4F56-8447-BD656D0FE361}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDE40370-1BC9-4DCC-B8A6-84C75D8595A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDE40370-1BC9-4DCC-B8A6-84C75D8595A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDE40370-1BC9-4DCC-B8A6-84C75D8595A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDE40370-1BC9-4DCC-B8A6-84C75D8595A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B72E2F00-CA54-4F8B-A70D-659B75C9F499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B72E2F00-CA54-4F8B-A70D-659B75C9F499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B72E2F00-CA54-4F8B-A70D-659B75C9F499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B72E2F00-CA54-4F8B-A70D-659B75C9F499}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
