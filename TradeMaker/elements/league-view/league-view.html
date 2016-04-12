@@ -9,13 +9,13 @@
             
         </style>
         <!-- local DOM goes here -->
-        <!--<iron-ajax
+        <iron-ajax
             id="ajax"
-            url="../league-data.php"
+            url="https://trademakerscraper.azurewebsites.net/api/scraper"
             handle-as="json"
-            on-response="hresponse"
+            on-response="_hresponse"
             method="GET">
-        </iron-ajax>-->
+        </iron-ajax>
         
         <h2>{{league.name}}</h2>
         
@@ -45,11 +45,14 @@
                 if (filteredLeagues) {
                     if (filteredLeagues.length == 1) {
                         leagueFirebase = filteredLeagues[0];
-                        //this.$['ajax'].generateRequest();
+                        this.$['ajax'].generateRequest();
                     }
                 }
 
                 return leagueFirebase;
+            },
+            _hresponse: function (e) {
+                console.log(e.detail.response);
             }
         });
     </script>
