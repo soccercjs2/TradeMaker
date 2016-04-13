@@ -8,6 +8,12 @@ namespace TradeMakerScraper.Models
     public class LeagueData
     {
         public List<Team> Teams { get; set; }
-        public Team Waivers { get; set; }
+        public List<Player> Waivers { get; set; }
+
+        public LeagueData()
+        {
+            Teams = new List<Team>();
+            Waivers = new List<Player>();
+        }
     }
 }
