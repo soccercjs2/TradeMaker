@@ -10,14 +10,25 @@
         </style>
         <!-- local DOM goes here -->
         <iron-ajax
-            id="ajax"
-            url="https://trademakerscraper.azurewebsites.net/api/scraper"
+            id="projectionAjax"
+            url="http://localhost:36880/api/projectionscraper"
             handle-as="json"
-            on-response="_hresponse"
+            on-response="_projectionResponse"
             method="GET">
+        </iron-ajax>
+
+        <iron-ajax 
+            id="leagueAjax"
+            url="http://localhost:36880/api/leaguescraper"
+            handle-as="json"
+            content-type="application/json"
+            on-response="_leagueResponse"
+            method="POST">
         </iron-ajax>
         
         <h2>{{league.name}}</h2>
+
+        {{projections}}
         
     </template>
     <script>
@@ -45,15 +56,21 @@
                 if (filteredLeagues) {
                     if (filteredLeagues.length == 1) {
                         leagueFirebase = filteredLeagues[0];
-                        this.$['ajax'].generateRequest();
+                        this.$['projectionAjax'].generateRequest();
                     }
                 }
 
                 return leagueFirebase;
             },
-            _hresponse: function (e) {
+            _projectionResponse: function (e) {
+                this.$['leagueAjax'].body = e.detail.response;
+                this.$['leagueAjax'].generateRequest();
+            },
+            _leagueResponse: function (e) {
                 console.log(e.detail.response);
             }
         });
+
+
     </script>
 </dom-module>
