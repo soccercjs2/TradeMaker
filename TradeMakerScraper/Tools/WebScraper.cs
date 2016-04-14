@@ -10,59 +10,63 @@ namespace TradeMakerScraper.Tools
 {
     public class WebScraper
     {
-        public string Url { get; set; }
-        public string LoginUrl { get; set;}
-        public string PostData { get; set; }
+        private CookieContainer Cookies { get; set; }
 
-        public WebScraper(string url): this(url, null, null) { }
+        public WebScraper(): this(null, null) { }
 
-        public WebScraper(string url, string loginUrl, string postData)
+        public WebScraper(string loginUrl, string postData)
         {
-            Url = url;
-            LoginUrl = loginUrl;
-            PostData = postData;
+            if (loginUrl != null) { Cookies = Login(loginUrl, postData); }
         }
 
-        public HtmlDocument Scrape()
+        private CookieContainer Login(string loginUrl, string postData)
         {
             HttpWebRequest webRequest;
-            StreamReader responseReader;
-            string responseData;
             CookieContainer cookies = new CookieContainer();
             StreamWriter requestWriter;
-
-            HtmlDocument document = null;
 
             try
             {
                 //get login  page with cookies
-                webRequest = (HttpWebRequest)WebRequest.Create(Url);
+                webRequest = (HttpWebRequest)WebRequest.Create(loginUrl);
                 webRequest.CookieContainer = cookies;
 
                 //recieve non-authenticated cookie
                 webRequest.GetResponse().Close();
 
                 //post form  data to page
-                webRequest = (HttpWebRequest)WebRequest.Create(LoginUrl);
+                webRequest = (HttpWebRequest)WebRequest.Create(loginUrl);
                 webRequest.Method = WebRequestMethods.Http.Post;
                 webRequest.ContentType = "application/x-www-form-urlencoded";
                 webRequest.CookieContainer = cookies;
 
-                if (LoginUrl != null)
-                {
-                    webRequest.ContentLength = PostData.Length;
+                webRequest.ContentLength = postData.Length;
 
-                    requestWriter = new StreamWriter(webRequest.GetRequestStream());
-                    requestWriter.Write(PostData);
-                    requestWriter.Close();
-                }
+                requestWriter = new StreamWriter(webRequest.GetRequestStream());
+                requestWriter.Write(postData);
+                requestWriter.Close();
 
                 //recieve authenticated cookie
                 webRequest.GetResponse().Close();
+            }
+            catch { }
 
+            return cookies;
+        }
+
+        public HtmlDocument Scrape(string url)
+        {
+            HttpWebRequest webRequest;
+            StreamReader responseReader;
+            string responseData;
+
+            HtmlDocument document = null;
+
+            try
+            {
                 //now we get the authenticated page
-                webRequest = (HttpWebRequest)WebRequest.Create(Url);
-                webRequest.CookieContainer = cookies;
+                webRequest = (HttpWebRequest)WebRequest.Create(url);
+                webRequest.CookieContainer = Cookies;
                 responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
                 responseData = responseReader.ReadToEnd();
                 responseReader.Close();

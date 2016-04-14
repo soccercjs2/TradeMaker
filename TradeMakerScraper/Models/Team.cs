@@ -9,6 +9,7 @@ namespace TradeMakerScraper.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Url { get; set; }
         public List<Player> Players { get; set; }
 
         public Team()
@@ -16,10 +17,11 @@ namespace TradeMakerScraper.Models
             Players = new List<Player>();
         }
 
-        public Team(int id, string name)
+        public Team(int id, string name, string url)
         {
             Id = id;
             Name = name;
+            Url = url;
             Players = new List<Player>();
         }
     }

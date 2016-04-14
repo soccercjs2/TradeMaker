@@ -11,7 +11,8 @@
         <!-- local DOM goes here -->
         <iron-ajax
             id="projectionAjax"
-            url="http://localhost:36880/api/projectionscraper"
+            <!--url="http://localhost:36880/api/projectionscraper"-->
+            url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"
             handle-as="json"
             on-response="_projectionResponse"
             method="GET">
@@ -19,7 +20,8 @@
 
         <iron-ajax 
             id="leagueAjax"
-            url="http://localhost:36880/api/leaguescraper"
+            <!--url="http://localhost:36880/api/leaguescraper"-->
+            url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"
             handle-as="json"
             content-type="application/json"
             on-response="_leagueResponse"
@@ -61,9 +63,6 @@
                 return leagueFirebase;
             },
             _projectionResponse: function (e) {
-                console.log(e.detail.response);
-                console.log(this.league);
-
                 this.$['leagueAjax'].body = { projections: e.detail.response, league: this.league };
                 this.$['leagueAjax'].generateRequest();
             },
@@ -71,7 +70,5 @@
                 console.log(e.detail.response);
             }
         });
-
-
     </script>
 </dom-module>

@@ -15,54 +15,39 @@ namespace TradeMakerScraper.Controllers
 {
     public class LeagueScraperController : ApiController
     {
-        // GET api/leaguescraper
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public LeagueData Get()
+        public LeagueData Post(LeagueScraperPackage package)
         {
             LeagueData leagueData = new LeagueData();
+            WebScraper scraper = null;
+            IHostParser parser = null;
 
-            Team broncos = new Team(1, "Broncos");
-            Team seahawks = new Team(2, "Seahawks");
+            //determine which parser to use based on url
+            if (package.League.Url.Contains("www.fleaflicker.com")) { parser = new FleaflickerLeagueParser(); }
+            else
+            { 
+                //throw exceptions saying league host not supported
+            }
 
-            leagueData.Teams.Add(broncos);
-            leagueData.Teams.Add(seahawks);
-
-            Player anderson = new Player(1, "C.J. Anderson", "DEN", "RB");
-            Player sanchez = new Player(2, "Mark Sanchez", "DEN", "QB");
-            Player sanders = new Player(3, "Emanuel Sanders", "DEN", "WR");
-
-            Player lynch = new Player(4, "Marshawn Lynch", "SEA", "RB");
-            Player wilson = new Player(5, "Russel Wilson", "SEA", "QB");
-            Player baldwin = new Player(6, "Doug Baldwin", "SEA", "WR");
-
-            broncos.Players.Add(anderson);
-            broncos.Players.Add(sanchez);
-            broncos.Players.Add(sanders);
-
-            seahawks.Players.Add(lynch);
-            seahawks.Players.Add(wilson);
-            seahawks.Players.Add(baldwin);
-
-            return leagueData;
-        }
-
-        [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public string Post(LeagueScraperPackage package)
-        {
-            WebScraper scraper;
-
+            //load web scraper based on whether a login is required
             if (package.League.RequiresLogin)
             {
-                scraper = new WebScraper(package.League.Url, null, null);
+                string loginUrl = parser.GetLoginUrl();
+                string postData = parser.GetPostData(package.League.Username, package.League.Password);
+                scraper = new WebScraper(loginUrl, postData);
             }
-            else
+            else { scraper = new WebScraper(); }
+
+            //parse league page to create teams in league data
+            parser.ParseLeague(scraper.Scrape(package.League.Url), ref leagueData);
+
+            //scrape each team and parse into league data
+            foreach (Team team in leagueData.Teams)
             {
-                scraper = new WebScraper(package.League.Url);
+                parser.ParseTeam(scraper.Scrape(team.Url), team, package.Projections);
             }
 
-            if (package.League.Url.Contains("www.fleaflicker.com")) { FleaflickerLeagueParser parser = new FleaflickerLeagueParser(scraper.Scrape()); }
-
-            return "asdf";
+            return leagueData;
         }
     }
 }
