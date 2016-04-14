@@ -18,13 +18,13 @@
         <!-- local DOM goes here -->
         <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
             <h2>Create a League</h2>
-            <paper-input id="league-name" label="league name" value="{{league.name}}" no-label-float></paper-input>
-            <paper-input id="league-url" label="league url" value="{{league.url}}" no-label-float></paper-input>
-            <paper-checkbox id="league-requires-login" checked="{{league.requires-login}}">
+            <paper-input id="league-name" label="league name" value="{{league.Name}}" no-label-float></paper-input>
+            <paper-input id="league-url" label="league url" value="{{league.Url}}" no-label-float></paper-input>
+            <paper-checkbox id="league-requires-login" checked="{{league.RequiresLogin}}">
                 requires login</paper-checkbox>
-            <paper-input id="league-username" label="league username" value="{{league.username}}" 
+            <paper-input id="league-username" label="league username" value="{{league.Username}}" 
                 disabled="{{!league.requires-login}}" no-label-float></paper-input>
-            <paper-input id="league-password" label="league password" value="{{league.password}}" 
+            <paper-input id="league-password" label="league password" value="{{league.Password}}" 
                 disabled="{{!league.requires-login}}" no-label-float></paper-input>
             <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
@@ -42,7 +42,7 @@
                 league: {
                     type: Object,
                     notify: true,
-                    value: { name: null, url: null, selected: false }
+                    value: { Name: null, Url: null, selected: false }
                 }
             },
             showEditor: function() {

@@ -26,9 +26,7 @@
             method="POST">
         </iron-ajax>
         
-        <h2>{{league.name}}</h2>
-
-        {{projections}}
+        <div class="title-text" style="font-size: 24px;">{{league.Name}}</div>
         
     </template>
     <script>
@@ -63,7 +61,10 @@
                 return leagueFirebase;
             },
             _projectionResponse: function (e) {
-                this.$['leagueAjax'].body = e.detail.response;
+                console.log(e.detail.response);
+                console.log(this.league);
+
+                this.$['leagueAjax'].body = { projections: e.detail.response, league: this.league };
                 this.$['leagueAjax'].generateRequest();
             },
             _leagueResponse: function (e) {

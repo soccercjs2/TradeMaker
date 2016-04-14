@@ -1755,7 +1755,6 @@
     <Content Include="bower_components\platinum-sw\test\platinum-sw-cache\cache-config.json" />
     <Content Include="bower_components\polymer\.bower.json" />
     <Content Include="bower_components\polymer\bower.json" />
-    <Content Include="bower_components\polymer\build.log" />
     <Content Include="bower_components\prism-element\.bower.json" />
     <Content Include="bower_components\prism-element\bower.json" />
     <Content Include="bower_components\prism-element\CONTRIBUTING.md" />
@@ -2633,11 +2632,11 @@
     <Content Include="bower_components\web-component-tester\browser.js.map" />
     <Content Include="bower_components\webcomponentsjs\.bower.json" />
     <Content Include="bower_components\webcomponentsjs\bower.json" />
-    <Content Include="bower_components\webcomponentsjs\build.log" />
     <Content Include="bower_components\webcomponentsjs\package.json" />
     <Content Include="bower_components\webcomponentsjs\README.md" />
     <Content Include="cache-config.json" />
     <Content Include="manifest.json" />
+    <None Include="Properties\PublishProfiles\TradeMaker %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\TradeMaker.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

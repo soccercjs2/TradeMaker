@@ -32,7 +32,7 @@ namespace TradeMakerScraper.Controllers
             html = File.ReadAllText(path);
 
             //create html object and load html into it
-            HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
+            HtmlDocument document = new HtmlDocument();
             document.LoadHtml(html);
 
             //get projection-data table from html

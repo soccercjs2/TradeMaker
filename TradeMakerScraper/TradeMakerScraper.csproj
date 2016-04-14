@@ -138,18 +138,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HostParsers\FleaflickerLeagueParser.cs" />
     <Compile Include="Models\League.cs" />
     <Compile Include="Models\LeagueData.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Projections.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\LeagueScraperPackage.cs" />
     <Compile Include="Tools\NumberFireParser.cs" />
+    <Compile Include="Tools\WebScraper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Html\projections_files\3da06e65a6" />
     <Content Include="Html\projections_files\d" />
+    <None Include="Properties\PublishProfiles\TradeMakerScraper %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\TradeMakerScraper.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

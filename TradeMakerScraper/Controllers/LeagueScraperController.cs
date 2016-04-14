@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +7,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using TradeMakerScraper.HostParsers;
 using TradeMakerScraper.Models;
+using TradeMakerScraper.Tools;
 
 namespace TradeMakerScraper.Controllers
 {
@@ -44,66 +47,20 @@ namespace TradeMakerScraper.Controllers
         }
 
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public string Post(Projections projections)
+        public string Post(LeagueScraperPackage package)
         {
-            HttpWebRequest webRequest;
-            StreamReader responseReader;
-            string responseData;
-            CookieContainer cookies = new CookieContainer();
-            StreamWriter requestWriter;
+            WebScraper scraper;
 
-            //string postData = string.Format(null, team.League.UserName, team.League.Password);
-
-            try
+            if (package.League.RequiresLogin)
             {
-                //get login  page with cookies
-                webRequest = (HttpWebRequest)WebRequest.Create(team.League.LeagueHost.LoginUrl);
-                webRequest.CookieContainer = cookies;
-
-                //recieve non-authenticated cookie
-                webRequest.GetResponse().Close();
-
-                //post form  data to page
-                webRequest = (HttpWebRequest)WebRequest.Create(team.League.LeagueHost.LoginUrl);
-                webRequest.Method = WebRequestMethods.Http.Post;
-                webRequest.ContentType = "application/x-www-form-urlencoded";
-                webRequest.CookieContainer = cookies;
-                webRequest.ContentLength = postData.Length;
-
-                requestWriter = new StreamWriter(webRequest.GetRequestStream());
-                requestWriter.Write(postData);
-                requestWriter.Close();
-
-                //recieve authenticated cookie
-                webRequest.GetResponse().Close();
-
-                //now we get the authenticated page
-                webRequest = (HttpWebRequest)WebRequest.Create(team.Url);
-                webRequest.CookieContainer = cookies;
-                responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
-                responseData = responseReader.ReadToEnd();
-                responseReader.Close();
-
-                //load html into htmlagilitypack
-                HtmlAgilityPack.HtmlDocument document = new HtmlAgilityPack.HtmlDocument();
-                document.LoadHtml(responseData);
-
-                HtmlNode table = document.GetElementbyId(League.LeagueHost.StarterTableName);
-                foreach (Player player in Players)
-                {
-                    if (table.InnerHtml.ToLower().Contains(player.Name.ToLower()) && table.InnerHtml.ToLower().Contains(player.Position.ToLower()) &&
-                            (table.InnerHtml.ToLower().Contains(player.NflTeam.ToLower()) || table.InnerHtml.ToLower().Contains(player.NflAlternateTeam.ToLower())))
-                    {
-                        try
-                        {
-                            player.TeamId = team.TeamId;
-                            //db.SaveChanges();
-                        }
-                        catch (Exception e) { }
-                    }
-                }
+                scraper = new WebScraper(package.League.Url, null, null);
             }
-            catch { }
+            else
+            {
+                scraper = new WebScraper(package.League.Url);
+            }
+
+            if (package.League.Url.Contains("www.fleaflicker.com")) { FleaflickerLeagueParser parser = new FleaflickerLeagueParser(scraper.Scrape()); }
 
             return "asdf";
         }
