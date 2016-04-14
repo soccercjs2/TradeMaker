@@ -1202,6 +1202,7 @@
     <Content Include="elements\trade-maker-auth\trade-maker-auth.html" />
     <Content Include="elements\trade-maker-data\trade-maker-data.html" />
     <Content Include="favicon.ico" />
+    <Content Include="images\ring.gif" />
     <Content Include="images\touch\apple-touch-icon.png" />
     <Content Include="images\touch\chrome-splashscreen-icon-384x384.png" />
     <Content Include="images\touch\chrome-touch-icon-192x192.png" />

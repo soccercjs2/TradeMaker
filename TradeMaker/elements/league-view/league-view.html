@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-request.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
 <dom-module id="league-view">
     <template>
@@ -9,24 +10,31 @@
             
         </style>
         <!-- local DOM goes here -->
+        <!--url="http://localhost:36880/api/projectionscraper"-->
+        <!--url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"-->
         <iron-ajax
             id="projectionAjax"
-            <!--url="http://localhost:36880/api/projectionscraper"-->
-            url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"
+            url="http://localhost:36880/api/projectionscraper"
             handle-as="json"
             on-response="_projectionResponse"
             method="GET">
         </iron-ajax>
 
+        <!--url="http://localhost:36880/api/leaguescraper"-->
+        <!--url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"-->
         <iron-ajax 
             id="leagueAjax"
-            <!--url="http://localhost:36880/api/leaguescraper"-->
-            url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"
+            url="http://localhost:36880/api/leaguescraper"
             handle-as="json"
             content-type="application/json"
             on-response="_leagueResponse"
             method="POST">
         </iron-ajax>
+
+        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
+            <h3>Loading Numberfire projections and league data...</h3>
+
+        </paper-dialog>
         
         <div class="title-text" style="font-size: 24px;">{{league.Name}}</div>
         
@@ -56,6 +64,7 @@
                 if (filteredLeagues) {
                     if (filteredLeagues.length == 1) {
                         leagueFirebase = filteredLeagues[0];
+                        this.$['dialog'].open();
                         this.$['projectionAjax'].generateRequest();
                     }
                 }
@@ -67,6 +76,7 @@
                 this.$['leagueAjax'].generateRequest();
             },
             _leagueResponse: function (e) {
+                this.$['dialog'].close();
                 console.log(e.detail.response);
             }
         });
