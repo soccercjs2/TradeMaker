@@ -52,7 +52,7 @@
             _onEdit: function(e) {
                 this.fire('edit-league', { league: e.detail.league });
             },
-            _selectLeague: function() {
+            _selectLeague: function () {
                 page.show('/league/' + this.league.__firebaseKey__);
             }
         });

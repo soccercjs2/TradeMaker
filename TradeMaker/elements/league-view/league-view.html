@@ -3,12 +3,15 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-request.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../elements/trade-filter/trade-filter.html">
 
 <dom-module id="league-view">
     <template>
         <style>
             /* local DOM styles go here */
-            
+            .margined {
+                margin: 5px;
+            }
         </style>
         <!-- local DOM goes here -->
         <!--url="http://localhost:36880/api/projectionscraper"-->
@@ -32,12 +35,17 @@
             method="POST">
         </iron-ajax>
 
-        <paper-dialog id="dialog" class="center vertical" modal autoFitOnAttach>
+        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
             <h3>Loading Numberfire projections and league data...</h3>
             <center><img src="../../images/ring.gif" /></center>
         </paper-dialog>
         
-        <div class="title-text" style="font-size: 24px;">{{league.Name}}</div>
+        <div class="title-text margined" style="font-size: 24px;">{{league.Name}}</div>
+        
+        <template is="dom-if" if="[[leagueData]]">
+            <div class="block margined">Your team: <trade-filter id="myTeamFilter" league-data="[[leagueData]]" primary></trade-filter></div>
+            <div class="block margined">Trade partner: <trade-filter id="theirTeamFilter" league-data="[[leagueData]]"></trade-filter></div>
+        </template>
         
     </template>
     <script>
@@ -56,6 +64,10 @@
                     type: Object,
                     notify: true,
                     computed: '_getFirebaseLeague(leagues, leagueid)'
+                },
+                leagueData: {
+                    type: Object,
+                    notify: true
                 }
             },
             _getFirebaseLeague: function (leagues, leagueid) {
@@ -78,7 +90,8 @@
             },
             _leagueResponse: function (e) {
                 this.$['dialog'].close();
-                console.log(e.detail.response);
+                this.dataLoaded = true;
+                this.leagueData = e.detail.response;
             }
         });
     </script>

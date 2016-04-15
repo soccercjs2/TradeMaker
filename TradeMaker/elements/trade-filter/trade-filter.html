@@ -1,0 +1,81 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+
+<dom-module id="trade-filter">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            .white {
+                background-color: white;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <paper-button id="button" class="white" raised on-tap="_openDialog"></paper-button>
+
+        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
+            <paper-dropdown-menu id="teamDropdown" label="Select a Team">
+                <paper-listbox id="teamList" class="dropdown-content" selected="{{selection}}" on-iron-select="_select">
+                    <template is="dom-repeat" items="{{leagueData.Teams}}" as="team">
+                        <paper-item value="{{team.Id}}">{{team.Name}}</paper-item>
+                    </template>
+                </paper-listbox>
+            </paper-dropdown-menu>
+
+            <template is="dom-if" if="{{selectedTeam}}">
+                <template is="dom-repeat" items="{{selectedTeam.Players}}" as="player">
+                    <p>{{player.Name}}</p>
+                </template>
+            </template>
+
+            <div class="buttons">
+                <paper-button class="white" dialog-dismiss>Cancel</paper-button>
+                <paper-button class="white" dialog-confirm on-tap="_accept">Accept</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+    <script>
+        Polymer({
+            is: 'trade-filter',
+            properties: {
+                leagueData: {
+                    type: Object
+                },
+                primary: {
+                    type: Boolean,
+                    value: false
+                },
+                selectedTeam: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            ready: function() {
+                if (this.primary && this.selectedTeam == null) {
+                    this.$.button.innerText = "SELECT YOUR TEAM";
+                }
+
+                if (!this.primary && this.selectedTeam == null) {
+                    this.$.button.innerText = "SELECT TRADE PARTNER";
+
+                    var paperItem = document.createElement("paper-item");
+                    paperItem.setAttribute("value", "0");
+                    paperItem.innerText = "All Teams";
+
+                    Polymer.dom(this.$.teamList).insertBefore(paperItem, this.$.teamList.firstElementChild);
+                }
+            },
+            _openDialog: function () {
+                this.$['dialog'].open();
+            },
+            _accept: function () {
+
+            },
+            _select: function () {
+                this.selectedTeam = this.leagueData.Teams[this.selection];
+                console.log(this.selectedTeam);
+            }
+        });
+    </script>
+</dom-module>
