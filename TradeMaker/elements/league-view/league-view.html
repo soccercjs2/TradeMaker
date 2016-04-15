@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-request.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
 <dom-module id="league-view">
@@ -31,9 +32,9 @@
             method="POST">
         </iron-ajax>
 
-        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
+        <paper-dialog id="dialog" class="center vertical" modal autoFitOnAttach>
             <h3>Loading Numberfire projections and league data...</h3>
-
+            <center><img src="../../images/ring.gif" /></center>
         </paper-dialog>
         
         <div class="title-text" style="font-size: 24px;">{{league.Name}}</div>

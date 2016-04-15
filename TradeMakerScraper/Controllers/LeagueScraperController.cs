@@ -47,6 +47,8 @@ namespace TradeMakerScraper.Controllers
                 parser.ParseTeam(scraper.Scrape(team.Url), team, package.Projections);
             }
 
+            leagueData.Waivers = package.Projections.Players;
+
             return leagueData;
         }
     }

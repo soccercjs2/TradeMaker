@@ -75,7 +75,10 @@ namespace TradeMakerScraper.HostParsers
                         (p.NflTeam == playerTeam || p.NflAlternateTeam == playerTeam)
                 ).FirstOrDefault<Player>();
 
-                if (player != null) { team.Players.Add(player); }
+                if (player != null) {
+                    projections.Players.Remove(player);
+                    team.Players.Add(player);
+                }
             }
         }
     }
