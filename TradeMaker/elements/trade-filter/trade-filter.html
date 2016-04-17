@@ -10,13 +10,25 @@
             .white {
                 background-color: white;
             }
+
+            .dialog-width {
+                width: 400px;
+            }
+
+            .content-width {
+                width: 350px;
+            }
+
+            .min-width {
+                width: 1%;
+            }
         </style>
         <!-- local DOM goes here -->
-        <paper-button id="button" class="white" raised on-tap="_openDialog"></paper-button>
+        <paper-button id="button" class="white" raised on-tap="_openDialog">{{selectedTeam.Name}}</paper-button>
 
-        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
-            <paper-dropdown-menu id="teamDropdown" label="Select a Team">
-                <paper-listbox id="teamList" class="dropdown-content" selected="{{selection}}" on-iron-select="_select">
+        <paper-dialog id="dialog" class="vertical dialog-width" modal autoFitOnAttach>
+            <paper-dropdown-menu id="teamDropdown" class="content-width" label="Select a Team">
+                <paper-listbox id="teamList" class="dropdown-content content-width" selected="{{selection}}" on-iron-select="_select">
                     <template is="dom-repeat" items="{{leagueData.Teams}}" as="team">
                         <paper-item value="{{team.Id}}">{{team.Name}}</paper-item>
                     </template>
@@ -24,9 +36,20 @@
             </paper-dropdown-menu>
 
             <template is="dom-if" if="{{selectedTeam}}">
-                <template is="dom-repeat" items="{{selectedTeam.Players}}" as="player">
-                    <p>{{player.Name}}</p>
-                </template>
+                <table class="dialog-width">
+                    <thead>
+                        <th></th>
+                        <th class="min-width">Required</th>
+                        <th class="min-width">Exclude</th>
+                    </thead>
+                    <template is="dom-repeat" items="{{selectedTeam.Players}}" as="player">
+                        <tr>
+                            <td>{{player.Name}}</td>
+                            <td class="min-width"><paper-checkbox></paper-checkbox></td>
+                            <td class="min-width"><paper-checkbox></paper-checkbox></td>
+                        </tr>
+                    </template>
+                </table>
             </template>
 
             <div class="buttons">
@@ -73,7 +96,7 @@
 
             },
             _select: function () {
-                this.selectedTeam = this.leagueData.Teams[this.selection];
+                this.selectedTeam = this.leagueData.Teams[this.selection - 1];
                 console.log(this.selectedTeam);
             }
         });

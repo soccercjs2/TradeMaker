@@ -44,7 +44,7 @@ namespace TradeMakerScraper.HostParsers
                 HtmlNode anchor = row.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>();
                 Team team = new Team();
                 team.Id = leagueData.Teams.Count + 1;
-                team.Name = anchor.InnerHtml;
+                team.Name = anchor.InnerHtml.Replace("&#39;", "'");
                 team.Url = "http://www.fleaflicker.com" + anchor.Attributes["href"].Value;
 
                 leagueData.Teams.Add(team);
