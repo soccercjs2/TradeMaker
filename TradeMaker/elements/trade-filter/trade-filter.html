@@ -16,7 +16,7 @@
             }
 
             .content-width {
-                width: 350px;
+                width: 87.5%;
             }
 
             .min-width {
@@ -45,8 +45,8 @@
                     <template is="dom-repeat" items="{{selectedTeam.Players}}" as="player">
                         <tr>
                             <td>{{player.Name}}</td>
-                            <td class="min-width"><paper-checkbox></paper-checkbox></td>
-                            <td class="min-width"><paper-checkbox></paper-checkbox></td>
+                            <td class="min-width"><center><paper-checkbox checked="{{player.Required}}"></center></paper-checkbox></td>
+                            <td class="min-width"><center><paper-checkbox checked="{{player.Excluded}}"></center></paper-checkbox></td>
                         </tr>
                     </template>
                 </table>
@@ -97,7 +97,6 @@
             },
             _select: function () {
                 this.selectedTeam = this.leagueData.Teams[this.selection - 1];
-                console.log(this.selectedTeam);
             }
         });
     </script>

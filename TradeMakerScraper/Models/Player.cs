@@ -21,15 +21,13 @@ namespace TradeMakerScraper.Models
         public decimal ReceivingYards { get; set; }
         public decimal ReceivingTouchdowns { get; set; }
         public decimal FantasyPoints { get; set; }
+        public bool Required { get; set; }
+        public bool Excluded { get; set; }
 
-        public Player() { }
-
-        public Player(int id, string name, string team, string position)
+        public Player()
         {
-            Id = id;
-            Name = name;
-            NflTeam = team;
-            Position = position;
+            Required = false;
+            Excluded = false;
         }
     }
 }
