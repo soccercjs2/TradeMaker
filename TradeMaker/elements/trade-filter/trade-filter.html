@@ -24,11 +24,11 @@
             }
         </style>
         <!-- local DOM goes here -->
-        <paper-button id="button" class="white" raised on-tap="_openDialog">{{selectedTeam.Name}}</paper-button>
+        <paper-button id="button" class="white" raised on-tap="_openDialog"></paper-button>
 
         <paper-dialog id="dialog" class="vertical dialog-width" modal autoFitOnAttach>
             <paper-dropdown-menu id="teamDropdown" class="content-width" label="Select a Team">
-                <paper-listbox id="teamList" class="dropdown-content content-width" selected="{{selection}}" on-iron-select="_select">
+                <paper-listbox id="teamList" class="dropdown-content content-width" selected="{{selection}}" on-iron-select="_select" attr-for-selected="value">
                     <template is="dom-repeat" items="{{leagueData.Teams}}" as="team">
                         <paper-item value="{{team.Id}}">{{team.Name}}</paper-item>
                     </template>
@@ -53,7 +53,7 @@
             </template>
 
             <div class="buttons">
-                <paper-button class="white" dialog-dismiss>Cancel</paper-button>
+                <paper-button class="white" dialog-dismiss on-tap="_cancel">Cancel</paper-button>
                 <paper-button class="white" dialog-confirm on-tap="_accept">Accept</paper-button>
             </div>
         </paper-dialog>
@@ -70,6 +70,10 @@
                     value: false
                 },
                 selectedTeam: {
+                    type: Object,
+                    notify: true
+                },
+                selectedTeamCache: {
                     type: Object,
                     notify: true
                 }
@@ -93,10 +97,42 @@
                 this.$['dialog'].open();
             },
             _accept: function () {
+                if (this.selection == 0) {
+                    this.selectedTeam = null;
+                    this.selectedTeamCache = null;
+                    this.$.button.innerText = "ALL TEAMS";
 
+                    if (!this.primary) {
+                        this.fire('set-their-teams', { });
+                    }
+                }
+                else if (this.selectedTeam != null)
+                {
+                    this.selectedTeamCache = this.selectedTeam;
+                    this.$.button.innerText = this.selectedTeam.Name;
+
+                    if (this.primary) {
+                        //console.log(this.selectedLeague);
+                        this.fire('set-my-team', { league: this.selectedTeam });
+                    }
+                    else {
+                        //console.log(this.selectedLeague);
+                        this.fire('set-their-team', { league: this.selectedTeam });
+                    }
+                }
+            },
+            _cancel: function() {
+                this.selectedTeam = this.selectedTeamCache;
+
+                if (this.selectedTeamCache != null) {
+                    this.selection = this.selectedTeamCache.Id;
+                }
             },
             _select: function () {
-                this.selectedTeam = this.leagueData.Teams[this.selection - 1];
+                if (this.selection != 0)
+                {
+                    this.selectedTeam = this.leagueData.Teams[this.selection - 1];
+                }
             }
         });
     </script>

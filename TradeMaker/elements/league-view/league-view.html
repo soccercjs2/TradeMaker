@@ -43,8 +43,14 @@
         <div class="title-text margined" style="font-size: 24px;">{{league.Name}}</div>
         
         <template is="dom-if" if="[[leagueData]]">
-            <div class="block margined">Your team: <trade-filter id="myTeamFilter" league-data="[[leagueData]]" primary></trade-filter></div>
-            <div class="block margined">Trade partner: <trade-filter id="theirTeamFilter" league-data="[[leagueData]]"></trade-filter></div>
+            <div class="block margined">
+                Your team: 
+                <trade-filter id="myTeamFilter" league-data="[[leagueData]]" primary on-set-my-team="_setMyTeam"></trade-filter>
+            </div>
+            <div class="block margined">
+                Trade partner: 
+                <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
+            </div>
         </template>
         
     </template>
@@ -92,6 +98,17 @@
                 this.$['dialog'].close();
                 this.dataLoaded = true;
                 this.leagueData = e.detail.response;
+            },
+            _setMyTeam: function (e) {
+                console.log("My Team:");
+                console.log(e.detail.league);
+            },
+            _setTheirTeam: function (e) {
+                console.log("Their Team:");
+                console.log(e.detail.league);
+            },
+            _setTheirTeams: function () {
+                console.log("SET THEIR TEAMS");
             }
         });
     </script>
