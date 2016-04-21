@@ -1202,6 +1202,8 @@
     <Content Include="elements\routing.html" />
     <Content Include="elements\trade-maker-auth\trade-maker-auth.html" />
     <Content Include="elements\trade-maker-data\trade-maker-data.html" />
+    <Content Include="elements\trade-side\trade-side.html" />
+    <Content Include="elements\trade-view\trade-view.html" />
     <Content Include="favicon.ico" />
     <Content Include="images\ring.gif" />
     <Content Include="images\touch\apple-touch-icon.png" />

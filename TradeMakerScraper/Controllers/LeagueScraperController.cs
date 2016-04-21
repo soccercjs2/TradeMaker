@@ -47,7 +47,21 @@ namespace TradeMakerScraper.Controllers
                 parser.ParseTeam(scraper.Scrape(team.Url), team, package.Projections);
             }
 
-            leagueData.Waivers = package.Projections.Players;
+            leagueData.WaiverQuarterback = package.Projections.Players.Where(p => p.Position == "QB").OrderByDescending(p => p.FantasyPoints).First<Player>();
+            leagueData.WaiverRunningBack = package.Projections.Players.Where(p => p.Position == "RB").OrderByDescending(p => p.FantasyPoints).First<Player>();
+            leagueData.WaiverWideReceiver = package.Projections.Players.Where(p => p.Position == "WR").OrderByDescending(p => p.FantasyPoints).First<Player>();
+            leagueData.WaiverTightEnd = package.Projections.Players.Where(p => p.Position == "TE").OrderByDescending(p => p.FantasyPoints).First<Player>();
+
+            foreach (Team team in leagueData.Teams)
+            {
+                foreach (Player player in team.Players)
+                {
+                    if (player.Position == "QB") { player.TradeValue = player.FantasyPoints - leagueData.WaiverQuarterback.FantasyPoints; }
+                    if (player.Position == "RB") { player.TradeValue = player.FantasyPoints - leagueData.WaiverRunningBack.FantasyPoints; }
+                    if (player.Position == "WR") { player.TradeValue = player.FantasyPoints - leagueData.WaiverWideReceiver.FantasyPoints; }
+                    if (player.Position == "TE") { player.TradeValue = player.FantasyPoints - leagueData.WaiverTightEnd.FantasyPoints; }
+                }
+            }
 
             return leagueData;
         }

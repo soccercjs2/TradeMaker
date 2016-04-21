@@ -1,0 +1,54 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<dom-module id="trade-side">
+    <template>
+        <style>
+            /* local DOM styles go here */
+
+            .side {
+                padding: 10px;
+                width: 100%;
+            }
+            
+            table {
+                width: 100%;
+            }
+
+            .value {
+                width: 1%;
+                text-align: right;
+            }
+
+            .green {
+                color: green;
+                text-align: right;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <div class="side">
+            <table>
+                <template is="dom-repeat" items="[[players]]" as="player">
+                    <tr>
+                        <td>[[player.Name]]</td>
+                        <td class="value">[[player.FantasyPoints]]</td>
+                    </tr>
+                </template>
+            </table>
+            <div class="green">[[differential]]</div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'trade-side',
+            properties: {
+                players: {
+                    type: Array
+                },
+                differential: {
+                    type: Number
+                }
+            }
+        });
+    </script>
+</dom-module>

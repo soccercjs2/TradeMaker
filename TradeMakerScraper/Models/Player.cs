@@ -23,6 +23,7 @@ namespace TradeMakerScraper.Models
         public decimal FantasyPoints { get; set; }
         public bool Required { get; set; }
         public bool Excluded { get; set; }
+        public decimal TradeValue { get; set; }
 
         public Player()
         {

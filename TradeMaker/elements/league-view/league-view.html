@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../elements/trade-filter/trade-filter.html">
+<link rel="import" href="../../elements/trade-view/trade-view.html">
 
 <dom-module id="league-view">
     <template>
@@ -11,6 +12,16 @@
             /* local DOM styles go here */
             .margined {
                 margin: 5px;
+            }
+
+            .blue {
+                background-color: #3f51b5;
+                color: #FFFFFF;
+            }
+
+            trade-view {
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
         </style>
         <!-- local DOM goes here -->
@@ -35,8 +46,18 @@
             method="POST">
         </iron-ajax>
 
+        <!--url="http://localhost:36880/api/trade"-->
+        <!--url="http://trademakerscraper.azurewebsites.net/api/trade"-->
+        <iron-ajax id="tradeAjax"
+                   url="http://localhost:36880/api/trade"
+                   handle-as="json"
+                   content-type="application/json"
+                   on-response="_findTradesResponse"
+                   method="POST">
+        </iron-ajax>
+
         <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
-            <h3>Loading Numberfire projections and league data...</h3>
+            <center><h3 id="dialogText"></h3></center>
             <center><img src="../../images/ring.gif" /></center>
         </paper-dialog>
         
@@ -51,8 +72,15 @@
                 Trade partner: 
                 <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
             </div>
+
+            <paper-button raised class="blue" on-tap="_findTrades">FIND TRADES</paper-button>
         </template>
-        
+
+        <template is="dom-if" if="[[trades]]">
+            <template is="dom-repeat" items="[[trades]]" as="trade">
+                <trade-view trade="[[trade]]"></trade-view>
+            </template>
+        </template>
     </template>
     <script>
         Polymer({
@@ -74,6 +102,10 @@
                 leagueData: {
                     type: Object,
                     notify: true
+                },
+                trades: {
+                    type: Array,
+                    notify: true
                 }
             },
             _getFirebaseLeague: function (leagues, leagueid) {
@@ -83,6 +115,7 @@
                 if (filteredLeagues) {
                     if (filteredLeagues.length == 1) {
                         leagueFirebase = filteredLeagues[0];
+                        this.$['dialogText'].innerText = "Loading Numberfire projections and league data...";
                         this.$['dialog'].open();
                         this.$['projectionAjax'].generateRequest();
                     }
@@ -100,15 +133,25 @@
                 this.leagueData = e.detail.response;
             },
             _setMyTeam: function (e) {
-                console.log("My Team:");
-                console.log(e.detail.league);
+                this.leagueData.MyTeam = e.detail.league;
             },
             _setTheirTeam: function (e) {
-                console.log("Their Team:");
-                console.log(e.detail.league);
+                this.leagueData.TheirTeam = e.detail.league;
+                this.leagueData.UseAllTeams = false;
             },
             _setTheirTeams: function () {
-                console.log("SET THEIR TEAMS");
+                this.leagueData.TheirTeam = null;
+                this.leagueData.UseAllTeams = true;
+            },
+            _findTrades: function () {
+                this.$['dialogText'].innerText = "Finding trades...";
+                this.$['dialog'].open();
+                this.$['tradeAjax'].body = this.leagueData;
+                this.$['tradeAjax'].generateRequest();
+            },
+            _findTradesResponse: function (e) {
+                this.$['dialog'].close();
+                this.trades = e.detail.response;
             }
         });
     </script>

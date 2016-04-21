@@ -29,8 +29,8 @@
         <paper-dialog id="dialog" class="vertical dialog-width" modal autoFitOnAttach>
             <paper-dropdown-menu id="teamDropdown" class="content-width" label="Select a Team">
                 <paper-listbox id="teamList" class="dropdown-content content-width" selected="{{selection}}" on-iron-select="_select" attr-for-selected="value">
-                    <template is="dom-repeat" items="{{leagueData.Teams}}" as="team">
-                        <paper-item value="{{team.Id}}">{{team.Name}}</paper-item>
+                    <template is="dom-repeat" items="[[leagueData.Teams]]" as="team">
+                        <paper-item value="[[team.Id]]">[[team.Name]]</paper-item>
                     </template>
                 </paper-listbox>
             </paper-dropdown-menu>
@@ -131,7 +131,11 @@
             _select: function () {
                 if (this.selection != 0)
                 {
-                    this.selectedTeam = this.leagueData.Teams[this.selection - 1];
+                    this.selectedTeam = JSON.parse(JSON.stringify(this.leagueData.Teams[this.selection - 1]));
+                }
+                else
+                {
+                    this.selectedTeam = null;
                 }
             }
         });

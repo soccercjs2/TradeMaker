@@ -1,0 +1,34 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../elements/trade-side/trade-side.html">
+
+<dom-module id="trade-view">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            trade-side {
+                display: inline-block;
+                width: 49%;
+            }
+
+            paper-material {
+                background-color: #FFFFFF;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <paper-material elevation="1">
+            <trade-side players="[[trade.MyPlayers]]" differential="[[trade.MyDifferential]]"></trade-side>
+            <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.TheirDifferential]]"></trade-side>
+        </paper-material>
+    </template>
+    <script>
+        Polymer({
+            is: 'trade-view',
+            properties: {
+                trade: {
+                    type: Object
+                }
+            }
+        });
+    </script>
+</dom-module>

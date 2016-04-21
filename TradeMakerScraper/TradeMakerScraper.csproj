@@ -135,6 +135,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\LeagueScraperController.cs" />
     <Compile Include="Controllers\ProjectionScraperController.cs" />
+    <Compile Include="Controllers\TradeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -145,9 +146,11 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Projections.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\Trade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\LeagueScraperPackage.cs" />
     <Compile Include="Tools\NumberFireParser.cs" />
+    <Compile Include="Tools\TeamPlayerPool.cs" />
     <Compile Include="Tools\WebScraper.cs" />
   </ItemGroup>
   <ItemGroup>
