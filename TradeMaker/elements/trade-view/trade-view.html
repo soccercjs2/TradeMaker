@@ -8,7 +8,7 @@
             /* local DOM styles go here */
             trade-side {
                 display: inline-block;
-                width: 49%;
+                
             }
 
             paper-material {
@@ -17,8 +17,8 @@
         </style>
         <!-- local DOM goes here -->
         <paper-material elevation="1">
-            <trade-side players="[[trade.MyPlayers]]" differential="[[trade.MyDifferential]]"></trade-side>
-            <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.TheirDifferential]]"></trade-side>
+            <trade-side players="[[trade.MyPlayers]]" differential="[[trade.MyDifferential]]" header="You Lose"></trade-side>
+            <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.TheirDifferential]]" header="You Get"></trade-side>
         </paper-material>
     </template>
     <script>

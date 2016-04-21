@@ -8,11 +8,11 @@
 
             .side {
                 padding: 10px;
-                width: 100%;
+                /*width: 100%;*/
             }
             
             table {
-                width: 100%;
+                /*width: 100%;*/
             }
 
             .value {
@@ -24,10 +24,18 @@
                 color: green;
                 text-align: right;
             }
+
+            thead {
+                background-color: #3f51b5;
+                color: #FFFFFF;
+            }
         </style>
         <!-- local DOM goes here -->
         <div class="side">
             <table>
+                <thead>
+                    <th colspan="2">[[header]]</th>
+                </thead>
                 <template is="dom-repeat" items="[[players]]" as="player">
                     <tr>
                         <td>[[player.Name]]</td>
@@ -47,6 +55,9 @@
                 },
                 differential: {
                     type: Number
+                },
+                header: {
+                    type: String
                 }
             }
         });
