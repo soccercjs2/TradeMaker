@@ -16,8 +16,6 @@ namespace TradeMakerScraper.Models
         public decimal TheirDifferential { get; set; }
         public decimal CompositeDifferential { get; set; }
         public decimal Fairness { get; set; }
-        public string MyNameList { get; set; }
-        public string TheirNameList { get; set; }
 
         public Trade()
         {
@@ -29,8 +27,6 @@ namespace TradeMakerScraper.Models
             MyPlayers = myPlayers.OrderByDescending(p => p.TradeValue);
             TheirPlayers = theirPlayers.OrderByDescending(p => p.TradeValue);
             Fairness = theirPlayers.Sum(p => p.TradeValue) - myPlayers.Sum(p => p.TradeValue);
-            MyNameList = GetPlayersString(MyPlayers);
-            TheirNameList = GetPlayersString(TheirPlayers);
         }
 
         public void CalculateDifferentials(LeagueData leagueData, TeamPlayerPool myTeamPlayerPool, TeamPlayerPool theirTeamPlayerPool)
@@ -57,21 +53,6 @@ namespace TradeMakerScraper.Models
             CompositeDifferential = MyDifferential + TheirDifferential;
         }
 
-        public string GetPlayersString(IEnumerable<Player> players)
-        {
-            //initialize string to return
-            string playersString = "";
-
-            //loop through players to build string
-            foreach (Player player in players)
-            {
-                playersString += "<div>" + player.Name + "(" + player.TradeValue + ")</div>";
-            }
-
-            //return result
-            return playersString;
-        }
-
         public override int GetHashCode()
         {
             int hashCode = (int)(
@@ -79,7 +60,6 @@ namespace TradeMakerScraper.Models
                 Math.Pow((double)MyDifferential, 2) + Math.Pow((double)TheirDifferential, 2) +
                 Math.Pow((double)CompositeDifferential, 2) + Math.Pow((double)Fairness, 2) +
                 Math.Pow((double)MyPlayers.Sum(p => p.FantasyPoints), 2) + Math.Pow((double)TheirPlayers.Sum(p => p.FantasyPoints), 2) +
-                Math.Pow((double)MyNameList.Length, 2) + Math.Pow((double)TheirNameList.Length, 2)
             );
 
             return hashCode;
@@ -112,18 +92,5 @@ namespace TradeMakerScraper.Models
 
             return true;
         }
-
-        //public TradeView GetTradeView()
-        //{
-        //    TradeView tradeView = new TradeView();
-
-        //    tradeView.MyPlayersHtml = MyNameList;
-        //    tradeView.TheirPlayersHtml = TheirNameList;
-        //    tradeView.MyDifferential = MyDifferential;
-        //    tradeView.TheirDifferential = TheirDifferential;
-        //    tradeView.Fairness = Fairness;
-
-        //    return tradeView;
-        //}
     }
 }

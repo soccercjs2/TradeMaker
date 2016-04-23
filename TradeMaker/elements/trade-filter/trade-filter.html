@@ -19,6 +19,10 @@
                 width: 87.5%;
             }
 
+            .fill {
+                width: 100%;
+            }
+
             .min-width {
                 width: 1%;
             }
@@ -28,7 +32,7 @@
 
         <paper-dialog id="dialog" class="vertical dialog-width" modal autoFitOnAttach>
             <paper-dropdown-menu id="teamDropdown" class="content-width" label="Select a Team">
-                <paper-listbox id="teamList" class="dropdown-content content-width" selected="{{selection}}" on-iron-select="_select" attr-for-selected="value">
+                <paper-listbox id="teamList" class="dropdown-content" selected="{{selection}}" on-iron-select="_select" attr-for-selected="value">
                     <template is="dom-repeat" items="[[leagueData.Teams]]" as="team">
                         <paper-item value="[[team.Id]]">[[team.Name]]</paper-item>
                     </template>
@@ -36,7 +40,7 @@
             </paper-dropdown-menu>
 
             <template is="dom-if" if="{{selectedTeam}}">
-                <table class="dialog-width">
+                <table class="fill">
                     <thead>
                         <th></th>
                         <th class="min-width">Required</th>

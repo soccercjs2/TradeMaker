@@ -8,17 +8,18 @@
             /* local DOM styles go here */
             trade-side {
                 display: inline-block;
-                
             }
 
             paper-material {
                 background-color: #FFFFFF;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
         </style>
         <!-- local DOM goes here -->
         <paper-material elevation="1">
-            <trade-side players="[[trade.MyPlayers]]" differential="[[trade.MyDifferential]]" header="You Lose"></trade-side>
-            <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.TheirDifferential]]" header="You Get"></trade-side>
+            <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.TheirDifferential]]" header="You Get" primary></trade-side>
+            <trade-side players="[[trade.MyPlayers]]" differential="[[trade.MyDifferential]]" header="They Get"></trade-side>
         </paper-material>
     </template>
     <script>

@@ -62,14 +62,78 @@ namespace TradeMakerScraper.Controllers
                                         from theirSideOfTrade in theirTradePool
                                         select (new Trade(mySideOfTrade, theirSideOfTrade));
 
+            List<Player> myRequiredPlayers = myTeamPlayerPool.TradablePlayers.Where(p => p.Required).ToList<Player>();
+            List<Player> myExcludedPlayers = myTeamPlayerPool.TradablePlayers.Where(p => p.Excluded).ToList<Player>();
+            List<Player> theirRequiredPlayers = theirTeamPlayerPool.TradablePlayers.Where(p => p.Required).ToList<Player>();
+            List<Player> theirExcludedPlayers = theirTeamPlayerPool.TradablePlayers.Where(p => p.Excluded).ToList<Player>();
+
             foreach (Trade trade in trades)
             {
                 if (Math.Abs(trade.Fairness) <= 5)
                 {
                     trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool);
-                    if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) { allTrades.Add(trade); }
+                    if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
+                        bool addTrade = true;
+                        
+                        //see if my side has my required players
+                        foreach (Player requiredPlayer in myRequiredPlayers)
+                        {
+                            bool foundPlayer = false;
+
+                            foreach (Player player in trade.MyPlayers)
+                            {
+                                if (player.Id == requiredPlayer.Id) { foundPlayer = true; }
+                            }
+
+                            if (!foundPlayer) { addTrade = false; }
+                        }
+
+                        //see if their side has their required players
+                        foreach (Player requiredPlayer in theirRequiredPlayers)
+                        {
+                            bool foundPlayer = false;
+
+                            foreach (Player player in trade.TheirPlayers)
+                            {
+                                if (player.Id == requiredPlayer.Id) { foundPlayer = true; }
+                            }
+
+                            if (!foundPlayer) { addTrade = false; }
+                        }
+
+                        //see if my side doesn't have my excluded players
+                        foreach (Player excludedPlayer in myExcludedPlayers)
+                        {
+                            foreach (Player player in trade.MyPlayers)
+                            {
+                                if (player.Id == excludedPlayer.Id) { addTrade = false; }
+                            }
+                        }
+
+                        if (addTrade) { allTrades.Add(trade); }
+                    }
                 }
             }
+        }
+
+        private HasRequiredPlayers(List<Player> players, List<Player> requiredPlayers)
+        {
+            foreach (Player requiredPlayer in requiredPlayers)
+            {
+                bool foundPlayer = false;
+
+                foreach (Player player in players)
+                {
+                    if (player.Id == requiredPlayer.Id) { foundPlayer = true; }
+                }
+
+                if (!foundPlayer) { addTrade = false; }
+            }
+        }
+
+        private CheckExcludedPlayers()
+        {
+
         }
     }
 }

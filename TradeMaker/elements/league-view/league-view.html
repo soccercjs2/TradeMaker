@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-request.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../elements/trade-filter/trade-filter.html">
 <link rel="import" href="../../elements/trade-view/trade-view.html">
 
@@ -14,14 +15,18 @@
                 margin: 5px;
             }
 
+            .title {
+                margin: 5px;
+                font-size: 30px;
+            }
+
             .blue {
                 background-color: #3f51b5;
                 color: #FFFFFF;
             }
 
-            trade-view {
-                margin-top: 10px;
-                margin-bottom: 10px;
+            paper-material {
+                padding: 10px;
             }
         </style>
         <!-- local DOM goes here -->
@@ -29,7 +34,7 @@
         <!--url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"-->
         <iron-ajax
             id="projectionAjax"
-            url="http://localhost:36880/api/projectionscraper"
+            url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"
             handle-as="json"
             on-response="_projectionResponse"
             method="GET">
@@ -39,7 +44,7 @@
         <!--url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"-->
         <iron-ajax 
             id="leagueAjax"
-            url="http://localhost:36880/api/leaguescraper"
+            url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"
             handle-as="json"
             content-type="application/json"
             on-response="_leagueResponse"
@@ -49,7 +54,7 @@
         <!--url="http://localhost:36880/api/trade"-->
         <!--url="http://trademakerscraper.azurewebsites.net/api/trade"-->
         <iron-ajax id="tradeAjax"
-                   url="http://localhost:36880/api/trade"
+                   url="http://trademakerscraper.azurewebsites.net/api/trade"
                    handle-as="json"
                    content-type="application/json"
                    on-response="_findTradesResponse"
@@ -61,19 +66,21 @@
             <center><img src="../../images/ring.gif" /></center>
         </paper-dialog>
         
-        <div class="title-text margined" style="font-size: 24px;">{{league.Name}}</div>
+        <div class="title">{{league.Name}}</div>
         
         <template is="dom-if" if="[[leagueData]]">
-            <div class="block margined">
-                Your team: 
-                <trade-filter id="myTeamFilter" league-data="[[leagueData]]" primary on-set-my-team="_setMyTeam"></trade-filter>
-            </div>
-            <div class="block margined">
-                Trade partner: 
-                <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
-            </div>
+            <paper-material elevation="2">
+                <div class="block margined">
+                    Your team:
+                    <trade-filter id="myTeamFilter" league-data="[[leagueData]]" primary on-set-my-team="_setMyTeam"></trade-filter>
+                </div>
+                <div class="block margined">
+                    Trade partner:
+                    <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
+                </div>
 
-            <paper-button raised class="blue" on-tap="_findTrades">FIND TRADES</paper-button>
+                <paper-button id="findTrades" raised on-tap="_findTrades" class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}">FIND TRADES</paper-button>
+            </paper-material>
         </template>
 
         <template is="dom-if" if="[[trades]]">
@@ -106,7 +113,13 @@
                 trades: {
                     type: Array,
                     notify: true
+                },
+                cantFindTrades: {
+                    type: Boolean
                 }
+            },
+            ready: function() {
+                this.cantFindTrades = true;
             },
             _getFirebaseLeague: function (leagues, leagueid) {
                 var filteredLeagues = leagues.filter( function(league){return (league.__firebaseKey__ == leagueid);} );
@@ -134,14 +147,34 @@
             },
             _setMyTeam: function (e) {
                 this.leagueData.MyTeam = e.detail.league;
+
+                //if leagues dont match, or all teams
+                if ((this.leagueData.TheirTeam != null && this.leagueData.TheirTeam.Id != this.leagueData.MyTeam.Id) || this.UseAllTeams)
+                {
+                    this.cantFindTrades = false;
+                } else {
+                    this.cantFindTrades = true;
+                }
             },
             _setTheirTeam: function (e) {
                 this.leagueData.TheirTeam = e.detail.league;
                 this.leagueData.UseAllTeams = false;
+
+                if (this.leagueData.MyTeam != null && this.leagueData.TheirTeam.Id != this.leagueData.MyTeam.Id) {
+                    this.cantFindTrades = false;
+                } else {
+                    this.cantFindTrades = true;
+                }
             },
             _setTheirTeams: function () {
                 this.leagueData.TheirTeam = null;
                 this.leagueData.UseAllTeams = true;
+
+                if (this.leagueData.MyTeam != null) {
+                    this.cantFindTrades = false;
+                } else {
+                    this.cantFindTrades = true;
+                }
             },
             _findTrades: function () {
                 this.$['dialogText'].innerText = "Finding trades...";
@@ -152,6 +185,10 @@
             _findTradesResponse: function (e) {
                 this.$['dialog'].close();
                 this.trades = e.detail.response;
+            },
+            _buttonClass: function(cantFindTrades) {
+                if (!cantFindTrades) { return 'blue'; }
+                else { return ''; }
             }
         });
     </script>
