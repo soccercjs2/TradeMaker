@@ -59,7 +59,7 @@ namespace TradeMakerScraper.Models
                 Math.Pow((double)MyPlayers.Count(), 2) + Math.Pow((double)TheirPlayers.Count(), 2) +
                 Math.Pow((double)MyDifferential, 2) + Math.Pow((double)TheirDifferential, 2) +
                 Math.Pow((double)CompositeDifferential, 2) + Math.Pow((double)Fairness, 2) +
-                Math.Pow((double)MyPlayers.Sum(p => p.FantasyPoints), 2) + Math.Pow((double)TheirPlayers.Sum(p => p.FantasyPoints), 2) +
+                Math.Pow((double)MyPlayers.Sum(p => p.FantasyPoints), 2) + Math.Pow((double)TheirPlayers.Sum(p => p.FantasyPoints), 2)
             );
 
             return hashCode;

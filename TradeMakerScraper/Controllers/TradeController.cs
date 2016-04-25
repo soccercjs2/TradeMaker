@@ -51,7 +51,7 @@ namespace TradeMakerScraper.Controllers
                 FindTrades(ref trades, leagueData, myTeamPlayerPool, otherTeamPlayerPool, myTeamPlayerPool.ThreePlayerTradePool, otherTeamPlayerPool.ThreePlayerTradePool); //3 for 3
             }
 
-            return trades.OrderByDescending(t => t.CompositeDifferential).Distinct().ToList();
+            return trades.OrderByDescending(t => t.MyDifferential).Distinct().ToList();
         }
 
         private void FindTrades(ref List<Trade> allTrades, LeagueData leagueData,
@@ -62,6 +62,7 @@ namespace TradeMakerScraper.Controllers
                                         from theirSideOfTrade in theirTradePool
                                         select (new Trade(mySideOfTrade, theirSideOfTrade));
 
+            //get required players and excluded players
             List<Player> myRequiredPlayers = myTeamPlayerPool.TradablePlayers.Where(p => p.Required).ToList<Player>();
             List<Player> myExcludedPlayers = myTeamPlayerPool.TradablePlayers.Where(p => p.Excluded).ToList<Player>();
             List<Player> theirRequiredPlayers = theirTeamPlayerPool.TradablePlayers.Where(p => p.Required).ToList<Player>();
@@ -73,50 +74,19 @@ namespace TradeMakerScraper.Controllers
                 {
                     trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool);
                     if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
-                        bool addTrade = true;
-                        
-                        //see if my side has my required players
-                        foreach (Player requiredPlayer in myRequiredPlayers)
-                        {
-                            bool foundPlayer = false;
+                        bool isValidTrade = 
+                            HasRequiredPlayers(trade.MyPlayers, myRequiredPlayers) &&
+                            HasRequiredPlayers(trade.TheirPlayers, theirRequiredPlayers) &&
+                            HasExcludedPlayers(trade.MyPlayers, myExcludedPlayers) &&
+                            HasExcludedPlayers(trade.TheirPlayers, theirExcludedPlayers);
 
-                            foreach (Player player in trade.MyPlayers)
-                            {
-                                if (player.Id == requiredPlayer.Id) { foundPlayer = true; }
-                            }
-
-                            if (!foundPlayer) { addTrade = false; }
-                        }
-
-                        //see if their side has their required players
-                        foreach (Player requiredPlayer in theirRequiredPlayers)
-                        {
-                            bool foundPlayer = false;
-
-                            foreach (Player player in trade.TheirPlayers)
-                            {
-                                if (player.Id == requiredPlayer.Id) { foundPlayer = true; }
-                            }
-
-                            if (!foundPlayer) { addTrade = false; }
-                        }
-
-                        //see if my side doesn't have my excluded players
-                        foreach (Player excludedPlayer in myExcludedPlayers)
-                        {
-                            foreach (Player player in trade.MyPlayers)
-                            {
-                                if (player.Id == excludedPlayer.Id) { addTrade = false; }
-                            }
-                        }
-
-                        if (addTrade) { allTrades.Add(trade); }
+                        if (isValidTrade) { allTrades.Add(trade); }
                     }
                 }
             }
         }
 
-        private HasRequiredPlayers(List<Player> players, List<Player> requiredPlayers)
+        private bool HasRequiredPlayers(IEnumerable<Player> players, List<Player> requiredPlayers)
         {
             foreach (Player requiredPlayer in requiredPlayers)
             {
@@ -127,13 +97,23 @@ namespace TradeMakerScraper.Controllers
                     if (player.Id == requiredPlayer.Id) { foundPlayer = true; }
                 }
 
-                if (!foundPlayer) { addTrade = false; }
+                if (!foundPlayer) { return false; }
             }
+
+            return true;
         }
 
-        private CheckExcludedPlayers()
+        private bool HasExcludedPlayers(IEnumerable<Player> players, List<Player> excludedPlayers)
         {
+            foreach (Player excludedPlayer in excludedPlayers)
+            {
+                foreach (Player player in players)
+                {
+                    if (player.Id == excludedPlayer.Id) { return false; }
+                }
+            }
 
+            return true;
         }
     }
 }

@@ -6,8 +6,19 @@
     <template>
         <style>
             /* local DOM styles go here */
-            trade-side {
-                display: inline-block;
+            @media (max-width: 1000px) {
+                trade-side {
+                    vertical-align: top;
+                }
+            }
+
+            @media (min-width: 1001px) {
+                trade-side {
+                    display: inline-block;
+                    vertical-align: top;
+                    min-width: 300px;
+                    width: 49%;
+                }
             }
 
             paper-material {
@@ -18,8 +29,10 @@
         </style>
         <!-- local DOM goes here -->
         <paper-material elevation="1">
-            <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.TheirDifferential]]" header="You Get" primary></trade-side>
-            <trade-side players="[[trade.MyPlayers]]" differential="[[trade.MyDifferential]]" header="They Get"></trade-side>
+            <center>
+                <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.MyDifferential]]" header="You Get" primary></trade-side>
+                <trade-side players="[[trade.MyPlayers]]" differential="[[trade.TheirDifferential]]" header="They Get"></trade-side>
+            </center>
         </paper-material>
     </template>
     <script>
