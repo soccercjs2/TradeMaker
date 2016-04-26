@@ -1200,6 +1200,7 @@
     <Content Include="elements\roster-container\roster-container.html" />
     <Content Include="elements\roster-side\roster-side.html" />
     <Content Include="elements\roster-view\roster-view.html" />
+    <Content Include="elements\trade-container\trade-container.html" />
     <Content Include="elements\trade-filter\trade-filter.html" />
     <Content Include="elements\leagues-view\leagues-view.html" />
     <Content Include="elements\routing.html" />

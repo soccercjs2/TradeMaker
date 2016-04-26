@@ -1,19 +1,58 @@
 ﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../elements/roster-side/roster-side.html">
 
 <dom-module id="roster-view">
     <template>
         <style>
             /* local DOM styles go here */
+            @media (max-width: 1000px) {
+                roster-side {
+                    vertical-align: top;
+                }
+            }
 
+            @media (min-width: 1001px) {
+                roster-side {
+                    display: inline-block;
+                    vertical-align: top;
+                    min-width: 300px;
+                    width: 49%;
+                }
+            }
         </style>
         <!-- local DOM goes here -->
         
+        <div>
+            <paper-ripple></paper-ripple>
+            <center>
+                <!--my roster side-->
+                <roster-side header="[[myName]]"
+                             roster="[[myRoster]]"
+                             primary></roster-side>
+
+                <!--their roster side-->
+                <roster-side header="[[theirName]]"
+                             roster="[[theirRoster]]"></roster-side>
+            </center>
+        </div>
+
     </template>
     <script>
         Polymer({
             is: 'roster-view',
             properties: {
-
+                myName: {
+                    type: String
+                },
+                theirName: {
+                    type: String
+                },
+                myRoster: {
+                    type: Object
+                },
+                theirRoster: {
+                    type: Object
+                }
             }
         });
     </script>

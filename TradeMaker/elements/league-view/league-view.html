@@ -5,7 +5,7 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../elements/trade-filter/trade-filter.html">
-<link rel="import" href="../../elements/trade-view/trade-view.html">
+<link rel="import" href="../../elements/trade-container/trade-container.html">
 
 <dom-module id="league-view">
     <template>
@@ -85,7 +85,8 @@
 
         <template is="dom-if" if="[[trades]]">
             <template is="dom-repeat" items="[[trades]]" as="trade">
-                <trade-view trade="[[trade]]"></trade-view>
+                <trade-container trade="[[trade]]" show-trade></trade-container>
+                <!--<trade-view trade="[[trade]]"></trade-view>-->
             </template>
         </template>
     </template>

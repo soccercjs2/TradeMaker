@@ -4,15 +4,109 @@
     <template>
         <style>
             /* local DOM styles go here */
+
+            .side {
+                padding: 10px;
+                /*width: 100%;*/
+            }
+            
+            table {
+                border-bottom: 1px solid #3f51b5;
+            }
+
+            .value {
+                width: 1%;
+                text-align: right;
+            }
+
+            .green {
+                color: green;
+                text-align: right;
+            }
+
+            .primary {
+                font-size: 22px;
+                font-weight: bold;
+            }
+
+            thead {
+                background-color: #3f51b5;
+                color: #FFFFFF;
+            }
+
+            .new {
+                font-weight: bold;
+                color: green;
+            }
+
+            .old {
+                font-weight: bold;
+                color: red;
+            }
         </style>
         <!-- local DOM goes here -->
+
+        <div class="side">
+            <table>
+                <thead>
+                <th colspan="2">[[header]]</th>
+                </thead>
+                <template is="dom-repeat" items="[[roster.Quarterbacks]]" as="quarterback">
+                    <tr class$="{{_newOrOld(quarterback)}}">
+                        <td>[[quarterback.Name]]</td>
+                        <td class="value">[[quarterback.FantasyPoints]]</td>
+                    </tr>
+                </template>
+                <template is="dom-repeat" items="[[roster.RunningBacks]]" as="runningback">
+                    <tr class$="{{_newOrOld(quarterback)}}">
+                        <td>[[runningback.Name]]</td>
+                        <td class="value">[[runningback.FantasyPoints]]</td>
+                    </tr>
+                </template>
+                <template is="dom-repeat" items="[[roster.WideReceivers]]" as="widereceiver">
+                    <tr class$="{{_newOrOld(quarterback)}}">
+                        <td>[[widereceiver.Name]]</td>
+                        <td class="value">[[widereceiver.FantasyPoints]]</td>
+                    </tr>
+                </template>
+                <template is="dom-repeat" items="[[roster.TightEnds]]" as="tightend">
+                    <tr class$="{{_newOrOld(quarterback)}}">
+                        <td>[[tightend.Name]]</td>
+                        <td class="value">[[tightend.FantasyPoints]]</td>
+                    </tr>
+                </template>
+                <template is="dom-repeat" items="[[roster.Flexes]]" as="flex">
+                    <tr class$="{{_newOrOld(quarterback)}}">
+                        <td>[[flex.Name]]</td>
+                        <td class="value">[[flex.FantasyPoints]]</td>
+                    </tr>
+                </template>
+            </table>
+        </div>
 
     </template>
     <script>
         Polymer({
             is: 'roster-side',
             properties: {
-
+                roster: {
+                    type: Object
+                },
+                header: {
+                    type: String
+                },
+                primary: {
+                    type: Boolean
+                }
+            },
+            _newOrOld: function (player) {
+                if (player.OldPlayer) {
+                    return "old";
+                } else if (player.NewPlayer) {
+                    return "new";
+                } else {
+                    return "";
+                }
             }
         });
     </script>

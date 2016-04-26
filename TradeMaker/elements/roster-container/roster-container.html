@@ -1,18 +1,49 @@
 ﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../elements/roster-view/roster-view.html">
 
 <dom-module id="roster-container">
     <template>
         <style>
             /* local DOM styles go here */
+
         </style>
         <!-- local DOM goes here -->
+        <paper-tabs selected="{{selected}}">
+            <paper-tab>New Teams</paper-tab>
+            <paper-tab>Old Teams</paper-tab>
+        </paper-tabs>
 
+        <iron-pages selected="{{selected}}">
+            <div>
+                <roster-view on-tap="_showTrade"
+                             my-name="[[trade.MyTeamName]]"
+                             their-name="[[trade.TheirTeamName]]"
+                             my-roster="[[trade.MyNewStartingRoster]]"
+                             their-roster="[[trade.TheirNewStartingRoster]]"></roster-view>
+            </div>
+            <div>
+                <roster-view on-tap="_showTrade"
+                             my-name="[[trade.MyTeamName]]"
+                             their-name="[[trade.TheirTeamName]]"
+                             my-roster="[[trade.MyOldStartingRoster]]"
+                             their-roster="[[trade.TheirOldStartingRoster]]"></roster-view>
+            </div>
+        </iron-pages>
     </template>
     <script>
         Polymer({
             is: 'roster-container',
             properties: {
-
+                trade: {
+                    type: Object
+                }
+            },
+            ready: function () {
+                this.selected = 0;
+            },
+            _showTrade: function () {
+                this.fire('show-trade', { });
             }
         });
     </script>

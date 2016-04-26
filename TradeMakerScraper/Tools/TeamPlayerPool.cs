@@ -24,9 +24,13 @@ namespace TradeMakerScraper.Tools
         }
 
         //public IEnumerable<Player> OptimalLineUp(LeagueData leagueData)
-        public Roster OptimalLineUp(LeagueData leagueData)
+        public Roster OptimalLineUp(LeagueData leagueData, IEnumerable<Player> lostPlayers)
         {
-            return OptimalLineUp(leagueData, null, null);
+            List<Player> team = new List<Player>(Team.Players);
+            Roster roster = SortOptimalRoster(leagueData, team);
+            roster = MarkLostPlayers(roster, lostPlayers);
+
+            return roster;
         }
 
         //public IEnumerable<Player> OptimalLineUp(LeagueData leagueData, IEnumerable<Player> gainedPlayers, IEnumerable<Player> lostPlayers)
@@ -36,8 +40,15 @@ namespace TradeMakerScraper.Tools
             if (lostPlayers != null) { foreach (Player lostPlayer in lostPlayers) { team.Remove(lostPlayer); } }
             if (gainedPlayers != null) { foreach (Player gainedPlayer in gainedPlayers) { team.Add(gainedPlayer); } }
 
+            Roster roster = SortOptimalRoster(leagueData, team);
+            roster = MarkGainedPlayers(roster, gainedPlayers);
+
+            return roster;
+        }
+
+        public Roster SortOptimalRoster(LeagueData leagueData, List<Player> team)
+        {
             //create list of starters to return
-            List<Player> starters = new List<Player>();
             Roster roster = new Roster();
 
             //get position players
@@ -47,21 +58,10 @@ namespace TradeMakerScraper.Tools
             List<Player> tightEnds = team.Where(p => p.Position == "TE").OrderByDescending(p => p.FantasyPoints).ToList();
 
             //get starting players
-            //List<Player> startingQbs = quarterbacks.Take(1).ToList();
-            //List<Player> startingRbs = runningBacks.Take(2).ToList();
-            //List<Player> startingWrs = wideReceivers.Take(2).ToList();
-            //List<Player> startingTes = tightEnds.Take(1).ToList();
-
             roster.Quarterbacks = quarterbacks.Take(1).ToList();
             roster.RunningBacks = runningBacks.Take(2).ToList();
             roster.WideReceivers = wideReceivers.Take(2).ToList();
             roster.TightEnds = tightEnds.Take(1).ToList();
-
-            //add best waiver to team if missing starter
-            //if (startingQbs.Count() < 1) { startingQbs.Add(leagueData.WaiverQuarterback); }
-            //if (startingRbs.Count() < 2) { startingRbs.Add(leagueData.WaiverRunningBack); }
-            //if (startingWrs.Count() < 2) { startingWrs.Add(leagueData.WaiverWideReceiver); }
-            //if (startingTes.Count() < 1) { startingTes.Add(leagueData.WaiverTightEnd); }
 
             //add best waiver to team if missing starter
             if (roster.Quarterbacks.Count() < 1) { roster.Quarterbacks.Add(leagueData.WaiverQuarterback); }
@@ -69,33 +69,104 @@ namespace TradeMakerScraper.Tools
             if (roster.WideReceivers.Count() < 2) { roster.WideReceivers.Add(leagueData.WaiverWideReceiver); }
             if (roster.TightEnds.Count() < 1) { roster.TightEnds.Add(leagueData.WaiverTightEnd); }
 
-            //get possible waiver players
+            //get possible flex players
             Player flexRb = runningBacks.Skip(2).Take(1).FirstOrDefault();
             Player flexWr = wideReceivers.Skip(2).Take(1).FirstOrDefault();
             Player flexTe = tightEnds.Skip(1).Take(1).FirstOrDefault();
 
-            //get waiver points for easy comparing
+            //get flex points for easy comparing
             decimal flexRbPoints = (flexRb != null) ? flexRb.FantasyPoints : 0;
             decimal flexWrPoints = (flexWr != null) ? flexWr.FantasyPoints : 0;
             decimal flexTePoints = (flexTe != null) ? flexTe.FantasyPoints : 0;
 
-            //add best waiver player to starters and remove him from the bench
+            //add best flex player to starters and remove him from the bench
             Player flexPlayer;
             if (flexRbPoints > flexWrPoints && flexRbPoints > flexTePoints) { flexPlayer = flexRb; }
             else if (flexWrPoints > flexRbPoints && flexWrPoints > flexTePoints) { flexPlayer = flexWr; }
             else { flexPlayer = flexTe; }
 
-            //foreach (Player player in startingQbs) { starters.Add(player); }
-            //foreach (Player player in startingRbs) { starters.Add(player); }
-            //foreach (Player player in startingWrs) { starters.Add(player); }
-            //foreach (Player player in startingTes) { starters.Add(player); }
-            //starters.Add(flexPlayer);
-
             roster.Flexes.Add(flexPlayer);
             return roster;
+        }
 
-            //return optimal starting lineup
-            //return starters;
+        public Roster MarkLostPlayers(Roster roster, IEnumerable<Player> lostPlayers)
+        {
+            //find quarterbacks lost
+            foreach (Player quarterback in roster.Quarterbacks)
+            {
+                Player lostPlayer = lostPlayers.Where(p => p.Id == quarterback.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { quarterback.OldPlayer = true; }
+            }
+
+            //find runningbacks lost
+            foreach (Player runningback in roster.RunningBacks)
+            {
+                Player lostPlayer = lostPlayers.Where(p => p.Id == runningback.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { runningback.OldPlayer = true; }
+            }
+
+            //find widereceivers lost
+            foreach (Player widereceiver in roster.WideReceivers)
+            {
+                Player lostPlayer = lostPlayers.Where(p => p.Id == widereceiver.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { widereceiver.OldPlayer = true; }
+            }
+
+            //find tightends lost
+            foreach (Player tightend in roster.TightEnds)
+            {
+                Player lostPlayer = lostPlayers.Where(p => p.Id == tightend.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { tightend.OldPlayer = true; }
+            }
+
+            //find flexes lost
+            foreach (Player flex in roster.Flexes)
+            {
+                Player lostPlayer = lostPlayers.Where(p => p.Id == flex.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { flex.OldPlayer = true; }
+            }
+
+            return roster;
+        }
+
+        public Roster MarkGainedPlayers(Roster roster, IEnumerable<Player> gainedPlayers)
+        {
+            //find quarterbacks gained
+            foreach (Player quarterback in roster.Quarterbacks)
+            {
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == quarterback.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { quarterback.NewPlayer = true; }
+            }
+
+            //find runningbacks gained
+            foreach (Player runningback in roster.RunningBacks)
+            {
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == runningback.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { runningback.NewPlayer = true; }
+            }
+
+            //find widereceivers gained
+            foreach (Player widereceiver in roster.WideReceivers)
+            {
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == widereceiver.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { widereceiver.NewPlayer = true; }
+            }
+
+            //find tightends gained
+            foreach (Player tightend in roster.TightEnds)
+            {
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == tightend.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { tightend.NewPlayer = true; }
+            }
+
+            //find flexes gained
+            foreach (Player flex in roster.Flexes)
+            {
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == flex.Id).FirstOrDefault<Player>();
+                if (lostPlayer != null) { flex.NewPlayer = true; }
+            }
+
+            return roster;
         }
 
         private IEnumerable<IEnumerable<Player>> GetOnePlayerTradePool()
