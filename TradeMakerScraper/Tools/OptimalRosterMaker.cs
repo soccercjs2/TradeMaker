@@ -13,7 +13,7 @@ namespace TradeMakerScraper.Tools
         public Roster GetRoster(LeagueData leagueData, List<Player> team, IEnumerable<Player> lostPlayers)
         {
             Roster roster = FindOptimalRoster(leagueData, team);
-            roster = MarkLostPlayers(roster, lostPlayers);
+            //roster = MarkLostPlayers(roster, lostPlayers);
 
             return roster;
         }
@@ -24,7 +24,7 @@ namespace TradeMakerScraper.Tools
             if (gainedPlayers != null) { foreach (Player gainedPlayer in gainedPlayers) { team.Add(gainedPlayer); } }
 
             Roster roster = FindOptimalRoster(leagueData, team);
-            roster = MarkGainedPlayers(roster, gainedPlayers);
+            //roster = MarkGainedPlayers(roster, gainedPlayers);
 
             return roster;
         }
