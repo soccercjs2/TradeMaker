@@ -32,8 +32,19 @@
         <paper-material elevation="1" on-tap="_toggleRosterView">
             <paper-ripple></paper-ripple>
             <center>
-                <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.MyDifferential]]" header="You Get" primary></trade-side>
-                <trade-side players="[[trade.MyPlayers]]" differential="[[trade.TheirDifferential]]" header="They Get"></trade-side>
+                <trade-side 
+                        players="[[trade.TheirPlayers]]" 
+                        differential="[[trade.MyDifferential]]" 
+                        new-roster="[[trade.MyNewStartingRoster]]"
+                        old-roster="[[trade.MyOldStartingRoster]]" 
+                        header="[[trade.MyTeamName]] Gets" primary></trade-side>
+
+                <trade-side 
+                        players="[[trade.MyPlayers]]" 
+                        differential="[[trade.TheirDifferential]]" 
+                        new-roster="[[trade.TheirNewStartingRoster]]"
+                        old-roster="[[trade.TheirOldStartingRoster]]" 
+                        header="[[trade.TheirTeamName]] Gets"></trade-side>
             </center>
         </paper-material>
     </template>

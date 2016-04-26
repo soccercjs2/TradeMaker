@@ -8,6 +8,8 @@ namespace TradeMakerScraper.Models
 {
     public class Trade : IEquatable<Trade>
     {
+        public string MyTeamName { get; set; }
+        public string TheirTeamName { get; set; }
         public IEnumerable<Player> MyPlayers { get; set; }
         public IEnumerable<Player> TheirPlayers { get; set; }
         //public IEnumerable<Player> MyStartingRoster { get; set; }
@@ -26,8 +28,10 @@ namespace TradeMakerScraper.Models
 
         }
 
-        public Trade(IEnumerable<Player> myPlayers, IEnumerable<Player> theirPlayers)
+        public Trade(string myTeamName, string theirTeamName, IEnumerable<Player> myPlayers, IEnumerable<Player> theirPlayers)
         {
+            MyTeamName = MyTeamName;
+            TheirTeamName = theirTeamName;
             MyPlayers = myPlayers.OrderByDescending(p => p.TradeValue);
             TheirPlayers = theirPlayers.OrderByDescending(p => p.TradeValue);
             Fairness = theirPlayers.Sum(p => p.TradeValue) - myPlayers.Sum(p => p.TradeValue);

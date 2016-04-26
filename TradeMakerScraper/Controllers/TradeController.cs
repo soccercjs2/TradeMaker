@@ -60,7 +60,7 @@ namespace TradeMakerScraper.Controllers
         {
             IEnumerable<Trade> trades = from mySideOfTrade in myTradePool
                                         from theirSideOfTrade in theirTradePool
-                                        select (new Trade(mySideOfTrade, theirSideOfTrade));
+                                        select (new Trade(myTeamPlayerPool.Team.Name, theirTeamPlayerPool.Team.Name, mySideOfTrade, theirSideOfTrade));
 
             //get required players and excluded players
             List<Player> myRequiredPlayers = myTeamPlayerPool.TradablePlayers.Where(p => p.Required).ToList<Player>();
