@@ -74,6 +74,7 @@ namespace TradeMakerScraper.Controllers
                 {
                     trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool);
                     if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
+
                         bool isValidTrade = 
                             HasRequiredPlayers(trade.MyPlayers, myRequiredPlayers) &&
                             HasRequiredPlayers(trade.TheirPlayers, theirRequiredPlayers) &&

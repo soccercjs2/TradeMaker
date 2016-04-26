@@ -23,12 +23,14 @@ namespace TradeMakerScraper.Tools
             ThreePlayerTradePool = GetThreePlayerTradePool();
         }
 
-        public IEnumerable<Player> OptimalLineUp(LeagueData leagueData)
+        //public IEnumerable<Player> OptimalLineUp(LeagueData leagueData)
+        public Roster OptimalLineUp(LeagueData leagueData)
         {
             return OptimalLineUp(leagueData, null, null);
         }
 
-        public IEnumerable<Player> OptimalLineUp(LeagueData leagueData, IEnumerable<Player> gainedPlayers, IEnumerable<Player> lostPlayers)
+        //public IEnumerable<Player> OptimalLineUp(LeagueData leagueData, IEnumerable<Player> gainedPlayers, IEnumerable<Player> lostPlayers)
+        public Roster OptimalLineUp(LeagueData leagueData, IEnumerable<Player> gainedPlayers, IEnumerable<Player> lostPlayers)
         {
             List<Player> team = new List<Player>(Team.Players);
             if (lostPlayers != null) { foreach (Player lostPlayer in lostPlayers) { team.Remove(lostPlayer); } }
@@ -36,6 +38,7 @@ namespace TradeMakerScraper.Tools
 
             //create list of starters to return
             List<Player> starters = new List<Player>();
+            Roster roster = new Roster();
 
             //get position players
             List<Player> quarterbacks = team.Where(p => p.Position == "QB").OrderByDescending(p => p.FantasyPoints).ToList();
@@ -44,16 +47,27 @@ namespace TradeMakerScraper.Tools
             List<Player> tightEnds = team.Where(p => p.Position == "TE").OrderByDescending(p => p.FantasyPoints).ToList();
 
             //get starting players
-            List<Player> startingQbs = quarterbacks.Take(1).ToList();
-            List<Player> startingRbs = runningBacks.Take(2).ToList();
-            List<Player> startingWrs = wideReceivers.Take(2).ToList();
-            List<Player> startingTes = tightEnds.Take(1).ToList();
+            //List<Player> startingQbs = quarterbacks.Take(1).ToList();
+            //List<Player> startingRbs = runningBacks.Take(2).ToList();
+            //List<Player> startingWrs = wideReceivers.Take(2).ToList();
+            //List<Player> startingTes = tightEnds.Take(1).ToList();
+
+            roster.Quarterbacks = quarterbacks.Take(1).ToList();
+            roster.RunningBacks = runningBacks.Take(2).ToList();
+            roster.WideReceivers = wideReceivers.Take(2).ToList();
+            roster.TightEnds = tightEnds.Take(1).ToList();
 
             //add best waiver to team if missing starter
-            if (startingQbs.Count() < 1) { startingQbs.Add(leagueData.WaiverQuarterback); }
-            if (startingRbs.Count() < 2) { startingRbs.Add(leagueData.WaiverRunningBack); }
-            if (startingWrs.Count() < 2) { startingWrs.Add(leagueData.WaiverWideReceiver); }
-            if (startingTes.Count() < 1) { startingTes.Add(leagueData.WaiverTightEnd); }
+            //if (startingQbs.Count() < 1) { startingQbs.Add(leagueData.WaiverQuarterback); }
+            //if (startingRbs.Count() < 2) { startingRbs.Add(leagueData.WaiverRunningBack); }
+            //if (startingWrs.Count() < 2) { startingWrs.Add(leagueData.WaiverWideReceiver); }
+            //if (startingTes.Count() < 1) { startingTes.Add(leagueData.WaiverTightEnd); }
+
+            //add best waiver to team if missing starter
+            if (roster.Quarterbacks.Count() < 1) { roster.Quarterbacks.Add(leagueData.WaiverQuarterback); }
+            if (roster.RunningBacks.Count() < 2) { roster.RunningBacks.Add(leagueData.WaiverRunningBack); }
+            if (roster.WideReceivers.Count() < 2) { roster.WideReceivers.Add(leagueData.WaiverWideReceiver); }
+            if (roster.TightEnds.Count() < 1) { roster.TightEnds.Add(leagueData.WaiverTightEnd); }
 
             //get possible waiver players
             Player flexRb = runningBacks.Skip(2).Take(1).FirstOrDefault();
@@ -71,14 +85,17 @@ namespace TradeMakerScraper.Tools
             else if (flexWrPoints > flexRbPoints && flexWrPoints > flexTePoints) { flexPlayer = flexWr; }
             else { flexPlayer = flexTe; }
 
-            foreach (Player player in startingQbs) { starters.Add(player); }
-            foreach (Player player in startingRbs) { starters.Add(player); }
-            foreach (Player player in startingWrs) { starters.Add(player); }
-            foreach (Player player in startingTes) { starters.Add(player); }
-            starters.Add(flexPlayer);
+            //foreach (Player player in startingQbs) { starters.Add(player); }
+            //foreach (Player player in startingRbs) { starters.Add(player); }
+            //foreach (Player player in startingWrs) { starters.Add(player); }
+            //foreach (Player player in startingTes) { starters.Add(player); }
+            //starters.Add(flexPlayer);
+
+            roster.Flexes.Add(flexPlayer);
+            return roster;
 
             //return optimal starting lineup
-            return starters;
+            //return starters;
         }
 
         private IEnumerable<IEnumerable<Player>> GetOnePlayerTradePool()

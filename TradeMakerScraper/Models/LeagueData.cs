@@ -20,6 +20,7 @@ namespace TradeMakerScraper.Models
         public LeagueData()
         {
             Teams = new List<Team>();
+            Trades = new List<Trade>();
         }
     }
 }

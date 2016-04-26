@@ -10,8 +10,12 @@ namespace TradeMakerScraper.Models
     {
         public IEnumerable<Player> MyPlayers { get; set; }
         public IEnumerable<Player> TheirPlayers { get; set; }
-        public IEnumerable<Player> MyStartingRoster { get; set; }
-        public IEnumerable<Player> TheirStartingRoster { get; set; }
+        //public IEnumerable<Player> MyStartingRoster { get; set; }
+        //public IEnumerable<Player> TheirStartingRoster { get; set; }
+        public Roster MyNewStartingRoster { get; set; }
+        public Roster MyOldStartingRoster { get; set; }
+        public Roster TheirNewStartingRoster { get; set; }
+        public Roster TheirOldStartingRoster { get; set; }
         public decimal MyDifferential { get; set; }
         public decimal TheirDifferential { get; set; }
         public decimal CompositeDifferential { get; set; }
@@ -32,20 +36,28 @@ namespace TradeMakerScraper.Models
         public void CalculateDifferentials(LeagueData leagueData, TeamPlayerPool myTeamPlayerPool, TeamPlayerPool theirTeamPlayerPool)
         {
             //get new original rosters
-            List<Player> myOriginalStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData).ToList();
-            List<Player> theirOriginalStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData).ToList();
+            //List<Player> myOriginalStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData).ToList();
+            //List<Player> theirOriginalStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData).ToList();
+            MyOldStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData);
+            TheirOldStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData);
 
             //calculate original starting lineup points
-            decimal myOriginalStartingPoints = myOriginalStartingRoster.Sum(p => p.FantasyPoints);
-            decimal theirOriginalStartingPoints = theirOriginalStartingRoster.Sum(p => p.FantasyPoints);
+            //decimal myOriginalStartingPoints = myOriginalStartingRoster.Sum(p => p.FantasyPoints);
+            //decimal theirOriginalStartingPoints = theirOriginalStartingRoster.Sum(p => p.FantasyPoints);
+            decimal myOriginalStartingPoints = MyOldStartingRoster.GetPoints();
+            decimal theirOriginalStartingPoints = TheirOldStartingRoster.GetPoints();
 
             //get new starting rosters
-            MyStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers, MyPlayers);
-            TheirStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers, TheirPlayers);
+            //MyStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers, MyPlayers);
+            //TheirStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers, TheirPlayers);
+            MyNewStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers, MyPlayers);
+            TheirNewStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers, TheirPlayers);
 
             //calculate new starting lineup points
-            decimal myNewStartingPoints = MyStartingRoster.Sum(p => p.FantasyPoints);
-            decimal theirNewStartingPoints = TheirStartingRoster.Sum(p => p.FantasyPoints);
+            //decimal myNewStartingPoints = MyStartingRoster.Sum(p => p.FantasyPoints);
+            //decimal theirNewStartingPoints = TheirStartingRoster.Sum(p => p.FantasyPoints);
+            decimal myNewStartingPoints = MyNewStartingRoster.GetPoints();
+            decimal theirNewStartingPoints = TheirNewStartingRoster.GetPoints();
 
             //calculate differentials
             MyDifferential = myNewStartingPoints - myOriginalStartingPoints;

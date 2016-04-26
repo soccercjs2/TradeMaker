@@ -1,5 +1,6 @@
 ﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../../elements/trade-side/trade-side.html">
 
 <dom-module id="trade-view">
@@ -28,7 +29,8 @@
             }
         </style>
         <!-- local DOM goes here -->
-        <paper-material elevation="1">
+        <paper-material elevation="1" on-tap="_toggleRosterView">
+            <paper-ripple></paper-ripple>
             <center>
                 <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.MyDifferential]]" header="You Get" primary></trade-side>
                 <trade-side players="[[trade.MyPlayers]]" differential="[[trade.TheirDifferential]]" header="They Get"></trade-side>
@@ -42,6 +44,9 @@
                 trade: {
                     type: Object
                 }
+            },
+            _toggleRosterView: function () {
+                console.log("Here's where I'd show roster view.")
             }
         });
     </script>

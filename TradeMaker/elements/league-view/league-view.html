@@ -34,7 +34,7 @@
         <!--url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"-->
         <iron-ajax
             id="projectionAjax"
-            url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"
+            url="http://localhost:36880/api/projectionscraper"
             handle-as="json"
             on-response="_projectionResponse"
             method="GET">
@@ -44,7 +44,7 @@
         <!--url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"-->
         <iron-ajax 
             id="leagueAjax"
-            url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"
+            url="http://localhost:36880/api/leaguescraper"
             handle-as="json"
             content-type="application/json"
             on-response="_leagueResponse"
@@ -54,7 +54,7 @@
         <!--url="http://localhost:36880/api/trade"-->
         <!--url="http://trademakerscraper.azurewebsites.net/api/trade"-->
         <iron-ajax id="tradeAjax"
-                   url="http://trademakerscraper.azurewebsites.net/api/trade"
+                   url="http://localhost:36880/api/trade"
                    handle-as="json"
                    content-type="application/json"
                    on-response="_findTradesResponse"
