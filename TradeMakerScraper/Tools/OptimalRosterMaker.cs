@@ -13,7 +13,7 @@ namespace TradeMakerScraper.Tools
         public Roster GetRoster(LeagueData leagueData, List<Player> team, IEnumerable<Player> lostPlayers)
         {
             Roster roster = FindOptimalRoster(leagueData, team);
-            //roster = MarkLostPlayers(roster, lostPlayers);
+            roster = MarkLostPlayers(roster, lostPlayers);
 
             return roster;
         }
@@ -24,7 +24,7 @@ namespace TradeMakerScraper.Tools
             if (gainedPlayers != null) { foreach (Player gainedPlayer in gainedPlayers) { team.Add(gainedPlayer); } }
 
             Roster roster = FindOptimalRoster(leagueData, team);
-            //roster = MarkGainedPlayers(roster, gainedPlayers);
+            roster = MarkGainedPlayers(roster, gainedPlayers);
 
             return roster;
         }
@@ -41,16 +41,16 @@ namespace TradeMakerScraper.Tools
             List<Player> tightEnds = team.Where(p => p.Position == "TE").OrderByDescending(p => p.FantasyPoints).ToList();
 
             //get starting players
-            roster.Quarterbacks = quarterbacks.Take(1).ToList();
-            roster.RunningBacks = runningBacks.Take(2).ToList();
-            roster.WideReceivers = wideReceivers.Take(2).ToList();
-            roster.TightEnds = tightEnds.Take(1).ToList();
+            foreach (Player player in quarterbacks.Take(1).ToList()) { roster.Quarterbacks.Add(new RosterPlayer(player)); };
+            foreach (Player player in runningBacks.Take(2).ToList()) { roster.RunningBacks.Add(new RosterPlayer(player)); };
+            foreach (Player player in wideReceivers.Take(2).ToList()) { roster.WideReceivers.Add(new RosterPlayer(player)); };
+            foreach (Player player in tightEnds.Take(1).ToList()) { roster.TightEnds.Add(new RosterPlayer(player)); };
 
             //add best waiver to team if missing starter
-            if (roster.Quarterbacks.Count() < 1) { roster.Quarterbacks.Add(leagueData.WaiverQuarterback); }
-            if (roster.RunningBacks.Count() < 2) { roster.RunningBacks.Add(leagueData.WaiverRunningBack); }
-            if (roster.WideReceivers.Count() < 2) { roster.WideReceivers.Add(leagueData.WaiverWideReceiver); }
-            if (roster.TightEnds.Count() < 1) { roster.TightEnds.Add(leagueData.WaiverTightEnd); }
+            if (roster.Quarterbacks.Count() < 1) { roster.Quarterbacks.Add(new RosterPlayer(leagueData.WaiverQuarterback)); }
+            if (roster.RunningBacks.Count() < 2) { roster.RunningBacks.Add(new RosterPlayer(leagueData.WaiverRunningBack)); }
+            if (roster.WideReceivers.Count() < 2) { roster.WideReceivers.Add(new RosterPlayer(leagueData.WaiverWideReceiver)); }
+            if (roster.TightEnds.Count() < 1) { roster.TightEnds.Add(new RosterPlayer(leagueData.WaiverTightEnd)); }
 
             //get possible flex players
             Player flexRb = runningBacks.Skip(2).Take(1).FirstOrDefault();
@@ -68,44 +68,44 @@ namespace TradeMakerScraper.Tools
             else if (flexWrPoints > flexRbPoints && flexWrPoints > flexTePoints) { flexPlayer = flexWr; }
             else { flexPlayer = flexTe; }
 
-            roster.Flexes.Add(flexPlayer);
+            roster.Flexes.Add(new RosterPlayer(flexPlayer));
             return roster;
         }
 
         public Roster MarkLostPlayers(Roster roster, IEnumerable<Player> lostPlayers)
         {
             //find quarterbacks lost
-            foreach (Player quarterback in roster.Quarterbacks)
+            foreach (RosterPlayer quarterback in roster.Quarterbacks)
             {
-                Player lostPlayer = lostPlayers.Where(p => p.Id == quarterback.Id).FirstOrDefault<Player>();
+                Player lostPlayer = lostPlayers.Where(p => p.Id == quarterback.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { quarterback.OldPlayer = true; }
             }
 
             //find runningbacks lost
-            foreach (Player runningback in roster.RunningBacks)
+            foreach (RosterPlayer runningback in roster.RunningBacks)
             {
-                Player lostPlayer = lostPlayers.Where(p => p.Id == runningback.Id).FirstOrDefault<Player>();
+                Player lostPlayer = lostPlayers.Where(p => p.Id == runningback.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { runningback.OldPlayer = true; }
             }
 
             //find widereceivers lost
-            foreach (Player widereceiver in roster.WideReceivers)
+            foreach (RosterPlayer widereceiver in roster.WideReceivers)
             {
-                Player lostPlayer = lostPlayers.Where(p => p.Id == widereceiver.Id).FirstOrDefault<Player>();
+                Player lostPlayer = lostPlayers.Where(p => p.Id == widereceiver.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { widereceiver.OldPlayer = true; }
             }
 
             //find tightends lost
-            foreach (Player tightend in roster.TightEnds)
+            foreach (RosterPlayer tightend in roster.TightEnds)
             {
-                Player lostPlayer = lostPlayers.Where(p => p.Id == tightend.Id).FirstOrDefault<Player>();
+                Player lostPlayer = lostPlayers.Where(p => p.Id == tightend.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { tightend.OldPlayer = true; }
             }
 
             //find flexes lost
-            foreach (Player flex in roster.Flexes)
+            foreach (RosterPlayer flex in roster.Flexes)
             {
-                Player lostPlayer = lostPlayers.Where(p => p.Id == flex.Id).FirstOrDefault<Player>();
+                Player lostPlayer = lostPlayers.Where(p => p.Id == flex.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { flex.OldPlayer = true; }
             }
 
@@ -115,37 +115,37 @@ namespace TradeMakerScraper.Tools
         public Roster MarkGainedPlayers(Roster roster, IEnumerable<Player> gainedPlayers)
         {
             //find quarterbacks gained
-            foreach (Player quarterback in roster.Quarterbacks)
+            foreach (RosterPlayer quarterback in roster.Quarterbacks)
             {
-                Player lostPlayer = gainedPlayers.Where(p => p.Id == quarterback.Id).FirstOrDefault<Player>();
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == quarterback.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { quarterback.NewPlayer = true; }
             }
 
             //find runningbacks gained
-            foreach (Player runningback in roster.RunningBacks)
+            foreach (RosterPlayer runningback in roster.RunningBacks)
             {
-                Player lostPlayer = gainedPlayers.Where(p => p.Id == runningback.Id).FirstOrDefault<Player>();
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == runningback.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { runningback.NewPlayer = true; }
             }
 
             //find widereceivers gained
-            foreach (Player widereceiver in roster.WideReceivers)
+            foreach (RosterPlayer widereceiver in roster.WideReceivers)
             {
-                Player lostPlayer = gainedPlayers.Where(p => p.Id == widereceiver.Id).FirstOrDefault<Player>();
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == widereceiver.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { widereceiver.NewPlayer = true; }
             }
 
             //find tightends gained
-            foreach (Player tightend in roster.TightEnds)
+            foreach (RosterPlayer tightend in roster.TightEnds)
             {
-                Player lostPlayer = gainedPlayers.Where(p => p.Id == tightend.Id).FirstOrDefault<Player>();
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == tightend.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { tightend.NewPlayer = true; }
             }
 
             //find flexes gained
-            foreach (Player flex in roster.Flexes)
+            foreach (RosterPlayer flex in roster.Flexes)
             {
-                Player lostPlayer = gainedPlayers.Where(p => p.Id == flex.Id).FirstOrDefault<Player>();
+                Player lostPlayer = gainedPlayers.Where(p => p.Id == flex.Player.Id).FirstOrDefault<Player>();
                 if (lostPlayer != null) { flex.NewPlayer = true; }
             }
 

@@ -28,8 +28,8 @@ namespace TradeMakerScraper.Models
 
         public Trade(string myTeamName, string theirTeamName, IEnumerable<Player> myPlayers, IEnumerable<Player> theirPlayers)
         {
-            MyTeamName = myTeamName;
-            TheirTeamName = theirTeamName;
+            MyTeamName = myTeamName.ToUpper();
+            TheirTeamName = theirTeamName.ToUpper();
             MyPlayers = myPlayers.OrderByDescending(p => p.TradeValue);
             TheirPlayers = theirPlayers.OrderByDescending(p => p.TradeValue);
             Fairness = theirPlayers.Sum(p => p.TradeValue) - myPlayers.Sum(p => p.TradeValue);
@@ -37,23 +37,17 @@ namespace TradeMakerScraper.Models
 
         public void CalculateDifferentials(LeagueData leagueData, TeamPlayerPool myTeamPlayerPool, TeamPlayerPool theirTeamPlayerPool)
         {
-            OptimalRosterMaker rosterMaker = new OptimalRosterMaker();
-
             //get new original rosters
-            //MyOldStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers);
-            //TheirOldStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers);
-            MyOldStartingRoster = rosterMaker.GetRoster(leagueData, myTeamPlayerPool.Team.Players, MyPlayers);
-            TheirOldStartingRoster = rosterMaker.GetRoster(leagueData, theirTeamPlayerPool.Team.Players, TheirPlayers);
+            MyOldStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers);
+            TheirOldStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers);
 
             //calculate original starting lineup points
             decimal myOriginalStartingPoints = MyOldStartingRoster.GetPoints();
             decimal theirOriginalStartingPoints = TheirOldStartingRoster.GetPoints();
 
             //get new starting rosters
-            //MyNewStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers, MyPlayers);
-            //TheirNewStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers, TheirPlayers);
-            MyNewStartingRoster = rosterMaker.GetRoster(leagueData, myTeamPlayerPool.Team.Players, TheirPlayers, MyPlayers);
-            TheirNewStartingRoster = rosterMaker.GetRoster(leagueData, theirTeamPlayerPool.Team.Players, TheirPlayers, MyPlayers);
+            MyNewStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers, MyPlayers);
+            TheirNewStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers, TheirPlayers);
 
             //calculate new starting lineup points
             decimal myNewStartingPoints = MyNewStartingRoster.GetPoints();

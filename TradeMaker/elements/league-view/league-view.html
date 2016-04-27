@@ -27,6 +27,7 @@
 
             paper-material {
                 padding: 10px;
+                background-color: #f5f5f5;
             }
         </style>
         <!-- local DOM goes here -->
@@ -34,7 +35,7 @@
         <!--url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"-->
         <iron-ajax
             id="projectionAjax"
-            url="http://localhost:36880/api/projectionscraper"
+            url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"
             handle-as="json"
             on-response="_projectionResponse"
             method="GET">
@@ -44,7 +45,7 @@
         <!--url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"-->
         <iron-ajax 
             id="leagueAjax"
-            url="http://localhost:36880/api/leaguescraper"
+            url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"
             handle-as="json"
             content-type="application/json"
             on-response="_leagueResponse"
@@ -54,7 +55,7 @@
         <!--url="http://localhost:36880/api/trade"-->
         <!--url="http://trademakerscraper.azurewebsites.net/api/trade"-->
         <iron-ajax id="tradeAjax"
-                   url="http://localhost:36880/api/trade"
+                   url="http://trademakerscraper.azurewebsites.net/api/trade"
                    handle-as="json"
                    content-type="application/json"
                    on-response="_findTradesResponse"
@@ -86,7 +87,6 @@
         <template is="dom-if" if="[[trades]]">
             <template is="dom-repeat" items="[[trades]]" as="trade">
                 <trade-container trade="[[trade]]" show-trade></trade-container>
-                <!--<trade-view trade="[[trade]]"></trade-view>-->
             </template>
         </template>
     </template>

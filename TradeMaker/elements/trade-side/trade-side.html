@@ -6,13 +6,19 @@
         <style>
             /* local DOM styles go here */
 
-            .side {
-                padding: 10px;
-                /*width: 100%;*/
+            paper-material {
+                padding: 0px;
+                margin: 0px;
             }
             
             table {
-                border-bottom: 1px solid #3f51b5;
+                border-spacing: 0px;
+                border-bottom: 1px solid black;
+            }
+
+            td {
+                padding: 4px;
+                background-color: #ffffff;
             }
 
             .value {
@@ -20,23 +26,35 @@
                 text-align: right;
             }
 
-            .green {
+            .footer {
                 color: green;
                 text-align: right;
+                background-color: #ffffff;
             }
 
-            .primary {
+            .primary-footer {
                 font-size: 22px;
                 font-weight: bold;
+                padding-right: 5px;
+            }
+
+            @media (min-width: 1001px) {
+                .non-primary-side {
+                    border-left: 1px solid black;
+                }
             }
 
             thead {
-                background-color: #3f51b5;
+                background-color: #6946AA;
                 color: #FFFFFF;
+            }
+
+            th {
+                padding: 5px;
             }
         </style>
         <!-- local DOM goes here -->
-        <div class="side">
+        <paper-material id="side" elevation="1">
             <table>
                 <thead>
                     <th colspan="2">[[header]]</th>
@@ -48,8 +66,8 @@
                     </tr>
                 </template>
             </table>
-            <div id="total" class="green">[[differential]]</div>
-        </div>
+            <div id="total" class="footer">[[differential]]</div>
+        </paper-material>
     </template>
     <script>
         Polymer({
@@ -70,7 +88,9 @@
             },
             ready: function () {
                 if (this.primary) {
-                    this.$.total.className += " primary"
+                    this.$.total.className += " primary-footer"
+                } else {
+                    this.$.side.className += " non-primary-side"
                 }
             }
         });

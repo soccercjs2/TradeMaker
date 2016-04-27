@@ -18,7 +18,7 @@
                     display: inline-block;
                     vertical-align: top;
                     min-width: 300px;
-                    width: 49%;
+                    width: 50%;
                 }
             }
 
@@ -29,20 +29,8 @@
             }
         </style>
         <!-- local DOM goes here -->
-        <div>
-            <paper-ripple></paper-ripple>
-            <center>
-                <trade-side 
-                        players="[[trade.TheirPlayers]]" 
-                        differential="[[trade.MyDifferential]]"
-                        header="[[trade.MyTeamName]] Gets" primary></trade-side>
-
-                <trade-side 
-                        players="[[trade.MyPlayers]]" 
-                        differential="[[trade.TheirDifferential]]"
-                        header="[[trade.TheirTeamName]] Gets"></trade-side>
-            </center>
-        </div>
+        <paper-ripple></paper-ripple>
+        <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.MyDifferential]]" header="[[trade.MyTeamName]] GETS" primary></trade-side><trade-side players="[[trade.MyPlayers]]" differential="[[trade.TheirDifferential]]" header="[[trade.TheirTeamName]] GETS"></trade-side>
     </template>
     <script>
         Polymer({
@@ -51,9 +39,6 @@
                 trade: {
                     type: Object
                 }
-            },
-            _toggleRosterView: function () {
-                console.log("Here's where I'd show roster view.")
             }
         });
     </script>

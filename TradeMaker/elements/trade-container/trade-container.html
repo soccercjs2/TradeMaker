@@ -12,9 +12,16 @@
                 margin-top: 20px;
                 margin-bottom: 20px;
             }
+
+            div {
+                /*background-color: #FFFFFF;*/
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
         </style>
         <!-- local DOM goes here -->
-        <paper-material elevation="1">
+        <!--<paper-material elevation="1">-->
+        <div>
             <template is="dom-if" if="[[showTrade]]">
                 <trade-view trade="[[trade]]" on-tap="_showRoster"></trade-view>
             </template>
@@ -22,7 +29,8 @@
             <template is="dom-if" if="[[showRoster]]">
                 <roster-container trade="[[trade]]" on-show-trade="_showTrade"></roster-container>
             </template>
-        </paper-material>
+        </div>
+        <!--</paper-material>-->
 </template>
     <script>
         Polymer({

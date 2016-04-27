@@ -16,26 +16,15 @@
                     display: inline-block;
                     vertical-align: top;
                     min-width: 300px;
-                    width: 49%;
+                    width: 50%;
                 }
             }
         </style>
         <!-- local DOM goes here -->
         
-        <div>
-            <paper-ripple></paper-ripple>
-            <center>
-                <!--my roster side-->
-                <roster-side header="[[myName]]"
-                             roster="[[myRoster]]"
-                             primary></roster-side>
-
-                <!--their roster side-->
-                <roster-side header="[[theirName]]"
-                             roster="[[theirRoster]]"></roster-side>
-            </center>
-        </div>
-
+        <paper-ripple></paper-ripple>
+        <!--my roster side-->
+        <roster-side header="[[myName]]" roster="[[myRoster]]" primary></roster-side><roster-side header="[[theirName]]" roster="[[theirRoster]]"></roster-side>
     </template>
     <script>
         Polymer({
