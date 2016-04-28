@@ -24,7 +24,11 @@
         
         <paper-ripple></paper-ripple>
         <!--my roster side-->
-        <roster-side header="[[myName]]" roster="[[myRoster]]"></roster-side><roster-side header="[[theirName]]" roster="[[theirRoster]]"></roster-side>
+        <roster-side header="[[myName]]"
+                     roster="[[myRoster]]"></roster-side><!--
+        
+     --><roster-side header="[[theirName]]"
+                     roster="[[theirRoster]]"></roster-side>
     </template>
     <script>
         Polymer({
@@ -39,14 +43,8 @@
                 myRoster: {
                     type: Object
                 },
-                myDifferential: {
-                    type: Number
-                },
                 theirRoster: {
                     type: Object
-                },
-                theirDifferential: {
-                    type: Number
                 }
             }
         });

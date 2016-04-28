@@ -27,7 +27,6 @@
             }
 
             .footer {
-                color: green;
                 text-align: right;
                 background-color: #ffffff;
                 font-weight: bold;
@@ -35,9 +34,12 @@
                 font-size: larger;
             }
 
-            .primary-footer {
-                font-size: x-large;
-                font-weight: bold;
+            .green {
+                color: green;
+            }
+
+            .red {
+                color: red;
             }
 
             @media (min-width: 1001px) {
@@ -103,7 +105,7 @@
                     </tr>
                 </template>
             </table>
-            <div id="total" class="footer">[[roster.Points]]</div>
+            <div id="total" class="footer">[[roster.Points]] ([[roster.Differential]])</div>
         </paper-material>
 
     </template>
@@ -124,6 +126,12 @@
             ready: function () {
                 if (!this.primary) {
                     this.$.side.className += " not-primary-side"
+                }
+
+                if (this.roster.Differential.includes('+')) {
+                    this.$.total.className = this.$.total.className + " green";
+                } else {
+                    this.$.total.className = this.$.total.className + " red";
                 }
             },
             _newOrOld: function (player) {

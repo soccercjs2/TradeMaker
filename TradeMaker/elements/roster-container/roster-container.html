@@ -23,9 +23,7 @@
                              my-name="[[trade.MyTeamName]]"
                              their-name="[[trade.TheirTeamName]]"
                              my-roster="[[trade.MyNewStartingRoster]]"
-                             their-roster="[[trade.TheirNewStartingRoster]]"
-                             my-differential="[[trade.MyDifferential]]"
-                             their-differential="[[trade.TheirDifferential]]"></roster-view>
+                             their-roster="[[trade.TheirNewStartingRoster]]"></roster-view>
             </div>
             <div>
                 <roster-view on-tap="_showTrade"
@@ -42,13 +40,26 @@
             properties: {
                 trade: {
                     type: Object
+                },
+                myNegativeDifferential: {
+                    type: String,
+                    computed: '_makeNegative(trade.MyDifferential)'
+                },
+                theirNegativeDifferential: {
+                    type: String,
+                    computed: '_makeNegative(trade.TheirDifferential)'
                 }
             },
             ready: function () {
                 this.selected = 0;
+                console.log(this.myNegativeDifferential);
+                console.log(this.theirNegativeDifferential);
             },
             _showTrade: function () {
                 this.fire('show-trade', { });
+            },
+            _makeNegative: function (differential) {
+                return (differential * -1);
             }
         });
     </script>

@@ -49,6 +49,12 @@ namespace TradeMakerScraper.Models
             MyDifferential = MyNewStartingRoster.Points - MyOldStartingRoster.Points;
             TheirDifferential = TheirNewStartingRoster.Points - TheirOldStartingRoster.Points;
             CompositeDifferential = MyDifferential + TheirDifferential;
+
+            //set differentials back in rosters
+            MyNewStartingRoster.Differential = "+" + MyDifferential;
+            MyOldStartingRoster.Differential = "-" + MyDifferential;
+            TheirNewStartingRoster.Differential = "+" + TheirDifferential;
+            TheirOldStartingRoster.Differential = "-" + TheirDifferential;
         }
 
         public override int GetHashCode()
