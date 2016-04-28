@@ -33,9 +33,9 @@
             }
 
             .primary-footer {
-                font-size: 22px;
+                font-size: larger;
                 font-weight: bold;
-                padding-right: 5px;
+                padding: 2px;
             }
 
             @media (min-width: 1001px) {
@@ -66,7 +66,7 @@
                     </tr>
                 </template>
             </table>
-            <div id="total" class="footer">[[differential]]</div>
+            <div class="footer"><span id="diff">+[[differential]]</span> ([[total]])</div>
         </paper-material>
     </template>
     <script>
@@ -84,11 +84,14 @@
                 },
                 primary: {
                     type: Boolean
+                },
+                total: {
+                    type: Number
                 }
             },
             ready: function () {
                 if (this.primary) {
-                    this.$.total.className += " primary-footer"
+                    this.$.diff.className += " primary-footer"
                 } else {
                     this.$.side.className += " non-primary-side"
                 }

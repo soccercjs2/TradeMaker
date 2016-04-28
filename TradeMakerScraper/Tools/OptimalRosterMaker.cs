@@ -69,6 +69,14 @@ namespace TradeMakerScraper.Tools
             else { flexPlayer = flexTe; }
 
             roster.Flexes.Add(new RosterPlayer(flexPlayer));
+
+            roster.Points =
+                roster.Quarterbacks.Sum(p => p.Player.FantasyPoints) +
+                roster.RunningBacks.Sum(p => p.Player.FantasyPoints) +
+                roster.WideReceivers.Sum(p => p.Player.FantasyPoints) +
+                roster.TightEnds.Sum(p => p.Player.FantasyPoints) +
+                roster.Flexes.Sum(p => p.Player.FantasyPoints);
+
             return roster;
         }
 

@@ -41,21 +41,13 @@ namespace TradeMakerScraper.Models
             MyOldStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers);
             TheirOldStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers);
 
-            //calculate original starting lineup points
-            decimal myOriginalStartingPoints = MyOldStartingRoster.GetPoints();
-            decimal theirOriginalStartingPoints = TheirOldStartingRoster.GetPoints();
-
             //get new starting rosters
             MyNewStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, TheirPlayers, MyPlayers);
             TheirNewStartingRoster = theirTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers, TheirPlayers);
 
-            //calculate new starting lineup points
-            decimal myNewStartingPoints = MyNewStartingRoster.GetPoints();
-            decimal theirNewStartingPoints = TheirNewStartingRoster.GetPoints();
-
             //calculate differentials
-            MyDifferential = myNewStartingPoints - myOriginalStartingPoints;
-            TheirDifferential = theirNewStartingPoints - theirOriginalStartingPoints;
+            MyDifferential = MyNewStartingRoster.Points - MyOldStartingRoster.Points;
+            TheirDifferential = TheirNewStartingRoster.Points - TheirOldStartingRoster.Points;
             CompositeDifferential = MyDifferential + TheirDifferential;
         }
 

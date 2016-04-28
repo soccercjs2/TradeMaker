@@ -13,6 +13,7 @@ namespace TradeMakerScraper.Tools
         public List<RosterPlayer> WideReceivers { get; set; }
         public List<RosterPlayer> TightEnds { get; set; }
         public List<RosterPlayer> Flexes { get; set; }
+        public decimal Points { get; set; }
 
         public Roster()
         {
@@ -21,16 +22,6 @@ namespace TradeMakerScraper.Tools
             WideReceivers = new List<RosterPlayer>();
             TightEnds = new List<RosterPlayer>();
             Flexes = new List<RosterPlayer>();
-        }
-
-        public decimal GetPoints()
-        {
-            return
-                Quarterbacks.Sum(p => p.Player.FantasyPoints) +
-                RunningBacks.Sum(p => p.Player.FantasyPoints) +
-                WideReceivers.Sum(p => p.Player.FantasyPoints) +
-                TightEnds.Sum(p => p.Player.FantasyPoints) +
-                Flexes.Sum(p => p.Player.FantasyPoints);
         }
     }
 }

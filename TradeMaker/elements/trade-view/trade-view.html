@@ -30,7 +30,16 @@
         </style>
         <!-- local DOM goes here -->
         <paper-ripple></paper-ripple>
-        <trade-side players="[[trade.TheirPlayers]]" differential="[[trade.MyDifferential]]" header="[[trade.MyTeamName]] GETS" primary></trade-side><trade-side players="[[trade.MyPlayers]]" differential="[[trade.TheirDifferential]]" header="[[trade.TheirTeamName]] GETS"></trade-side>
+        <trade-side players="[[trade.TheirPlayers]]" 
+                    differential="[[trade.MyDifferential]]" 
+                    header="[[trade.MyTeamName]] GETS"
+                    total="[[trade.MyNewStartingRoster.Points]]"
+                    primary></trade-side><!--
+        
+     --><trade-side players="[[trade.MyPlayers]]"
+                       differential="[[trade.TheirDifferential]]"
+                       header="[[trade.TheirTeamName]] GETS"
+                       total="[[trade.TheirNewStartingRoster.Points]]"></trade-side>
     </template>
     <script>
         Polymer({
