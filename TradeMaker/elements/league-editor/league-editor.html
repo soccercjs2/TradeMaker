@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 
 <dom-module id="league-editor">
     <template>
@@ -22,10 +23,23 @@
             <paper-input id="league-url" label="league url" value="{{league.Url}}" no-label-float></paper-input>
             <paper-checkbox id="league-requires-login" checked="{{league.RequiresLogin}}">
                 requires login</paper-checkbox>
-            <paper-input id="league-username" label="league username" value="{{league.Username}}" 
-                disabled="{{!league.requires-login}}" no-label-float></paper-input>
-            <paper-input id="league-password" label="league password" value="{{league.Password}}" 
-                disabled="{{!league.requires-login}}" no-label-float></paper-input>
+
+            Points per Throwing Touchdown:
+            <paper-dropdown-menu label="SELECT A VALUE">
+                <paper-listbox id="teamList" class="dropdown-content" selected="{{league.PointsPerPassingTouchdown}}" attr-for-selected="value">
+                    <paper-item value="4">4</paper-item>
+                    <paper-item value="6">6</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+
+            Points per Reception:
+            <paper-dropdown-menu label="SELECT A VALUE">
+                <paper-listbox id="teamList" class="dropdown-content" selected="{{league.PointsPerReception}}" attr-for-selected="value">
+                    <paper-item value="0">0</paper-item>
+                    <paper-item value="0.5">0.5</paper-item>
+                    <paper-item value="1">1</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
             <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
                 <paper-button dialog-confirm on-tap="_accept">Accept</paper-button>
@@ -52,8 +66,6 @@
                 this.$['league-name'].value = "";
                 this.$['league-url'].value = "";
                 this.$['league-requires-login'].checked = false;
-                this.$['league-username'].value = "";
-                this.$['league-password'].value = "";
             },
             _accept: function () {
                 this.fire('save-league', { league: this.league });
