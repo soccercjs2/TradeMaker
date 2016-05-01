@@ -33,7 +33,7 @@ namespace TradeMakerScraper.Controllers
             if (package.League.RequiresLogin)
             {
                 string loginUrl = parser.GetLoginUrl();
-                string postData = parser.GetPostData(package.League.Username, package.League.Password);
+                string postData = ""; // parser.GetPostData(package.Username, package.Password);
                 scraper = new WebScraper(loginUrl, postData);
             }
             else { scraper = new WebScraper(); }
@@ -44,7 +44,7 @@ namespace TradeMakerScraper.Controllers
             //scrape each team and parse into league data
             foreach (Team team in leagueData.Teams)
             {
-                parser.ParseTeam(scraper.Scrape(team.Url), team, package.Projections);
+                parser.ParseTeam(scraper.Scrape(team.Url), package.League, team, package.Projections);
             }
 
             leagueData.WaiverQuarterback = package.Projections.Players.Where(p => p.Position == "QB").OrderByDescending(p => p.FantasyPoints).First<Player>();

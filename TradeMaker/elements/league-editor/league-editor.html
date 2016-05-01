@@ -1,9 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="league-editor">
     <template>
@@ -15,31 +17,68 @@
             paper-dialog {
                 width: 400px;
             }
+
+            .number {
+                text-align: right;
+            }
+
+            .seperator {
+                border: 1px solid #3f51b5;
+            }
+
+            .scrollable {
+                overflow: scroll;
+            }
         </style>
         <!-- local DOM goes here -->
-        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
+        <paper-dialog id="dialog" class="layout vertical" modal autoFitOnAttach>
             <h2>Create a League</h2>
-            <paper-input id="league-name" label="league name" value="{{league.Name}}" no-label-float></paper-input>
-            <paper-input id="league-url" label="league url" value="{{league.Url}}" no-label-float></paper-input>
-            <paper-checkbox id="league-requires-login" checked="{{league.RequiresLogin}}">
-                requires login</paper-checkbox>
 
-            Points per Throwing Touchdown:
-            <paper-dropdown-menu label="SELECT A VALUE">
-                <paper-listbox id="teamList" class="dropdown-content" selected="{{league.PointsPerPassingTouchdown}}" attr-for-selected="value">
-                    <paper-item value="4">4</paper-item>
-                    <paper-item value="6">6</paper-item>
-                </paper-listbox>
-            </paper-dropdown-menu>
+            <div class="scrollable">
+                <div class="seperator"></div>
 
-            Points per Reception:
-            <paper-dropdown-menu label="SELECT A VALUE">
-                <paper-listbox id="teamList" class="dropdown-content" selected="{{league.PointsPerReception}}" attr-for-selected="value">
-                    <paper-item value="0">0</paper-item>
-                    <paper-item value="0.5">0.5</paper-item>
-                    <paper-item value="1">1</paper-item>
-                </paper-listbox>
-            </paper-dropdown-menu>
+                <paper-input id="league-name" label="league name" value="{{league.Name}}" no-label-float></paper-input>
+                <paper-input id="league-url" label="league url" value="{{league.Url}}" no-label-float></paper-input>
+                <paper-checkbox id="league-requires-login" checked="{{league.RequiresLogin}}">requires login</paper-checkbox>
+
+                <div class="seperator"></div>
+
+                <paper-input class="number" type="number" value="{{league.Quarterbakcs}}" no-label-float>
+                    <div suffix>quarterbacks</div>
+                </paper-input>
+
+                <paper-input class="number" type="number" value="{{league.RunningBacks}}" no-label-float>
+                    <div suffix>running backs</div>
+                </paper-input>
+
+                <paper-input class="number" type="number" value="{{league.WideReceivers}}" no-label-float>
+                    <div suffix>wide receivers</div>
+                </paper-input>
+
+                <paper-input class="number" type="number" value="{{league.TightEnds}}" no-label-float>
+                    <div suffix>tight ends</div>
+                </paper-input>
+
+                <paper-input class="number" type="number" value="{{league.Flexes}}" no-label-float>
+                    <div suffix>flex(s)</div>
+                </paper-input>
+
+                <div class="seperator"></div>
+
+                <paper-input class="number" type="number" value="{{league.PointsPerPassingTouchdown}}" no-label-float>
+                    <div suffix>points per passing TD</div>
+                </paper-input>
+
+                <paper-input class="number" type="number" value="{{league.YardsPerFantasyPoint}}" no-label-float>
+                    <div prefix>1 point per</div>
+                    <div suffix>passing yard(s)</div>
+                </paper-input>
+
+                <paper-input class="number" type="number" value="{{league.PointsPerReception}}" no-label-float>
+                    <div suffix>point(s) per reception</div>
+                </paper-input>
+            </div>
+
             <div class="buttons">
                 <paper-button dialog-dismiss>Cancel</paper-button>
                 <paper-button dialog-confirm on-tap="_accept">Accept</paper-button>
@@ -56,7 +95,7 @@
                 league: {
                     type: Object,
                     notify: true,
-                    value: { Name: null, Url: null, selected: false }
+                    value: { Name: null, Url: null, RequiresLogin: false, PointsPerPassingTouchdown: 4, YardsPerFantasyPoint: 20, PointsPerReception: 0, selected: false }
                 }
             },
             showEditor: function() {

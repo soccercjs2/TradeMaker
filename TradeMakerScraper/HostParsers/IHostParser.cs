@@ -15,6 +15,6 @@ namespace TradeMakerScraper.HostParsers
 
         void ParseLeague(HtmlDocument document, ref LeagueData leagueData);
 
-        void ParseTeam(HtmlDocument document, Team team, Projections projections);
+        void ParseTeam(HtmlDocument document, League league, Team team, Projections projections);
     }
 }

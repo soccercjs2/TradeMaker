@@ -59,7 +59,7 @@ namespace TradeMakerScraper.Controllers
                 player.Receptions = decimal.Parse(row.SelectSingleNode("./td[11]").InnerText);
                 player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[12]").InnerText);
                 player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[13]").InnerText);
-                player.FantasyPoints = decimal.Parse(row.SelectSingleNode("./td[15]").InnerText);
+                player.FantasyPoints = 0;
 
                 //add datarow to datatable
                 players.Add(player);

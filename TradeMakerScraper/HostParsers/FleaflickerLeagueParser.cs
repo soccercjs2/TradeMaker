@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using TradeMakerScraper.Models;
+using TradeMakerScraper.Tools;
 
 namespace TradeMakerScraper.HostParsers
 {
@@ -51,7 +52,7 @@ namespace TradeMakerScraper.HostParsers
             }
         }
 
-        public void ParseTeam(HtmlDocument document, Team team, Projections projections)
+        public void ParseTeam(HtmlDocument document, League league, Team team, Projections projections)
         {
             //get table containing players of teams
             HtmlNode teamTable = document.GetElementbyId(LeagueTableId);
@@ -77,6 +78,7 @@ namespace TradeMakerScraper.HostParsers
 
                 if (player != null) {
                     projections.Players.Remove(player);
+                    player.FantasyPoints = new FantasyPointsCalculator(league, player).FantasyPoints;
                     team.Players.Add(player);
                 }
             }
