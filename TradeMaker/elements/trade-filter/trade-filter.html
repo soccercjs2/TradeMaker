@@ -42,9 +42,9 @@
             <template is="dom-if" if="{{selectedTeam}}">
                 <table class="fill">
                     <thead>
-                        <th></th>
-                        <th class="min-width">Required</th>
-                        <th class="min-width">Exclude</th>
+                    <th></th>
+                    <th class="min-width">Required</th>
+                    <th class="min-width">Exclude</th>
                     </thead>
                     <template is="dom-repeat" items="{{selectedTeam.Players}}" as="player">
                         <tr>
@@ -60,7 +60,7 @@
                 <paper-button class="white" dialog-dismiss on-tap="_cancel">Cancel</paper-button>
                 <paper-button class="white" dialog-confirm on-tap="_accept">Accept</paper-button>
             </div>
-        </paper-dialog>
+</paper-dialog>
     </template>
     <script>
         Polymer({
