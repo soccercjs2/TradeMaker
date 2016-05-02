@@ -23,47 +23,56 @@
             }
 
             .seperator {
-                border: 1px solid #3f51b5;
+                border-bottom: 1px solid black;
+                padding-top: 10px;
+                padding-bottom: 2px;
+                font-weight: bold;
+                font-size: 17px;
             }
 
             .scrollable {
-                overflow: scroll;
+                overflow-y: scroll;
+            }
+
+            .header {
+                font-size: 20px;
+                font-weight: bold;
             }
         </style>
         <!-- local DOM goes here -->
         <paper-dialog id="dialog" class="layout vertical" modal autoFitOnAttach>
-            <h2>Create a League</h2>
+            <div class="header">Create a League</div>
 
             <div class="scrollable">
-                <div class="seperator"></div>
+                <div class="seperator">General</div>
 
                 <paper-input id="league-name" label="league name" value="{{league.Name}}" no-label-float></paper-input>
                 <paper-input id="league-url" label="league url" value="{{league.Url}}" no-label-float></paper-input>
                 <paper-checkbox id="league-requires-login" checked="{{league.RequiresLogin}}">requires login</paper-checkbox>
 
-                <div class="seperator"></div>
+                <div class="seperator">Roster</div>
 
-                <paper-input class="number" type="number" value="{{league.Quarterbakcs}}" no-label-float>
-                    <div suffix>quarterbacks</div>
+                <paper-input class="number" type="number" value="{{league.Quarterbacks}}" no-label-float>
+                    <div suffix>quarterback(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.RunningBacks}}" no-label-float>
-                    <div suffix>running backs</div>
+                    <div suffix>running back(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.WideReceivers}}" no-label-float>
-                    <div suffix>wide receivers</div>
+                    <div suffix>wide receiver(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.TightEnds}}" no-label-float>
-                    <div suffix>tight ends</div>
+                    <div suffix>tight end(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.Flexes}}" no-label-float>
                     <div suffix>flex(s)</div>
                 </paper-input>
 
-                <div class="seperator"></div>
+                <div class="seperator">Scoring</div>
 
                 <paper-input class="number" type="number" value="{{league.PointsPerPassingTouchdown}}" no-label-float>
                     <div suffix>points per passing TD</div>
@@ -95,7 +104,11 @@
                 league: {
                     type: Object,
                     notify: true,
-                    value: { Name: null, Url: null, RequiresLogin: false, PointsPerPassingTouchdown: 4, YardsPerFantasyPoint: 20, PointsPerReception: 0, selected: false }
+                    value: {
+                        Name: null, Url: null, RequiresLogin: false,
+                        Quarterbacks: 1, RunningBacks: 2, WideReceivers: 2, TightEnds: 1, Flexes: 1,
+                        PointsPerPassingTouchdown: 4, YardsPerFantasyPoint: 20, PointsPerReception: 0, selected: false
+                    }
                 }
             },
             showEditor: function() {
