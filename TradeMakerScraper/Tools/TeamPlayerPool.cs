@@ -10,9 +10,9 @@ namespace TradeMakerScraper.Tools
     {
         public Team Team { get; set; }
         public List<Player> TradablePlayers { get; set; }
-        public IEnumerable<IEnumerable<Player>> OnePlayerTradePool { get; set; }
-        public IEnumerable<IEnumerable<Player>> TwoPlayerTradePool { get; set; }
-        public IEnumerable<IEnumerable<Player>> ThreePlayerTradePool { get; set; }
+        public HashSet<PlayerList> OnePlayerTradePool { get; set; }
+        public HashSet<PlayerList> TwoPlayerTradePool { get; set; }
+        public HashSet<PlayerList> ThreePlayerTradePool { get; set; }
 
         public TeamPlayerPool(Team team)
         {
@@ -23,7 +23,7 @@ namespace TradeMakerScraper.Tools
             ThreePlayerTradePool = GetThreePlayerTradePool();
         }
 
-        public Roster OptimalLineUp(LeagueData leagueData, IEnumerable<Player> lostPlayers)
+        public Roster OptimalLineUp(LeagueData leagueData, HashSet<Player> lostPlayers)
         {
             List<Player> team = new List<Player>(Team.Players);
             IEnumerable<Player> lost = new List<Player>(lostPlayers);
@@ -31,7 +31,7 @@ namespace TradeMakerScraper.Tools
             return rosterMaker.GetRoster(leagueData, team, lost);
         }
 
-        public Roster OptimalLineUp(LeagueData leagueData, IEnumerable<Player> gainedPlayers, IEnumerable<Player> lostPlayers)
+        public Roster OptimalLineUp(LeagueData leagueData, HashSet<Player> gainedPlayers, HashSet<Player> lostPlayers)
         {
             List<Player> team = new List<Player>(Team.Players);
             IEnumerable<Player> gained = new List<Player>(gainedPlayers);
@@ -41,27 +41,55 @@ namespace TradeMakerScraper.Tools
             return rosterMaker.GetRoster(leagueData, team, gained, lost);
         }
 
-        private IEnumerable<IEnumerable<Player>> GetOnePlayerTradePool()
+        private HashSet<PlayerList> GetOnePlayerTradePool()
         {
-            return from firstPlayer in TradablePlayers
-                   select new List<Player>() { firstPlayer };
+            IEnumerable<PlayerList> foundTradeSides =   from firstPlayer in TradablePlayers
+                                                        select new PlayerList() { Players = { firstPlayer } };
+            //select new HashSet<Player>() { firstPlayer };
+
+            HashSet<PlayerList> efficientTradeSides = new HashSet<PlayerList>();
+
+            foreach (PlayerList tradeSide in foundTradeSides)
+            {
+                efficientTradeSides.Add(tradeSide);
+            }
+
+            return efficientTradeSides;
         }
 
-        private IEnumerable<IEnumerable<Player>> GetTwoPlayerTradePool()
+        private HashSet<PlayerList> GetTwoPlayerTradePool()
         {
-            return from firstPlayer in TradablePlayers
-                   from secondPlayer in TradablePlayers
-                   where firstPlayer != secondPlayer
-                   select new List<Player>() { firstPlayer, secondPlayer };
+            IEnumerable<PlayerList> foundTradeSides = from firstPlayer in TradablePlayers
+                                                      from secondPlayer in TradablePlayers
+                                                      where firstPlayer != secondPlayer
+                                                      select new PlayerList() { Players = { firstPlayer, secondPlayer } };
+
+            HashSet<PlayerList> efficientTradeSides = new HashSet<PlayerList>();
+
+            foreach (PlayerList tradeSide in foundTradeSides)
+            {
+                efficientTradeSides.Add(tradeSide);
+            }
+
+            return efficientTradeSides;
         }
 
-        private IEnumerable<IEnumerable<Player>> GetThreePlayerTradePool()
+        private HashSet<PlayerList> GetThreePlayerTradePool()
         {
-            return from firstPlayer in TradablePlayers
-                   from secondPlayer in TradablePlayers
-                   from thirdPlayer in TradablePlayers
-                   where firstPlayer != secondPlayer && firstPlayer != thirdPlayer && secondPlayer != thirdPlayer
-                   select new List<Player>() { firstPlayer, secondPlayer, thirdPlayer };
+            IEnumerable<PlayerList> foundTradeSides = from firstPlayer in TradablePlayers
+                                                      from secondPlayer in TradablePlayers
+                                                      from thirdPlayer in TradablePlayers
+                                                      where firstPlayer != secondPlayer && firstPlayer != thirdPlayer && secondPlayer != thirdPlayer
+                                                      select new PlayerList() { Players = { firstPlayer, secondPlayer, thirdPlayer } };
+
+            HashSet<PlayerList> efficientTradeSides = new HashSet<PlayerList>();
+
+            foreach (PlayerList tradeSide in foundTradeSides)
+            {
+                efficientTradeSides.Add(tradeSide);
+            }
+
+            return efficientTradeSides;
         }
     }
 }

@@ -10,8 +10,8 @@ namespace TradeMakerScraper.Models
     {
         public string MyTeamName { get; set; }
         public string TheirTeamName { get; set; }
-        public IEnumerable<Player> MyPlayers { get; set; }
-        public IEnumerable<Player> TheirPlayers { get; set; }
+        public HashSet<Player> MyPlayers { get; set; }
+        public HashSet<Player> TheirPlayers { get; set; }
         public Roster MyNewStartingRoster { get; set; }
         public Roster MyOldStartingRoster { get; set; }
         public Roster TheirNewStartingRoster { get; set; }
@@ -26,13 +26,15 @@ namespace TradeMakerScraper.Models
 
         }
 
-        public Trade(string myTeamName, string theirTeamName, IEnumerable<Player> myPlayers, IEnumerable<Player> theirPlayers)
+        public Trade(string myTeamName, string theirTeamName, PlayerList myPlayers, PlayerList theirPlayers)
         {
             MyTeamName = myTeamName.ToUpper();
             TheirTeamName = theirTeamName.ToUpper();
-            MyPlayers = myPlayers.OrderByDescending(p => p.TradeValue);
-            TheirPlayers = theirPlayers.OrderByDescending(p => p.TradeValue);
-            Fairness = theirPlayers.Sum(p => p.TradeValue) - myPlayers.Sum(p => p.TradeValue);
+            //MyPlayers = myPlayers.OrderByDescending(p => p.TradeValue);
+            //TheirPlayers = theirPlayers.OrderByDescending(p => p.TradeValue);
+            MyPlayers = myPlayers.Players;
+            TheirPlayers = theirPlayers.Players;
+            Fairness = theirPlayers.Players.Sum(p => p.TradeValue) - myPlayers.Players.Sum(p => p.TradeValue);
         }
 
         public void CalculateDifferentials(LeagueData leagueData, TeamPlayerPool myTeamPlayerPool, TeamPlayerPool theirTeamPlayerPool)

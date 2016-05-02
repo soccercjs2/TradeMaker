@@ -144,6 +144,7 @@
     <Compile Include="Models\League.cs" />
     <Compile Include="Models\LeagueData.cs" />
     <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\PlayerList.cs" />
     <Compile Include="Models\Projections.cs" />
     <Compile Include="Models\RosterPlayer.cs" />
     <Compile Include="Models\Team.cs" />

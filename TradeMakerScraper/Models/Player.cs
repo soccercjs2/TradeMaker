@@ -5,7 +5,7 @@ using System.Web;
 
 namespace TradeMakerScraper.Models
 {
-    public class Player
+    public class Player : IEquatable<Player>
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -29,6 +29,17 @@ namespace TradeMakerScraper.Models
         {
             Required = false;
             Excluded = false;
+        }
+
+        public bool Equals(Player other)
+        {
+            return other.Id == Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)(Id + Name.Length + PassingYards + PassingTouchdowns + Interceptions +
+                RushingYards + RushingTouchdowns + Receptions + ReceivingYards + ReceivingTouchdowns);
         }
     }
 }

@@ -7,6 +7,6 @@ namespace TradeMakerScraper.Models
 {
     public class Projections
     {
-        public List<Player> Players { get; set; }
+        public HashSet<Player> Players { get; set; }
     }
 }

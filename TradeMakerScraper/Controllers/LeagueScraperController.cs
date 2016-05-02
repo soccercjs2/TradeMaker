@@ -19,8 +19,15 @@ namespace TradeMakerScraper.Controllers
         public LeagueData Post(LeagueScraperPackage package)
         {
             LeagueData leagueData = new LeagueData();
+            leagueData.League = package.League;
+
             WebScraper scraper = null;
             IHostParser parser = null;
+
+            foreach (Player player in package.Projections.Players)
+            {
+                player.FantasyPoints = new FantasyPointsCalculator(package.League, player).FantasyPoints;
+            }
 
             //determine which parser to use based on url
             if (package.League.Url.Contains("www.fleaflicker.com")) { parser = new FleaflickerLeagueParser(); }
@@ -47,19 +54,25 @@ namespace TradeMakerScraper.Controllers
                 parser.ParseTeam(scraper.Scrape(team.Url), package.League, team, package.Projections);
             }
 
-            leagueData.WaiverQuarterback = package.Projections.Players.Where(p => p.Position == "QB").OrderByDescending(p => p.FantasyPoints).First<Player>();
-            leagueData.WaiverRunningBack = package.Projections.Players.Where(p => p.Position == "RB").OrderByDescending(p => p.FantasyPoints).First<Player>();
-            leagueData.WaiverWideReceiver = package.Projections.Players.Where(p => p.Position == "WR").OrderByDescending(p => p.FantasyPoints).First<Player>();
-            leagueData.WaiverTightEnd = package.Projections.Players.Where(p => p.Position == "TE").OrderByDescending(p => p.FantasyPoints).First<Player>();
+            //leagueData.WaiverQuarterback = package.Projections.Players.Where(p => p.Position == "QB").OrderByDescending(p => p.FantasyPoints).First<Player>();
+            //leagueData.WaiverRunningBack = package.Projections.Players.Where(p => p.Position == "RB").OrderByDescending(p => p.FantasyPoints).First<Player>();
+            //leagueData.WaiverWideReceiver = package.Projections.Players.Where(p => p.Position == "WR").OrderByDescending(p => p.FantasyPoints).First<Player>();
+            //leagueData.WaiverTightEnd = package.Projections.Players.Where(p => p.Position == "TE").OrderByDescending(p => p.FantasyPoints).First<Player>();
+
+            leagueData.Waivers = package.Projections.Players;
+            Player waiverQuarterback = leagueData.GetWaiver("QB", 0);
+            Player waiverRunningBack = leagueData.GetWaiver("RB", 0);
+            Player waiverWideReceiver = leagueData.GetWaiver("WR", 0);
+            Player waiverTightEnd = leagueData.GetWaiver("TE", 0);
 
             foreach (Team team in leagueData.Teams)
             {
                 foreach (Player player in team.Players)
                 {
-                    if (player.Position == "QB") { player.TradeValue = player.FantasyPoints - leagueData.WaiverQuarterback.FantasyPoints; }
-                    if (player.Position == "RB") { player.TradeValue = player.FantasyPoints - leagueData.WaiverRunningBack.FantasyPoints; }
-                    if (player.Position == "WR") { player.TradeValue = player.FantasyPoints - leagueData.WaiverWideReceiver.FantasyPoints; }
-                    if (player.Position == "TE") { player.TradeValue = player.FantasyPoints - leagueData.WaiverTightEnd.FantasyPoints; }
+                    if (player.Position == "QB") { player.TradeValue = player.FantasyPoints - waiverQuarterback.FantasyPoints; }
+                    if (player.Position == "RB") { player.TradeValue = player.FantasyPoints - waiverRunningBack.FantasyPoints; }
+                    if (player.Position == "WR") { player.TradeValue = player.FantasyPoints - waiverWideReceiver.FantasyPoints; }
+                    if (player.Position == "TE") { player.TradeValue = player.FantasyPoints - waiverTightEnd.FantasyPoints; }
                 }
             }
 

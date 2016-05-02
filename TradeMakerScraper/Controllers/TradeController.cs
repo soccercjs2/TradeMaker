@@ -56,11 +56,17 @@ namespace TradeMakerScraper.Controllers
 
         private void FindTrades(ref List<Trade> allTrades, LeagueData leagueData,
                                 TeamPlayerPool myTeamPlayerPool, TeamPlayerPool theirTeamPlayerPool,
-                                IEnumerable<IEnumerable<Player>> myTradePool, IEnumerable<IEnumerable<Player>> theirTradePool)
+                                HashSet<PlayerList> myTradePool, HashSet<PlayerList> theirTradePool)
         {
             IEnumerable<Trade> trades = from mySideOfTrade in myTradePool
                                         from theirSideOfTrade in theirTradePool
                                         select (new Trade(myTeamPlayerPool.Team.Name, theirTeamPlayerPool.Team.Name, mySideOfTrade, theirSideOfTrade));
+
+            HashSet<Trade> uniqueTrades = new HashSet<Trade>();
+            foreach (Trade trade in trades)
+            {
+                uniqueTrades.Add(trade);
+            }
 
             //get required players and excluded players
             List<Player> myRequiredPlayers = myTeamPlayerPool.TradablePlayers.Where(p => p.Required).ToList<Player>();
@@ -68,7 +74,7 @@ namespace TradeMakerScraper.Controllers
             List<Player> theirRequiredPlayers = theirTeamPlayerPool.TradablePlayers.Where(p => p.Required).ToList<Player>();
             List<Player> theirExcludedPlayers = theirTeamPlayerPool.TradablePlayers.Where(p => p.Excluded).ToList<Player>();
 
-            foreach (Trade trade in trades)
+            foreach (Trade trade in uniqueTrades)
             {
                 if (Math.Abs(trade.Fairness) <= 5)
                 {

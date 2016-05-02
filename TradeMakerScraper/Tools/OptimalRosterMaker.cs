@@ -46,44 +46,58 @@ namespace TradeMakerScraper.Tools
             foreach (Player player in wideReceivers.Take(2).ToList()) { roster.WideReceivers.Add(new RosterPlayer(player)); };
             foreach (Player player in tightEnds.Take(1).ToList()) { roster.TightEnds.Add(new RosterPlayer(player)); };
 
-            //add best waiver to team if missing starterw
-            if (roster.Quarterbacks.Count() < 1) { roster.Quarterbacks.Add(new RosterPlayer(leagueData.WaiverQuarterback)); }
-            if (roster.RunningBacks.Count() < 2) { roster.RunningBacks.Add(new RosterPlayer(leagueData.WaiverRunningBack)); }
-            if (roster.WideReceivers.Count() < 2) { roster.WideReceivers.Add(new RosterPlayer(leagueData.WaiverWideReceiver)); }
-            if (roster.TightEnds.Count() < 1) { roster.TightEnds.Add(new RosterPlayer(leagueData.WaiverTightEnd)); }
+            //add best waivers to team if missing starters
+            int neededQuarterbacks = leagueData.League.Quarterbacks - roster.Quarterbacks.Count;
+            int neededRunningBacks = leagueData.League.RunningBacks - roster.RunningBacks.Count;
+            int neededWideReceivers = leagueData.League.WideReceivers - roster.WideReceivers.Count;
+            int neededTightEnds = leagueData.League.TightEnds - roster.TightEnds.Count;
+
+            for (int i = 0; i < neededQuarterbacks; i++) { roster.Quarterbacks.Add(new RosterPlayer(leagueData.GetWaiver("QB", i), true)); }
+            for (int i = 0; i < neededRunningBacks; i++) { roster.RunningBacks.Add(new RosterPlayer(leagueData.GetWaiver("RB", i), true)); }
+            for (int i = 0; i < neededWideReceivers; i++) { roster.WideReceivers.Add(new RosterPlayer(leagueData.GetWaiver("WR", i), true)); }
+            for (int i = 0; i < neededTightEnds; i++) { roster.TightEnds.Add(new RosterPlayer(leagueData.GetWaiver("TE", i), true)); }
 
             //get possible flex players
-            Player flexRb = runningBacks.Skip(2).Take(1).FirstOrDefault();
-            Player flexWr = wideReceivers.Skip(2).Take(1).FirstOrDefault();
-            Player flexTe = tightEnds.Skip(1).Take(1).FirstOrDefault();
+            List<Player> possibleFlexes = new List<Player>();
+            possibleFlexes.AddRange(runningBacks.Skip(leagueData.League.RunningBacks));
+            possibleFlexes.AddRange(wideReceivers.Skip(leagueData.League.WideReceivers));
+            possibleFlexes.AddRange(tightEnds.Skip(leagueData.League.TightEnds));
+            possibleFlexes = possibleFlexes.OrderByDescending(p => p.FantasyPoints).ToList<Player>();
 
+            //add remaining players on roster as flex
 
-
-            //get flex points for easy comparing
-            decimal flexRbPoints = (flexRb != null) ? flexRb.FantasyPoints : 0;
-            decimal flexWrPoints = (flexWr != null) ? flexWr.FantasyPoints : 0;
-            decimal flexTePoints = (flexTe != null) ? flexTe.FantasyPoints : 0;
-
-            //add best flex player to starters and remove him from the bench
-            Player flexPlayer;
-            if (flexRbPoints > flexWrPoints && flexRbPoints > flexTePoints) { flexPlayer = flexRb; }
-            else if (flexWrPoints > flexRbPoints && flexWrPoints > flexTePoints) { flexPlayer = flexWr; }
-            else { flexPlayer = flexTe; }
-
-            roster.Flexes.Add(new RosterPlayer(flexPlayer));
-
-            try
+            for (int i = 0; i < leagueData.League.Flexes; i++)
             {
-                roster.Points =
+                if (possibleFlexes.Count > i) { roster.Flexes.Add(new RosterPlayer(possibleFlexes[i])); }
+            }
+
+            //find out if you need waivers for flex
+            int neededFlexes = leagueData.League.Flexes - roster.Flexes.Count;
+            int skippedQuarterbacks = neededQuarterbacks;
+            int skippedRunningBacks = neededRunningBacks;
+            int skippedWideReceivers = neededWideReceivers;
+            int skippedTightEnds = neededTightEnds;
+
+            //add waivers to flex
+            for (int i = 0; i < neededFlexes; i++)
+            {
+                Player player = leagueData.GetWaiver(skippedQuarterbacks, skippedRunningBacks, skippedWideReceivers, skippedTightEnds);
+
+                if (player.Position == "QB") { skippedQuarterbacks++; }
+                if (player.Position == "RB") { skippedRunningBacks++; }
+                if (player.Position == "WR") { skippedWideReceivers++; }
+                if (player.Position == "TE") { skippedTightEnds++; }
+
+                roster.Flexes.Add(new RosterPlayer(player, true));
+            }
+
+            //calculate roster point total
+            roster.Points =
                 roster.Quarterbacks.Sum(p => p.Player.FantasyPoints) +
                 roster.RunningBacks.Sum(p => p.Player.FantasyPoints) +
                 roster.WideReceivers.Sum(p => p.Player.FantasyPoints) +
                 roster.TightEnds.Sum(p => p.Player.FantasyPoints) +
                 roster.Flexes.Sum(p => p.Player.FantasyPoints);
-            } catch(Exception e)
-            {
-                string asdf = "asdf";
-            }
 
             return roster;
         }

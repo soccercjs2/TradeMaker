@@ -78,7 +78,6 @@ namespace TradeMakerScraper.HostParsers
 
                 if (player != null) {
                     projections.Players.Remove(player);
-                    player.FantasyPoints = new FantasyPointsCalculator(league, player).FantasyPoints;
                     team.Players.Add(player);
                 }
             }

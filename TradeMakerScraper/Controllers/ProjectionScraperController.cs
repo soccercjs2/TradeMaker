@@ -18,7 +18,7 @@ namespace TradeMakerScraper.Controllers
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         public Projections Get()
         {
-            List<Player> players = new List<Player>();
+            HashSet<Player> players = new HashSet<Player>();
 
             //get qb data
             string html = "";
