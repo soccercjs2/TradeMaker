@@ -66,6 +66,10 @@
                 font-weight: bold;
                 color: red;
             }
+
+            .waiver {
+                color: green;
+            }
         </style>
         <!-- local DOM goes here -->
 
@@ -75,32 +79,47 @@
                 <th colspan="2">[[header]]</th>
                 </thead>
                 <template is="dom-repeat" items="[[roster.Quarterbacks]]" as="quarterback">
-                    <tr class$="{{_newOrOld(quarterback)}}">
-                        <td>[[quarterback.Player.Name]]</td>
+                    <tr class$="{{_class(quarterback)}}">
+                        <td>
+                            [[quarterback.Player.Name]]
+                            <template is="dom-if" if="[[quarterback.Waiver]]">[W]</template>
+                        </td>
                         <td class="value">[[quarterback.Player.FantasyPoints]]</td>
                     </tr>
                 </template>
                 <template is="dom-repeat" items="[[roster.RunningBacks]]" as="runningback">
-                    <tr class$="{{_newOrOld(runningback)}}">
-                        <td>[[runningback.Player.Name]]</td>
+                    <tr class$="{{_class(runningback)}}">
+                        <td>
+                            [[runningback.Player.Name]]
+                            <template is="dom-if" if="[[runningback.Waiver]]">[W]</template>
+                        </td>
                         <td class="value">[[runningback.Player.FantasyPoints]]</td>
                     </tr>
                 </template>
                 <template is="dom-repeat" items="[[roster.WideReceivers]]" as="widereceiver">
-                    <tr class$="{{_newOrOld(widereceiver)}}">
-                        <td>[[widereceiver.Player.Name]]</td>
+                    <tr class$="{{_class(widereceiver)}}">
+                        <td>
+                            [[widereceiver.Player.Name]]
+                            <template is="dom-if" if="[[widereceiver.Waiver]]">[W]</template>
+                        </td>
                         <td class="value">[[widereceiver.Player.FantasyPoints]]</td>
                     </tr>
                 </template>
                 <template is="dom-repeat" items="[[roster.TightEnds]]" as="tightend">
-                    <tr class$="{{_newOrOld(tightend)}}">
-                        <td>[[tightend.Player.Name]]</td>
+                    <tr class$="{{_class(tightend)}}">
+                        <td>
+                            [[tightend.Player.Name]]
+                            <template is="dom-if" if="[[tightend.Waiver]]">[W]</template>
+                        </td>
                         <td class="value">[[tightend.Player.FantasyPoints]]</td>
                     </tr>
                 </template>
                 <template is="dom-repeat" items="[[roster.Flexes]]" as="flex">
-                    <tr class$="{{_newOrOld(flex)}}">
-                        <td>[[flex.Player.Name]]</td>
+                    <tr class$="{{_class(flex)}}">
+                        <td>
+                            [[flex.Player.Name]]
+                            <template is="dom-if" if="[[flex.Waiver]]">[W]</template>
+                        </td>
                         <td class="value">[[flex.Player.FantasyPoints]]</td>
                     </tr>
                 </template>
@@ -134,14 +153,20 @@
                     this.$.total.className = this.$.total.className + " red";
                 }
             },
-            _newOrOld: function (player) {
+            _class: function (player) {
+                var cssclass = "";
+
                 if (player.OldPlayer) {
-                    return "old";
+                    cssclass = "old";
                 } else if (player.NewPlayer) {
-                    return "new";
-                } else {
-                    return "";
+                    cssclass = "new";
                 }
+
+                if (player.Waiver) {
+                    cssclass += " waiver";
+                }
+
+                return cssclass;
             }
         });
     </script>
