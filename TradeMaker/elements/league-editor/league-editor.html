@@ -38,6 +38,10 @@
                 font-size: 20px;
                 font-weight: bold;
             }
+
+            .suffix {
+                padding-left: 5px;
+            }
         </style>
         <!-- local DOM goes here -->
         <paper-dialog id="dialog" class="layout vertical" modal autoFitOnAttach>
@@ -53,38 +57,38 @@
                 <div class="seperator">Roster</div>
 
                 <paper-input class="number" type="number" value="{{league.Quarterbacks}}" no-label-float>
-                    <div suffix> quarterback(s)</div>
+                    <div suffix class="suffix">quarterback(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.RunningBacks}}" no-label-float>
-                    <div suffix> running back(s)</div>
+                    <div suffix class="suffix">running back(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.WideReceivers}}" no-label-float>
-                    <div suffix> wide receiver(s)</div>
+                    <div suffix class="suffix">wide receiver(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.TightEnds}}" no-label-float>
-                    <div suffix> tight end(s)</div>
+                    <div suffix class="suffix">tight end(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.Flexes}}" no-label-float>
-                    <div suffix> flex(s)</div>
+                    <div suffix class="suffix">flex(s)</div>
                 </paper-input>
 
                 <div class="seperator">Scoring</div>
 
                 <paper-input class="number" type="number" value="{{league.PointsPerPassingTouchdown}}" no-label-float>
-                    <div suffix> points per passing TD</div>
+                    <div suffix class="suffix">points per passing TD</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.YardsPerFantasyPoint}}" no-label-float>
-                    <div prefix>1 point per </div>
-                    <div suffix> passing yard(s)</div>
+                    <div prefix>1 point per</div>
+                    <div suffix class="suffix">passing yard(s)</div>
                 </paper-input>
 
                 <paper-input class="number" type="number" value="{{league.PointsPerReception}}" no-label-float>
-                    <div suffix> point(s) per reception</div>
+                    <div suffix class="suffix">point(s) per reception</div>
                 </paper-input>
             </div>
 
