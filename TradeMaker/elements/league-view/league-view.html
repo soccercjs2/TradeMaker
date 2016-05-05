@@ -102,10 +102,14 @@
                     type: Array,
                     readonly: true
                 },
+                kick: {
+                    type: Number,
+                    notify: true
+                },
                 league: {
                     type: Object,
                     notify: true,
-                    computed: '_getFirebaseLeague(leagues, leagueid)'
+                    computed: '_getFirebaseLeague(leagues, leagueid, kick)'
                 },
                 leagueData: {
                     type: Object,
@@ -122,8 +126,12 @@
             ready: function() {
                 this.cantFindTrades = true;
             },
-            _getFirebaseLeague: function (leagues, leagueid) {
-                var filteredLeagues = leagues.filter( function(league){return (league.__firebaseKey__ == leagueid);} );
+            _getFirebaseLeague: function (leagues, leagueid, kick) {
+                this.league = null;
+                this.leagueData = null;
+                this.trades = null;
+
+                var filteredLeagues = leagues.filter(function (league) { return (league.__firebaseKey__ == leagueid); });
                 var leagueFirebase;
                 
                 if (filteredLeagues) {
@@ -150,7 +158,7 @@
                 this.leagueData.MyTeam = e.detail.league;
 
                 //if leagues dont match, or all teams
-                if ((this.leagueData.TheirTeam != null && this.leagueData.TheirTeam.Id != this.leagueData.MyTeam.Id) || this.UseAllTeams)
+                if ((this.leagueData.TheirTeam != null && this.leagueData.TheirTeam.Id != this.leagueData.MyTeam.Id) || this.leagueData.UseAllTeams)
                 {
                     this.cantFindTrades = false;
                 } else {

@@ -41,6 +41,14 @@
                 league: {
                     type: Object,
                     notify: true
+                },
+                update: {
+                    type: Boolean,
+                    value: true
+                },
+                kick: {
+                    type: Number,
+                    notify: true
                 }
             },
             _onDelete: function() {
@@ -49,10 +57,17 @@
             _onShowEditor: function() {
                 this.$['league-editor'].showEditor();
             },
-            _onEdit: function(e) {
+            _onEdit: function (e) {
+                this.update = true;
                 this.fire('edit-league', { league: e.detail.league });
             },
             _selectLeague: function () {
+                if (this.update)
+                {
+                    this.update = false;
+                    this.kick = this.kick + 1;
+                }
+
                 page.show('/league/' + this.league.__firebaseKey__);
             }
         });

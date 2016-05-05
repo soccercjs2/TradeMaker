@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
   
   app.firebaseURL = 'https://trade-finder.firebaseio.com';
+  app.kick = 0;
 
   // Sets app default base URL
   app.baseUrl = '/';
