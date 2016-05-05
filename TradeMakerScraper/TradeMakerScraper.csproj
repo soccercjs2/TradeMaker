@@ -141,6 +141,7 @@
     </Compile>
     <Compile Include="HostParsers\FleaflickerLeagueParser.cs" />
     <Compile Include="HostParsers\IHostParser.cs" />
+    <Compile Include="HostParsers\MFLParser.cs" />
     <Compile Include="Models\League.cs" />
     <Compile Include="Models\LeagueData.cs" />
     <Compile Include="Models\Player.cs" />
