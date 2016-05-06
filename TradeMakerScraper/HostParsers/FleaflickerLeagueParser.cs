@@ -10,7 +10,7 @@ namespace TradeMakerScraper.HostParsers
 {
     public class FleaflickerLeagueParser : IHostParser
     {
-        private const string LoginUrl = "www.fleaflicker.com";
+        private const string LoginUrl = "http://www.fleaflicker.com/nfl/login";
         private const string LeagueTableId = "table_0";
         private const string TeamLinkClass = "league-name";
 
