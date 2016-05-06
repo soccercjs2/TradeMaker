@@ -13,7 +13,6 @@ namespace TradeMakerScraper.HostParsers
         private const string LoginUrl = "www.fleaflicker.com";
         private const string LeagueTableId = "table_0";
         private const string TeamLinkClass = "league-name";
-        private const string TeamTableIdentifier = "league-standings";
 
         public FleaflickerLeagueParser() { }
 
@@ -35,6 +34,7 @@ namespace TradeMakerScraper.HostParsers
             //get all the rows that contain the team links
             List<HtmlNode> rows = leagueTable.Descendants().Where(
                         row => row.Attributes.Count > 0 &&
+                        row.Name == "div" &&
                         row.Attributes["class"] != null &&
                         row.Attributes["class"].Value.Contains(TeamLinkClass)
             ).ToList<HtmlNode>();

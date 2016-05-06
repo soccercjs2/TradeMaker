@@ -47,10 +47,16 @@ namespace TradeMakerScraper.Tools
         {
             switch (team)
             {
-                case "WSH":
-                    return "WAS";
-                default:
-                    return team;
+                case "GB": return "GBP";
+                case "KC": return "KCC";
+                case "NE": return "NEP";
+                case "NO": return "NOS";
+                case "SD": return "SDC";
+                case "SF": return "SFO";
+                case "STL": return "RAM";
+                case "TB": return "TBB";
+                case "WSH": return "WAS";
+                default: return team;
             }
         }
     }

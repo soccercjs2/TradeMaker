@@ -31,6 +31,7 @@ namespace TradeMakerScraper.Controllers
 
             //determine which parser to use based on url
             if (package.League.Url.Contains("www.fleaflicker.com")) { parser = new FleaflickerLeagueParser(); }
+            else if (package.League.Url.Contains("www60.myfantasyleague.com")) { parser = new MFLParser(); }
             else
             { 
                 //throw exceptions saying league host not supported
