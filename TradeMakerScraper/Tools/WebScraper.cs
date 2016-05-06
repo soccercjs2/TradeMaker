@@ -32,7 +32,8 @@ namespace TradeMakerScraper.Tools
                 webRequest.CookieContainer = cookies;
 
                 //recieve non-authenticated cookie
-                webRequest.GetResponse().Close();
+                WebResponse response = webRequest.GetResponse();
+                response.Close();
 
                 //post form  data to page
                 webRequest = (HttpWebRequest)WebRequest.Create(loginUrl);
@@ -49,7 +50,9 @@ namespace TradeMakerScraper.Tools
                 //recieve authenticated cookie
                 webRequest.GetResponse().Close();
             }
-            catch { }
+            catch (Exception e) {
+                string asdf = "asdf";
+            }
 
             return cookies;
         }

@@ -32,6 +32,7 @@ namespace TradeMakerScraper.Controllers
             //determine which parser to use based on url
             if (package.League.Url.Contains("www.fleaflicker.com")) { parser = new FleaflickerLeagueParser(); }
             else if (package.League.Url.Contains("www60.myfantasyleague.com")) { parser = new MFLParser(); }
+            else if (package.League.Url.Contains("games.espn.go.com")) { parser = new EspnParser(); }
             else
             { 
                 //throw exceptions saying league host not supported
@@ -41,7 +42,8 @@ namespace TradeMakerScraper.Controllers
             if (package.League.RequiresLogin)
             {
                 string loginUrl = parser.GetLoginUrl();
-                string postData = ""; // parser.GetPostData(package.Username, package.Password);
+                //parser.GetPostData(package.Username, package.Password);
+                string postData = parser.GetPostData(null, null);
                 scraper = new WebScraper(loginUrl, postData);
             }
             else { scraper = new WebScraper(); }
@@ -54,11 +56,6 @@ namespace TradeMakerScraper.Controllers
             {
                 parser.ParseTeam(scraper.Scrape(team.Url), package.League, team, package.Projections);
             }
-
-            //leagueData.WaiverQuarterback = package.Projections.Players.Where(p => p.Position == "QB").OrderByDescending(p => p.FantasyPoints).First<Player>();
-            //leagueData.WaiverRunningBack = package.Projections.Players.Where(p => p.Position == "RB").OrderByDescending(p => p.FantasyPoints).First<Player>();
-            //leagueData.WaiverWideReceiver = package.Projections.Players.Where(p => p.Position == "WR").OrderByDescending(p => p.FantasyPoints).First<Player>();
-            //leagueData.WaiverTightEnd = package.Projections.Players.Where(p => p.Position == "TE").OrderByDescending(p => p.FantasyPoints).First<Player>();
 
             leagueData.Waivers = package.Projections.Players;
             Player waiverQuarterback = leagueData.GetWaiver("QB", 0);
