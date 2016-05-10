@@ -6,10 +6,10 @@
         <style>
             /* local DOM styles go here */
 
-            paper-material {
+            /*paper-material {
                 padding: 0px;
                 margin: 0px;
-            }
+            }*/
             
             table {
                 border-spacing: 0px;
@@ -41,6 +41,11 @@
             @media (min-width: 1001px) {
                 .non-primary-side {
                     border-left: 1px solid black;
+                    margin-left: -1px;
+                }
+
+                .primary-side {
+                    border-right: 1px solid black;
                 }
             }
 
@@ -54,7 +59,7 @@
             }
         </style>
         <!-- local DOM goes here -->
-        <paper-material id="side" elevation="1">
+        <div id="side">
             <table>
                 <thead>
                     <th colspan="2">[[header]]</th>
@@ -67,7 +72,7 @@
                 </template>
             </table>
             <div class="footer"><span id="diff">+[[differential]]</span> ([[total]])</div>
-        </paper-material>
+        </div>
     </template>
     <script>
         Polymer({
@@ -91,9 +96,10 @@
             },
             ready: function () {
                 if (this.primary) {
-                    this.$.diff.className += " primary-footer"
+                    this.$.diff.className += " primary-footer";
+                    this.$.side.className += " primary-side";
                 } else {
-                    this.$.side.className += " non-primary-side"
+                    this.$.side.className += " non-primary-side";
                 }
             }
         });
