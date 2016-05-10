@@ -84,7 +84,7 @@ namespace TradeMakerScraper.HostParsers
                     //get player attributes
                     string playerName = playerNames[1].Trim() + " " + playerNames[0].Trim();
                     string playerPosition = playerTeamPosition.Substring(positionStart, playerTeamPosition.Length - positionStart).Trim();
-                    string playerTeam = playerTeamPosition.Substring(teamStart, positionStart - teamStart - 1).Trim();
+                    string playerTeam = playerTeamPosition.Substring(teamStart, positionStart - teamStart - 1).Trim().ToUpper();
 
                     Player player = projections.Players.Where(
                         p => p.Name == playerName &&

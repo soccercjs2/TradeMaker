@@ -68,7 +68,7 @@ namespace TradeMakerScraper.HostParsers
 
                 string playerName = nameCell.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>().InnerText;
                 string playerPosition = positionCell.Descendants().Where(s => s.Name == "span").FirstOrDefault<HtmlNode>().InnerText;
-                string playerTeam = teamCell.Descendants().Where(s => s.Name == "span").FirstOrDefault<HtmlNode>().InnerText;
+                string playerTeam = teamCell.Descendants().Where(s => s.Name == "span").FirstOrDefault<HtmlNode>().InnerText.ToUpper();
 
                 Player player = projections.Players.Where(
                     p => p.Name == playerName &&

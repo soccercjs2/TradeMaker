@@ -12,14 +12,14 @@ namespace TradeMakerScraper.Tools
     {
         private CookieContainer Cookies { get; set; }
 
-        public WebScraper(): this(null, null) { }
+        public WebScraper(): this(null, null, null) { }
 
-        public WebScraper(string loginUrl, string postData)
+        public WebScraper(string leagueUrl, string loginUrl, string postData)
         {
-            if (loginUrl != null) { Cookies = Login(loginUrl, postData); }
+            if (loginUrl != null) { Cookies = Login(leagueUrl, loginUrl, postData); }
         }
 
-        private CookieContainer Login(string loginUrl, string postData)
+        private CookieContainer Login(string leagueUrl, string loginUrl, string postData)
         {
             HttpWebRequest webRequest;
             CookieContainer cookies = new CookieContainer();
@@ -28,17 +28,17 @@ namespace TradeMakerScraper.Tools
             try
             {
                 //get login  page with cookies
-                webRequest = (HttpWebRequest)WebRequest.Create(loginUrl);
+                webRequest = (HttpWebRequest)WebRequest.Create(leagueUrl);
                 webRequest.CookieContainer = cookies;
 
                 //recieve non-authenticated cookie
-                WebResponse response = webRequest.GetResponse();
-                response.Close();
+                WebResponse nonAuthResponse = webRequest.GetResponse();
+                nonAuthResponse.Close();
 
                 //post form  data to page
                 webRequest = (HttpWebRequest)WebRequest.Create(loginUrl);
                 webRequest.Method = WebRequestMethods.Http.Post;
-                webRequest.ContentType = "application/x-www-form-urlencoded";
+                webRequest.ContentType = "application/json; charset=UTF-8";
                 webRequest.CookieContainer = cookies;
 
                 webRequest.ContentLength = postData.Length;
@@ -48,7 +48,8 @@ namespace TradeMakerScraper.Tools
                 requestWriter.Close();
 
                 //recieve authenticated cookie
-                webRequest.GetResponse().Close();
+                WebResponse authResponse = webRequest.GetResponse();
+                authResponse.Close();
             }
             catch (Exception e) {
                 string asdf = "asdf";

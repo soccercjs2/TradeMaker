@@ -33,6 +33,7 @@ namespace TradeMakerScraper.Controllers
             if (package.League.Url.Contains("www.fleaflicker.com")) { parser = new FleaflickerLeagueParser(); }
             else if (package.League.Url.Contains("www60.myfantasyleague.com")) { parser = new MFLParser(); }
             else if (package.League.Url.Contains("games.espn.go.com")) { parser = new EspnParser(); }
+            else if (package.League.Url.Contains("football.fantasysports.yahoo.com")) { parser = new YahooParser(); }
             else
             { 
                 //throw exceptions saying league host not supported
@@ -44,7 +45,7 @@ namespace TradeMakerScraper.Controllers
                 string loginUrl = parser.GetLoginUrl();
                 //parser.GetPostData(package.Username, package.Password);
                 string postData = parser.GetPostData(null, null);
-                scraper = new WebScraper(loginUrl, postData);
+                scraper = new WebScraper(package.League.Url, loginUrl, postData);
             }
             else { scraper = new WebScraper(); }
 

@@ -10,6 +10,7 @@ namespace TradeMakerScraper.HostParsers
     public class EspnParser : IHostParser
     {
         private const string LoginUrl = "https://registerdisney.go.com/jgc/v2/client/ESPN-FANTASYLM-PROD/guest/login?langPref=en-US";
+        //private const string LoginUrl = "https://espn.go.com/login/";
         private const string LeagueTableId = "xstandTbl_div";
         private const string TeamLinkClass = "sortableRow";
         private const string TeamTableId = "playertable_0";
@@ -24,7 +25,7 @@ namespace TradeMakerScraper.HostParsers
         public string GetPostData(string username, string password)
         {
             //return string.Format("""loginValue"":""soccercjs2@gmail.com"",""password"":""Unitednumber2.""", username, password);
-            return "\"loginValue\":\"soccercjs2@gmail.com\",\"password\":\"Unitednumber2.\"";
+            return "{ \"loginValue\":\"soccercjs2@gmail.com\",\"password\":\"Unitednumber2.\"}";
         }
 
         public void ParseLeague(HtmlDocument document, ref LeagueData leagueData)
@@ -53,7 +54,7 @@ namespace TradeMakerScraper.HostParsers
                 Team team = new Team();
                 team.Id = leagueData.Teams.Count + 1;
                 team.Name = anchor.InnerHtml.Replace("&#39;", "'");
-                team.Url = anchor.Attributes["href"].Value;
+                team.Url = "http://games.espn.go.com" + anchor.Attributes["href"].Value.Replace("&amp;", "&");
 
                 leagueData.Teams.Add(team);
             }
@@ -73,19 +74,16 @@ namespace TradeMakerScraper.HostParsers
 
                 if (playerCell != null && playerCell.Id != null)
                 {
-                    string playerTeamPosition = playerCell.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>().InnerText;
+                    string playerTeamPosition = playerCell.InnerText.Replace("&nbsp;", " ");
 
                     //find indecies of start of team and position
                     int positionStart = playerTeamPosition.LastIndexOf(" ") + 1;
                     int teamStart = playerTeamPosition.Substring(0, positionStart - 1).LastIndexOf(" ");
 
-                    //split player names into array to rearange them
-                    string[] playerNames = playerTeamPosition.Substring(0, teamStart).Split(',');
-
                     //get player attributes
-                    string playerName = playerNames[1].Trim() + " " + playerNames[0].Trim();
+                    string playerName = playerTeamPosition.Substring(0, teamStart - 1);
                     string playerPosition = playerTeamPosition.Substring(positionStart, playerTeamPosition.Length - positionStart).Trim();
-                    string playerTeam = playerTeamPosition.Substring(teamStart, positionStart - teamStart - 1).Trim();
+                    string playerTeam = playerTeamPosition.Substring(teamStart, positionStart - teamStart - 1).Trim().ToUpper();
 
                     Player player = projections.Players.Where(
                         p => p.Name == playerName &&
