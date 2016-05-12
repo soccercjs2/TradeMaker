@@ -89,6 +89,12 @@
                 <trade-container trade="[[trade]]" show-trade></trade-container>
             </template>
         </template>
+
+        <template is="dom-if" if="[[noTradesFound]]">
+            <p>
+                Sorry, no trades were found!
+            </p>
+        </template>
     </template>
     <script>
         Polymer({
@@ -117,6 +123,10 @@
                 },
                 trades: {
                     type: Array,
+                    notify: true
+                },
+                noTradesFound: {
+                    type: Boolean,
                     notify: true
                 },
                 cantFindTrades: {
@@ -194,6 +204,12 @@
             _findTradesResponse: function (e) {
                 this.$['dialog'].close();
                 this.trades = e.detail.response;
+
+                if (this.trades.length == 0) {
+                    this.noTradesFound = true;
+                } else {
+                    this.noTradesFound = false;
+                }
             },
             _buttonClass: function(cantFindTrades) {
                 if (!cantFindTrades) { return 'blue'; }

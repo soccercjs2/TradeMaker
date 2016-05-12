@@ -26,6 +26,10 @@
             .min-width {
                 width: 1%;
             }
+
+            .scroll {
+                overflow-y: auto;
+            }
         </style>
         <!-- local DOM goes here -->
         <paper-button id="button" class="white" raised on-tap="_openDialog"></paper-button>
@@ -116,11 +120,9 @@
                     this.$.button.innerText = this.selectedTeam.Name;
 
                     if (this.primary) {
-                        //console.log(this.selectedLeague);
                         this.fire('set-my-team', { league: this.selectedTeam });
                     }
                     else {
-                        //console.log(this.selectedLeague);
                         this.fire('set-their-team', { league: this.selectedTeam });
                     }
                 }
@@ -130,15 +132,20 @@
 
                 if (this.selectedTeamCache != null) {
                     this.selection = this.selectedTeamCache.Id;
+                } else {
+                    this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
                 }
             },
             _select: function () {
                 if (this.selection != 0)
                 {
+                    this.$.dialog.className += " scroll";
                     this.selectedTeam = JSON.parse(JSON.stringify(this.leagueData.Teams[this.selection - 1]));
                 }
                 else
                 {
+                    this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
+
                     this.selectedTeam = null;
                 }
             }
