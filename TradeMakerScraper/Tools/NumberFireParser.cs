@@ -55,7 +55,7 @@ namespace TradeMakerScraper.Tools
                 case "SF": return "SFO";
                 case "STL": return "RAM";
                 case "TB": return "TBB";
-                case "WSH": return "WAS";
+                case "WAS": return "WSH";
                 default: return team;
             }
         }

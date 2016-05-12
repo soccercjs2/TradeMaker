@@ -71,14 +71,18 @@ namespace TradeMakerScraper.HostParsers
                 string playerTeam = teamCell.Descendants().Where(s => s.Name == "span").FirstOrDefault<HtmlNode>().InnerText.ToUpper();
 
                 Player player = projections.Players.Where(
-                    p => p.Name == playerName &&
+                    p => (p.Name == playerName || p.AlternateNames.Contains(playerName)) &&
                         p.Position == playerPosition &&
-                        (p.NflTeam == playerTeam || p.NflAlternateTeam == playerTeam)
+                        (p.NflTeam == playerTeam || p.NflAlternateTeams.Contains(playerTeam))
                 ).FirstOrDefault<Player>();
 
                 if (player != null) {
                     projections.Players.Remove(player);
                     team.Players.Add(player);
+                }
+                else if (playerPosition == "QB" || playerPosition == "RB" || playerPosition == "WR" || playerPosition == "TE")
+                {
+                    projections.UnMatchedPlayers.Add(playerName + ";" + playerPosition + ";" + playerTeam);
                 }
             }
         }

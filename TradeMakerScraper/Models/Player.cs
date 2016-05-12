@@ -9,8 +9,9 @@ namespace TradeMakerScraper.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public List<string> AlternateNames { get; set; }
         public string NflTeam { get; set; }
-        public string NflAlternateTeam { get; set; }
+        public List<string> NflAlternateTeams { get; set; }
         public string Position { get; set; }
         public decimal PassingYards { get; set; }
         public decimal PassingTouchdowns { get; set; }
