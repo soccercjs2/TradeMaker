@@ -26,12 +26,12 @@
             }
             
             .google-sign-in-icon {
-                background: url('/images/google-sign-in/g-normal.png') transparent 5px 50% no-repeat;
+                background: url('/images/g-logo.png') transparent 50% no-repeat;
                 display: inline-block;
                 vertical-align: middle;
                 width: 42px;
                 height: 42px;
-                border-right: #2265d4 1px solid;
+                border: #4285f4 1px solid;
             }
             
             .google-sign-in-label {
@@ -44,17 +44,60 @@
                 /* Use the Roboto font that is loaded in the <head> */
                 font-family: 'Roboto', sans-serif;
             }
+
+            .facebook-sign-in {
+                display: inline-block;
+                background: #4267b2;
+                color: white;
+                width: 190px;
+                border-radius: 5px;
+                white-space: nowrap;
+            }
+            
+            .facebook-sign-in:hover {
+                cursor: pointer;
+            }
+            
+            .facebook-sign-in-icon {
+                background: url('/images/g-logo.png') transparent 50% no-repeat;
+                display: inline-block;
+                vertical-align: middle;
+                width: 42px;
+                height: 42px;
+                border: #4267b2 1px solid;
+            }
+            
+            .facebook-sign-in-label {
+                display: inline-block;
+                vertical-align: middle;
+                padding-left: 42px;
+                padding-right: 42px;
+                font-size: 14px;
+                font-weight: bold;
+                /* Use the Roboto font that is loaded in the <head> */
+                font-family: 'Roboto', sans-serif;
+            }
+
+            .center {
+                text-align: center;
+            }
         </style>
 
-        <firebase-auth id="authenticate" user="{{user}}" location="{{location}}" ref="{{refauth}}" provider="google">
-        </firebase-auth>
+        <firebase-auth id="authGoogle" user="{{user}}" location="{{location}}" ref="{{refauth}}" provider="google"></firebase-auth>
+        <firebase-auth id="authFacebook" user="{{user}}" location="{{location}}" ref="{{refauth}}" provider="facebook"></firebase-auth>
 
-        <paper-dialog modal opened="{{!user}}" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
-            <h2>Oh hai! Please sign in</h2>
-            <div>
-                <div class="google-sign-in" tabindex="0" on-tap="signIn">
+        <paper-dialog modal opened="{{showDialog}}" entry-animation="scale-up-animation" exit-animation="fade-out-animation">
+            <h2>Welcome back! Please sign in.</h2>
+            <div class="center">
+                <div class="google-sign-in" tabindex="0" on-tap="signInGoogle">
                     <span class="google-sign-in-icon"></span>
                     <span class="google-sign-in-label">Google</span>
+                </div>
+            </div>
+            <div class="center">
+                <div class="facebook-sign-in" tabindex="0" on-tap="signInFacebook">
+                    <span class="facebook-sign-in-icon"></span>
+                    <span class="facebook-sign-in-label">Facebook</span>
                 </div>
             </div>
         </paper-dialog>
@@ -66,14 +109,36 @@
             properties: {
                 user: {
                     notify: true
+                },
+                showDialog: {
+                    type: Boolean,
+                    notify: true,
+                    computed: '_showDialog(user, route)'
                 }
             },
-            signIn: function() {
-                this.$.authenticate.login();
+            signInGoogle: function () {
+                this.$.authGoogle.login();
             },
-            signOut: function() {
-                this.$.authenticate.logout();
+            signOutGoogle: function() {
+                this.$.authGoogle.logout();
                 this.user = null;
+            },
+            signInFacebook: function () {
+                this.$.authFacebook.login();
+            },
+            signOutFacebook: function () {
+                this.$.authFacebook.logout();
+                this.user = null;
+            },
+            _showDialog: function(user, route) {
+                if (!user && route == 'leagues')
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         });
     </script>

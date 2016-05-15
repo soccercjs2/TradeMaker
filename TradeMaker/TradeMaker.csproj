@@ -1209,6 +1209,7 @@
     <Content Include="elements\trade-side\trade-side.html" />
     <Content Include="elements\trade-view\trade-view.html" />
     <Content Include="favicon.ico" />
+    <Content Include="images\g-logo.png" />
     <Content Include="images\ring.gif" />
     <Content Include="images\touch\apple-touch-icon.png" />
     <Content Include="images\touch\chrome-splashscreen-icon-384x384.png" />

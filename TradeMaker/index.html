@@ -63,16 +63,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <span id="browser-sync-binding"></span>
     <template is="dom-bind" id="app">
         
-        <trade-maker-auth id="auth"
-               user="{{user}}"
-               location="[[firebaseURL]]">
-        </trade-maker-auth>
-
-        <trade-maker-data location="[[firebaseURL]]"
-                leagues="{{leagues}}"
-                user="{{user}}">
-        </trade-maker-data>
-
         <paper-drawer-panel id="paperDrawerPanel">
             <!-- Drawer Scroll Header Panel -->
             <paper-scroll-header-panel drawer fixed>
@@ -137,7 +127,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </section>
                         
                         <section data-route="leagues">
-                            <!--<leagues-view leagues="{{leagues}}"></leagues-view>-->
+                            <trade-maker-auth id="auth"
+                                              user="{{user}}"
+                                              route="{{route}}"
+                                              location="[[firebaseURL]]">
+                            </trade-maker-auth>
+
+                            <trade-maker-data location="[[firebaseURL]]"
+                                              leagues="{{leagues}}"
+                                              user="{{user}}">
+                            </trade-maker-data>
+
                             <league-list-view leagues="{{leagues}}" kick="{{kick}}"></league-list-view>
                         </section>
                         
