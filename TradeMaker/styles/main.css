@@ -12,3 +12,9 @@ body {
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
 }
+
+account-badge {
+    position: absolute;
+    right: 5px;
+    height: 100%;
+}

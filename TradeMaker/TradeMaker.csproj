@@ -1192,11 +1192,13 @@
     <Content Include="bower_components\webcomponentsjs\webcomponents-lite.min.js" />
     <Content Include="bower_components\webcomponentsjs\webcomponents.js" />
     <Content Include="bower_components\webcomponentsjs\webcomponents.min.js" />
+    <Content Include="elements\account-badge\account-badge.html" />
     <Content Include="elements\elements.html" />
     <Content Include="elements\league-editor\league-editor.html" />
     <Content Include="elements\league-list-item\league-list-item.html" />
     <Content Include="elements\league-list-view\league-list-view.html" />
     <Content Include="elements\league-view\league-view.html" />
+    <Content Include="elements\my-account\my-account.html" />
     <Content Include="elements\roster-container\roster-container.html" />
     <Content Include="elements\roster-side\roster-side.html" />
     <Content Include="elements\roster-view\roster-view.html" />
@@ -1209,6 +1211,7 @@
     <Content Include="elements\trade-side\trade-side.html" />
     <Content Include="elements\trade-view\trade-view.html" />
     <Content Include="favicon.ico" />
+    <Content Include="images\account.png" />
     <Content Include="images\g-logo.png" />
     <Content Include="images\ring.gif" />
     <Content Include="images\touch\apple-touch-icon.png" />

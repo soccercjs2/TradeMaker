@@ -1,0 +1,44 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="my-account">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            paper-button {
+                background-color: indianred;
+                color: white;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <h1>{{name}}</h1>
+        <paper-button on-tap="_signOut">Sign Out</paper-button>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-account',
+            properties: {
+                user: {
+                    type: Object,
+                    notify: true
+                },
+                name: {
+                    type: String,
+                    computed: '_getDisplayName(user)'
+                }
+            },
+            _getDisplayName: function(user) {
+                if (user != null) {
+                    if (user.provider == "google") { return user.google.displayName; }
+                    else if (user.provider == "facebook") { return user.facebook.displayName; }
+                    else { return "guest"; }
+                }
+            },
+            _signOut: function() {
+                if (this.user.provider == "google") { this.fire('google-sign-out'); }
+                else if (this.user.provider == "facebook") { this.fire('facebook-sign-out'); }
+            }
+        });
+    </script>
+</dom-module>

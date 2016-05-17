@@ -19,20 +19,21 @@
                 width: 190px;
                 border-radius: 5px;
                 white-space: nowrap;
+                padding: 10px;
             }
             
             .google-sign-in:hover {
                 cursor: pointer;
             }
             
-            .google-sign-in-icon {
+            /*.google-sign-in-icon {
                 background: url('/images/g-logo.png') transparent 50% no-repeat;
                 display: inline-block;
                 vertical-align: middle;
                 width: 42px;
                 height: 42px;
                 border: #4285f4 1px solid;
-            }
+            }*/
             
             .google-sign-in-label {
                 display: inline-block;
@@ -52,20 +53,21 @@
                 width: 190px;
                 border-radius: 5px;
                 white-space: nowrap;
+                padding: 10px;
             }
             
             .facebook-sign-in:hover {
                 cursor: pointer;
             }
             
-            .facebook-sign-in-icon {
+            /*.facebook-sign-in-icon {
                 background: url('/images/g-logo.png') transparent 50% no-repeat;
                 display: inline-block;
                 vertical-align: middle;
                 width: 42px;
                 height: 42px;
                 border: #4267b2 1px solid;
-            }
+            }*/
             
             .facebook-sign-in-label {
                 display: inline-block;
@@ -90,13 +92,11 @@
             <h2>Welcome back! Please sign in.</h2>
             <div class="center">
                 <div class="google-sign-in" tabindex="0" on-tap="signInGoogle">
-                    <span class="google-sign-in-icon"></span>
                     <span class="google-sign-in-label">Google</span>
                 </div>
             </div>
             <div class="center">
                 <div class="facebook-sign-in" tabindex="0" on-tap="signInFacebook">
-                    <span class="facebook-sign-in-icon"></span>
                     <span class="facebook-sign-in-label">Facebook</span>
                 </div>
             </div>
@@ -130,8 +130,8 @@
                 this.$.authFacebook.logout();
                 this.user = null;
             },
-            _showDialog: function(user, route) {
-                if (!user && route == 'leagues')
+            _showDialog: function (user, route) {
+                if (!user && (route == 'leagues' || route == 'account'))
                 {
                     return true;
                 }

@@ -1,0 +1,62 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+
+<dom-module id="account-badge">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            .avatar {
+                border-radius: 300px;
+            }
+
+            table {
+                cursor: pointer;
+                height: 100%;
+            }
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
+        </style>
+        <!-- local DOM goes here -->
+
+        <a href="{{href}}">
+            <paper-ripple></paper-ripple>
+            <table>
+                <tr>
+                    <td><img src="../../images/account.png" class="avatar" /></td>
+                    <td>
+                        <template is="dom-if" if="{{user}}">{{name}}</template>
+                        <template is="dom-if" if="{{!user}}">Sign In</template>
+                    </td>
+                </tr>
+            </table>
+        </a>
+    </template>
+    <script>
+        Polymer({
+            is: 'account-badge',
+            properties: {
+                user: {
+                    type: Object
+                },
+                name: {
+                    type: String,
+                    computed: '_getDisplayName(user)'
+                },
+                href: {
+                    type: String
+                }
+            },
+            _getDisplayName: function(user) {
+                if (user != null) {
+                    if (user.provider == "google") { return user.google.displayName; }
+                    else if (user.provider == "facebook") { return user.facebook.displayName; }
+                    else { return "guest"; }
+                }
+            }
+        });
+    </script>
+</dom-module>

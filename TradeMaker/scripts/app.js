@@ -39,6 +39,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     console.log('Our app is ready to rock!');
   });
 
+  window.addEventListener('google-sign-out', function () {
+      this.auth.signOutGoogle();
+      window.location = app.baseUrl;
+  });
+
+  window.addEventListener('facebook-sign-out', function () {
+      this.auth.signOutGoogle();
+      window.location = app.baseUrl;
+  });
+
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
