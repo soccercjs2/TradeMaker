@@ -46,8 +46,9 @@
             _onAdd: function(e) {
                 this.push('leagues', e.detail.league);
             },
-            _onEdit: function(e) {
-                this.set('leagues.#' + (e.model.index + 1), e.detail.league)
+            _onEdit: function (e) {
+                this.set('leagues.#' + (e.model.index), e.detail.league)
+                //this.set('leagues.#' + (e.model.index + 1), e.detail.league)
             },
             _onDelete: function(e) {
                 this.arrayDelete('leagues', e.detail.league)

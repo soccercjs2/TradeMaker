@@ -1,0 +1,77 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<dom-module id="kickstarter-redeemer">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            .redeem {
+                background-color: green;
+                color: white;
+            }
+
+            paper-material {
+                background-color: white;
+                padding: 10px;
+                margin: 10px 0;
+            }
+
+            .error {
+                color: red;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <paper-material elevation="1">
+            <paper-input id="txtCode" label="kickstarter reward code"></paper-input>
+            <paper-button class="redeem" on-tap="_redeem">Redeem</paper-button>
+            <span id="error" class="error"></span>
+        </paper-material>
+    </template>
+    <script>
+        Polymer({
+            is: 'kickstarter-redeemer',
+            properties: {
+                user: {
+                    type: Object,
+                    notify: true
+                },
+                codes: {
+                    type: Array,
+                    notify: true
+                },
+                subscription: {
+                    type: String,
+                    notify: true
+                }
+            },
+            _redeem: function () {
+                var input = this.$.txtCode.value;
+                
+                var filteredCodes = this.codes.filter(function (code) { return (code.__firebaseKey__ == input); });
+
+                if (filteredCodes != null && filteredCodes.length == 1) {
+                    var code = filteredCodes[0];
+                    var expirationDate
+
+                    if (this.subscription.length > 0) {
+                        expirationDate = new Date(this.subscription[0].value);
+                        var postDate = expirationDate.getMonth() + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
+                        this.subscription = postDate;
+                    } else {
+                        expirationDate = new Date();
+                        var postDate = expirationDate.getMonth() + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
+                        this.push('subscription', postDate);
+                    }
+                } else {
+                    if (input.length == 0) {
+                        this.$.error.innerText = "please enter a code";
+                    } else {
+                        this.$.error.innerText = "invalid kickstarter reward code";
+                    }
+                }
+            }
+        });
+    </script>
+</dom-module>

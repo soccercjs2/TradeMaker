@@ -114,6 +114,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                   user="{{user}}">
                 </trade-maker-data>
 
+                <kickstarter-data codes="{{codes}}"
+                                  location="[[codesURL]]">
+                </kickstarter-data>
+
+                <subscription-data location="[[firebaseURL]]"
+                                  subscription="{{subscription}}"
+                                  user="{{user}}">
+                </subscription-data>
+
                 <!-- Main Toolbar -->
                 <paper-toolbar id="mainToolbar">
                     <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
@@ -162,7 +171,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </section>
 
                         <section data-route="account">
-                            <my-account user="{{user}}"></my-account>
+                            <my-account user="{{user}}" codes="{{codes}}" subscription="{{subscription}}"></my-account>
                         </section>
 
                         <section data-route="users">

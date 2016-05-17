@@ -1,19 +1,49 @@
 ﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../kickstarter-redeemer/kickstarter-redeemer.html">
 
 <dom-module id="my-account">
     <template>
         <style>
             /* local DOM styles go here */
-            paper-button {
+            .signOut {
                 background-color: indianred;
                 color: white;
+            }
+
+            .redeem {
+                background-color: green;
+                color: white;
+            }
+
+            paper-material {
+                background-color: white;
+                padding: 10px;
             }
         </style>
         <!-- local DOM goes here -->
         <h1>{{name}}</h1>
-        <paper-button on-tap="_signOut">Sign Out</paper-button>
+        <paper-button class="signOut" on-tap="_signOut">Sign Out</paper-button>
+
+        <!--<template is="dom-if" if="{{user.subscriptionEnds}}">
+            <paper-material elevation="1">
+                Subscription Ends: {{user.subscriptionEnds}}
+            </paper-material>
+        </template>-->
+
+        <template is="dom-if" if="{{!user.subscriptionEnds}}">
+            <kickstarter-redeemer user="{{user}}" codes="{{codes}}" subscription="{{subscription}}" leagues="{{leagues}}"></kickstarter-redeemer>
+        </template>
+
+        <template is="dom-if" if="{{isAdmin}}">
+            <paper-material elevation="1">
+                <paper-input id="txtYears" label="reward years"></paper-input>
+                <paper-button class="redeem" on-tap="_addCode">Add</paper-button>
+            </paper-material>
+        </template>
     </template>
     <script>
         Polymer({
@@ -26,9 +56,21 @@
                 name: {
                     type: String,
                     computed: '_getDisplayName(user)'
+                },
+                codes: {
+                    type: Array,
+                    notify: true
+                },
+                subscription: {
+                    type: String,
+                    notify: true
+                },
+                isAdmin: {
+                    type: Boolean,
+                    computed: '_isAdmin(user)'
                 }
             },
-            _getDisplayName: function(user) {
+            _getDisplayName: function (user) {
                 if (user != null) {
                     if (user.provider == "google") { return user.google.displayName; }
                     else if (user.provider == "facebook") { return user.facebook.displayName; }
@@ -38,6 +80,16 @@
             _signOut: function() {
                 if (this.user.provider == "google") { this.fire('google-sign-out'); }
                 else if (this.user.provider == "facebook") { this.fire('facebook-sign-out'); }
+            },
+            _isAdmin: function (user) {
+                if (user.uid == 'google:108994655411219549574') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            _addCode: function () {
+                this.push('codes', { 'years': this.$$('#txtYears').value, 'redeemed': false });
             }
         });
     </script>

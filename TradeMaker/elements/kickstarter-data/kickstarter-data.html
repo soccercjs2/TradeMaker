@@ -1,0 +1,23 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+
+<dom-module id="kickstarter-data">
+    <template>
+        <firebase-collection data="{{codes}}"
+                             location="{{location}}"></firebase-collection>
+    </template>
+    <script>
+        Polymer({
+            is: 'kickstarter-data',
+            properties: {
+                codes: {
+                    type: Array,
+                    notify: true
+                },
+                location: {
+                    type: String
+                }
+            }
+        });
+    </script>
+</dom-module>

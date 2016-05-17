@@ -1194,6 +1194,8 @@
     <Content Include="bower_components\webcomponentsjs\webcomponents.min.js" />
     <Content Include="elements\account-badge\account-badge.html" />
     <Content Include="elements\elements.html" />
+    <Content Include="elements\kickstarter-data\kickstarter-data.html" />
+    <Content Include="elements\kickstarter-redeemer\kickstarter-redeemer.html" />
     <Content Include="elements\league-editor\league-editor.html" />
     <Content Include="elements\league-list-item\league-list-item.html" />
     <Content Include="elements\league-list-view\league-list-view.html" />
@@ -1202,6 +1204,7 @@
     <Content Include="elements\roster-container\roster-container.html" />
     <Content Include="elements\roster-side\roster-side.html" />
     <Content Include="elements\roster-view\roster-view.html" />
+    <Content Include="elements\subscription-data\subscription-data.html" />
     <Content Include="elements\trade-container\trade-container.html" />
     <Content Include="elements\trade-filter\trade-filter.html" />
     <Content Include="elements\leagues-view\leagues-view.html" />

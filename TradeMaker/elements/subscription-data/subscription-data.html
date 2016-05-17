@@ -1,17 +1,17 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
 
-<dom-module id="trade-maker-data">
+<dom-module id="subscription-data">
     <template>
-        <firebase-collection data="{{leagues}}"
-            location="{{leaguesLocation}}"></firebase-collection>
+        <firebase-collection data="{{subscription}}"
+                             location="{{subscriptionLocation}}"></firebase-collection>
     </template>
     <script>
         Polymer({
-            is: 'trade-maker-data',
+            is: 'subscription-data',
             properties: {
-                leagues: {
-                    type: Array,
+                subscription: {
+                    type: String,
                     notify: true
                 },
                 user: {
@@ -20,7 +20,7 @@
                 location: {
                     type: String
                 },
-                leaguesLocation: {
+                subscriptionLocation: {
                     type: String,
                     notify: true
                 }
@@ -28,7 +28,7 @@
             // Setup user ref in firebase if auth succeeds
             _userChanged: function(user) {
                 if (user) {
-                    this.leaguesLocation = [this.location, 'users', this.user.uid, 'leagues'].join('/');
+                    this.subscriptionLocation = [this.location, 'users', this.user.uid, 'subscription'].join('/');
                 }
             }
         });

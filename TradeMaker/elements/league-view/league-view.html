@@ -144,13 +144,11 @@
                 var filteredLeagues = leagues.filter(function (league) { return (league.__firebaseKey__ == leagueid); });
                 var leagueFirebase;
                 
-                if (filteredLeagues) {
-                    if (filteredLeagues.length == 1) {
-                        leagueFirebase = filteredLeagues[0];
-                        this.$['dialogText'].innerText = "Loading Numberfire projections and league data...";
-                        this.$['dialog'].open();
-                        this.$['projectionAjax'].generateRequest();
-                    }
+                if (filteredLeagues && filteredLeagues.length == 1) {
+                    leagueFirebase = filteredLeagues[0];
+                    this.$['dialogText'].innerText = "Loading Numberfire projections and league data...";
+                    this.$['dialog'].open();
+                    this.$['projectionAjax'].generateRequest();
                 }
 
                 return leagueFirebase;
