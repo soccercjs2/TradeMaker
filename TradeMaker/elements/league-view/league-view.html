@@ -81,6 +81,9 @@
                 </div>
 
                 <paper-button id="findTrades" raised on-tap="_findTrades" class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}">FIND TRADES</paper-button>
+                <template is="dom-if" if="{{trades}}">
+                    {{trades.length}} trade(s) found
+                </template>
             </paper-material>
         </template>
 

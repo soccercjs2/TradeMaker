@@ -51,7 +51,7 @@ namespace TradeMakerScraper.Controllers
                 FindTrades(ref trades, leagueData, myTeamPlayerPool, otherTeamPlayerPool, myTeamPlayerPool.ThreePlayerTradePool, otherTeamPlayerPool.ThreePlayerTradePool); //3 for 3
             }
 
-            return trades.OrderByDescending(t => t.MyDifferential).Distinct().ToList();
+            return trades.OrderByDescending(t => (t.MyDifferential * t.TheirDifferential)).Distinct().ToList();
         }
 
         private void FindTrades(ref List<Trade> allTrades, LeagueData leagueData,
@@ -80,14 +80,16 @@ namespace TradeMakerScraper.Controllers
                 {
                     trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool);
                     if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
+                        if (trade.MyDifferential * trade.TheirDifferential > 100)
+                        {
+                            bool isValidTrade =
+                                HasRequiredPlayers(trade.MyPlayers, myRequiredPlayers) &&
+                                HasRequiredPlayers(trade.TheirPlayers, theirRequiredPlayers) &&
+                                HasExcludedPlayers(trade.MyPlayers, myExcludedPlayers) &&
+                                HasExcludedPlayers(trade.TheirPlayers, theirExcludedPlayers);
 
-                        bool isValidTrade = 
-                            HasRequiredPlayers(trade.MyPlayers, myRequiredPlayers) &&
-                            HasRequiredPlayers(trade.TheirPlayers, theirRequiredPlayers) &&
-                            HasExcludedPlayers(trade.MyPlayers, myExcludedPlayers) &&
-                            HasExcludedPlayers(trade.TheirPlayers, theirExcludedPlayers);
-
-                        if (isValidTrade) { allTrades.Add(trade); }
+                            if (isValidTrade) { allTrades.Add(trade); }
+                        }
                     }
                 }
             }
