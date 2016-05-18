@@ -80,16 +80,13 @@ namespace TradeMakerScraper.Controllers
                 {
                     trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool);
                     if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
-                        if (trade.MyDifferential * trade.TheirDifferential > 100)
-                        {
-                            bool isValidTrade =
+                        bool isValidTrade =
                                 HasRequiredPlayers(trade.MyPlayers, myRequiredPlayers) &&
                                 HasRequiredPlayers(trade.TheirPlayers, theirRequiredPlayers) &&
                                 HasExcludedPlayers(trade.MyPlayers, myExcludedPlayers) &&
                                 HasExcludedPlayers(trade.TheirPlayers, theirExcludedPlayers);
 
-                            if (isValidTrade) { allTrades.Add(trade); }
-                        }
+                        if (isValidTrade) { allTrades.Add(trade); }
                     }
                 }
             }

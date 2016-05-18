@@ -21,17 +21,6 @@
                 text-align: right;
             }
 
-            .total {
-                color: green;
-                text-align: right;
-                background-color: #ffffff;
-            }
-
-            .footer {
-                background-color: #ffffff;
-                width: 100%;
-            }
-
             .primary-total {
                 font-size: larger;
                 font-weight: bold;
@@ -49,7 +38,12 @@
                 }
             }
 
-            thead {
+            .non-primary-side table thead {
+                background-color: #9a6af5;
+                color: #FFFFFF;
+            }
+
+            .primary-side table thead {
                 background-color: #6946AA;
                 color: #FFFFFF;
             }
@@ -60,10 +54,30 @@
 
             .gains {
                 color: green;
+                white-space: nowrap;
             }
 
             .losses {
                 color: red;
+                white-space: nowrap;
+            }
+
+            .total {
+                font-weight: bold;
+                text-align: right;
+                background-color: white;
+                width: 100%;
+                padding: 2px 0;
+                color: green;
+            }
+
+            .changes {
+                text-align: right;
+                background-color: white;
+                width: 100%;
+                padding: 2px 0;
+                font-size: small;
+                border-bottom: 1px solid black;
             }
         </style>
         <!-- local DOM goes here -->
@@ -79,7 +93,7 @@
                     </tr>
                 </template>
             </table>
-            <table class="footer">
+            <!--<table class="footer">
                 <tr>
                     <td>
                         <span class="gains">[[gains]]</span>
@@ -89,7 +103,12 @@
                         <span id="diff">+[[differential]]</span> ([[total]])
                     </td>
                 </tr>
-            </table>
+            </table>-->
+            <div class="changes">
+                <span class="gains">[[gains]]</span>
+                <span class="losses">[[losses]]</span>
+            </div>
+            <div class="total"><span id="diff">+[[differential]]</span> ([[total]])</div>
         </div>
     </template>
     <script>
