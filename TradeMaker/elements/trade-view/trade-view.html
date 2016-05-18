@@ -33,12 +33,16 @@
             <paper-ripple></paper-ripple>
             <trade-side players="[[trade.TheirPlayers]]"
                         differential="[[trade.MyDifferential]]"
+                        gains="[[trade.MyGains]]"
+                        losses="[[trade.MyLosses]]"
                         header="[[trade.MyTeamName]] GETS"
                         total="[[trade.MyNewStartingRoster.Points]]"
                         primary></trade-side><!--
 
-        --><trade-side players="[[trade.MyPlayers]]"
+         --><trade-side players="[[trade.MyPlayers]]"
                         differential="[[trade.TheirDifferential]]"
+                        gains="[[trade.TheirGains]]"
+                        losses="[[trade.TheirLosses]]"
                         header="[[trade.TheirTeamName]] GETS"
                         total="[[trade.TheirNewStartingRoster.Points]]"></trade-side>
         </paper-material>

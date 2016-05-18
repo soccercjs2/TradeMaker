@@ -6,12 +6,7 @@
         <style>
             /* local DOM styles go here */
 
-            /*paper-material {
-                padding: 0px;
-                margin: 0px;
-            }*/
-            
-            table {
+           .players {
                 border-spacing: 0px;
                 border-bottom: 1px solid black;
             }
@@ -26,13 +21,18 @@
                 text-align: right;
             }
 
-            .footer {
+            .total {
                 color: green;
                 text-align: right;
                 background-color: #ffffff;
             }
 
-            .primary-footer {
+            .footer {
+                background-color: #ffffff;
+                width: 100%;
+            }
+
+            .primary-total {
                 font-size: larger;
                 font-weight: bold;
                 padding: 2px;
@@ -57,21 +57,39 @@
             th {
                 padding: 5px;
             }
+
+            .gains {
+                color: green;
+            }
+
+            .losses {
+                color: red;
+            }
         </style>
         <!-- local DOM goes here -->
         <div id="side">
-            <table>
+            <table class="players">
                 <thead>
                     <th colspan="2">[[header]]</th>
                 </thead>
                 <template is="dom-repeat" items="[[players]]" as="player">
                     <tr>
-                        <td>[[player.Name]]</td>
+                        <td>[[player.Name]] ([[player.Position]], [[player.NflTeam]])</td>
                         <td class="value">[[player.FantasyPoints]]</td>
                     </tr>
                 </template>
             </table>
-            <div class="footer"><span id="diff">+[[differential]]</span> ([[total]])</div>
+            <table class="footer">
+                <tr>
+                    <td>
+                        <span class="gains">[[gains]]</span>
+                        <span class="losses">[[losses]]</span>
+                    </td>
+                    <td class="total">
+                        <span id="diff">+[[differential]]</span> ([[total]])
+                    </td>
+                </tr>
+            </table>
         </div>
     </template>
     <script>
@@ -82,6 +100,12 @@
                     type: Array
                 },
                 differential: {
+                    type: Number
+                },
+                gains: {
+                    type: Number
+                },
+                losses: {
                     type: Number
                 },
                 header: {
@@ -96,7 +120,7 @@
             },
             ready: function () {
                 if (this.primary) {
-                    this.$.diff.className += " primary-footer";
+                    this.$.diff.className += " primary-total";
                     this.$.side.className += " primary-side";
                 } else {
                     this.$.side.className += " non-primary-side";

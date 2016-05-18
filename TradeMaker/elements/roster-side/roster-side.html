@@ -11,7 +11,7 @@
                 margin: 0px;
             }
             
-            table {
+            .players {
                 border-spacing: 0px;
                 border-bottom: 1px solid black;
             }
@@ -27,11 +27,9 @@
             }
 
             .footer {
-                text-align: right;
                 background-color: #ffffff;
-                font-weight: bold;
                 padding: 2px;
-                font-size: larger;
+                width: 100%;
             }
 
             .green {
@@ -70,18 +68,31 @@
             .waiver {
                 color: green;
             }
+
+            .gains {
+                color: green;
+            }
+
+            .losses {
+                color: red;
+            }
+
+            .total {
+                font-weight: bold;
+                text-align: right;
+            }
         </style>
         <!-- local DOM goes here -->
 
         <paper-material id="side" elevation="1">
-            <table>
+            <table class="players">
                 <thead>
                 <th colspan="2">[[header]]</th>
                 </thead>
                 <template is="dom-repeat" items="[[roster.Quarterbacks]]" as="quarterback">
                     <tr class$="{{_class(quarterback)}}">
                         <td>
-                            [[quarterback.Player.Name]]
+                            [[quarterback.Player.Name]] ([[quarterback.Player.Position]], [[quarterback.Player.NflTeam]])
                             <template is="dom-if" if="[[quarterback.Waiver]]">[W]</template>
                         </td>
                         <td class="value">[[quarterback.Player.FantasyPoints]]</td>
@@ -90,7 +101,7 @@
                 <template is="dom-repeat" items="[[roster.RunningBacks]]" as="runningback">
                     <tr class$="{{_class(runningback)}}">
                         <td>
-                            [[runningback.Player.Name]]
+                            [[runningback.Player.Name]] ([[runningback.Player.Position]], [[runningback.Player.NflTeam]])
                             <template is="dom-if" if="[[runningback.Waiver]]">[W]</template>
                         </td>
                         <td class="value">[[runningback.Player.FantasyPoints]]</td>
@@ -99,7 +110,7 @@
                 <template is="dom-repeat" items="[[roster.WideReceivers]]" as="widereceiver">
                     <tr class$="{{_class(widereceiver)}}">
                         <td>
-                            [[widereceiver.Player.Name]]
+                            [[widereceiver.Player.Name]] ([[widereceiver.Player.Position]], [[widereceiver.Player.NflTeam]])
                             <template is="dom-if" if="[[widereceiver.Waiver]]">[W]</template>
                         </td>
                         <td class="value">[[widereceiver.Player.FantasyPoints]]</td>
@@ -108,7 +119,7 @@
                 <template is="dom-repeat" items="[[roster.TightEnds]]" as="tightend">
                     <tr class$="{{_class(tightend)}}">
                         <td>
-                            [[tightend.Player.Name]]
+                            [[tightend.Player.Name]] ([[tightend.Player.Position]], [[tightend.Player.NflTeam]])
                             <template is="dom-if" if="[[tightend.Waiver]]">[W]</template>
                         </td>
                         <td class="value">[[tightend.Player.FantasyPoints]]</td>
@@ -117,14 +128,25 @@
                 <template is="dom-repeat" items="[[roster.Flexes]]" as="flex">
                     <tr class$="{{_class(flex)}}">
                         <td>
-                            [[flex.Player.Name]]
+                            [[flex.Player.Name]] ([[flex.Player.Position]], [[flex.Player.NflTeam]])
                             <template is="dom-if" if="[[flex.Waiver]]">[W]</template>
                         </td>
                         <td class="value">[[flex.Player.FantasyPoints]]</td>
                     </tr>
                 </template>
             </table>
-            <div id="total" class="footer">[[roster.Points]] ([[roster.Differential]])</div>
+            <table class="footer">
+                <tr>
+                    <td>
+                        <span class="gains">[[gains]]</span>
+                        <span class="losses">[[losses]]</span>
+                    </td>
+                    <td id="total" class="total">
+                        [[roster.Points]] ([[roster.Differential]])
+                    </td>
+                </tr>
+            </table>
+            <!--<div id="total" class="footer">[[roster.Points]] ([[roster.Differential]])</div>-->
         </paper-material>
 
     </template>
@@ -140,6 +162,12 @@
                 },
                 primary: {
                     type: Boolean
+                },
+                gains: {
+                    type: String
+                },
+                losses: {
+                    type: String
                 }
             },
             ready: function () {

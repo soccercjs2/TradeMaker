@@ -14,6 +14,11 @@ namespace TradeMakerScraper.Tools
         public List<RosterPlayer> TightEnds { get; set; }
         public List<RosterPlayer> Flexes { get; set; }
         public decimal Points { get; set; }
+        public decimal QbPoints { get; set; }
+        public decimal RbPoints { get; set; }
+        public decimal WrPoints { get; set; }
+        public decimal TePoints { get; set; }
+        public decimal FlexPoints { get; set; }
         public string Differential { get; set; }
 
         public Roster()

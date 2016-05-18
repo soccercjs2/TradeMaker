@@ -25,10 +25,14 @@
         <paper-ripple></paper-ripple>
         <!--my roster side-->
         <roster-side header="[[myName]]"
-                     roster="[[myRoster]]"></roster-side><!--
+                     roster="[[myRoster]]"
+                     gains="[[myGains]]"
+                     losses="[[myLosses]]"></roster-side><!--
         
      --><roster-side header="[[theirName]]"
-                     roster="[[theirRoster]]"></roster-side>
+                     roster="[[theirRoster]]"
+                     gains="[[theirGains]]"
+                     losses="[[theirLosses]]"></roster-side>
     </template>
     <script>
         Polymer({
@@ -45,6 +49,18 @@
                 },
                 theirRoster: {
                     type: Object
+                },
+                myGains: {
+                    type: String
+                },
+                myLosses: {
+                    type: String
+                },
+                theirGains: {
+                    type: String
+                },
+                theirLosses: {
+                    type: String
                 }
             }
         });

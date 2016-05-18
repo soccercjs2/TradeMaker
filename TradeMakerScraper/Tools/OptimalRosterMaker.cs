@@ -92,12 +92,13 @@ namespace TradeMakerScraper.Tools
             }
 
             //calculate roster point total
-            roster.Points =
-                roster.Quarterbacks.Sum(p => p.Player.FantasyPoints) +
-                roster.RunningBacks.Sum(p => p.Player.FantasyPoints) +
-                roster.WideReceivers.Sum(p => p.Player.FantasyPoints) +
-                roster.TightEnds.Sum(p => p.Player.FantasyPoints) +
-                roster.Flexes.Sum(p => p.Player.FantasyPoints);
+            roster.QbPoints = roster.Quarterbacks.Sum(p => p.Player.FantasyPoints);
+            roster.RbPoints = roster.RunningBacks.Sum(p => p.Player.FantasyPoints);
+            roster.WrPoints = roster.WideReceivers.Sum(p => p.Player.FantasyPoints);
+            roster.TePoints = roster.TightEnds.Sum(p => p.Player.FantasyPoints);
+            roster.FlexPoints = roster.Flexes.Sum(p => p.Player.FantasyPoints);
+
+            roster.Points = roster.QbPoints + roster.RbPoints + roster.WrPoints + roster.TePoints + roster.FlexPoints;
 
             return roster;
         }

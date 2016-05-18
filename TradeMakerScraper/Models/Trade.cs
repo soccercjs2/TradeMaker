@@ -17,6 +17,10 @@ namespace TradeMakerScraper.Models
         public Roster TheirNewStartingRoster { get; set; }
         public Roster TheirOldStartingRoster { get; set; }
         public decimal MyDifferential { get; set; }
+        public string MyGains { get; set; }
+        public string MyLosses { get; set; }
+        public string TheirGains { get; set; }
+        public string TheirLosses { get; set; }
         public decimal TheirDifferential { get; set; }
         public decimal CompositeDifferential { get; set; }
         public decimal Fairness { get; set; }
@@ -52,11 +56,55 @@ namespace TradeMakerScraper.Models
             TheirDifferential = TheirNewStartingRoster.Points - TheirOldStartingRoster.Points;
             CompositeDifferential = MyDifferential + TheirDifferential;
 
+            //calculate my positional differentials and add them to the proper change string
+            AddMyChange("QB", MyNewStartingRoster.QbPoints - MyOldStartingRoster.QbPoints);
+            AddMyChange("RB", MyNewStartingRoster.RbPoints - MyOldStartingRoster.RbPoints);
+            AddMyChange("WR", MyNewStartingRoster.WrPoints - MyOldStartingRoster.WrPoints);
+            AddMyChange("TE", MyNewStartingRoster.TePoints - MyOldStartingRoster.TePoints);
+            AddMyChange("FLEX", MyNewStartingRoster.FlexPoints - MyOldStartingRoster.FlexPoints);
+
+            //calculate their positional differentials and add them to the proper change string
+            AddTheirChange("QB", TheirNewStartingRoster.QbPoints - TheirOldStartingRoster.QbPoints);
+            AddTheirChange("RB", TheirNewStartingRoster.RbPoints - TheirOldStartingRoster.RbPoints);
+            AddTheirChange("WR", TheirNewStartingRoster.WrPoints - TheirOldStartingRoster.WrPoints);
+            AddTheirChange("TE", TheirNewStartingRoster.TePoints - TheirOldStartingRoster.TePoints);
+            AddTheirChange("FLEX", TheirNewStartingRoster.FlexPoints - TheirOldStartingRoster.FlexPoints);
+
             //set differentials back in rosters
             MyNewStartingRoster.Differential = "+" + MyDifferential;
             MyOldStartingRoster.Differential = "-" + MyDifferential;
             TheirNewStartingRoster.Differential = "+" + TheirDifferential;
             TheirOldStartingRoster.Differential = "-" + TheirDifferential;
+        }
+
+        private void AddMyChange(string position, decimal differential)
+        {
+            if (differential > 0)
+            {
+                if (MyGains == null) { MyGains = "[" + position + " +" + differential + "]"; }
+                else { MyGains += "[" + position + " +" + differential + "]"; }
+            }
+            else if (differential < 0)
+            {
+                if (MyLosses == null) { MyLosses = "[" + position + " " + differential + "]"; }
+                else { MyLosses += "[" + position + " " + differential + "]"; }
+            }
+        }
+
+        private void AddTheirChange(string position, decimal differential)
+        {
+            string change = "[" + position + " " + differential + "]";
+
+            if (differential > 0)
+            {
+                if (TheirGains == null) { TheirGains = "[" + position + " +" + differential + "]"; }
+                else { TheirGains += "[" + position + " +" + differential + "]"; }
+            }
+            else if (differential < 0)
+            {
+                if (TheirLosses == null) { TheirLosses = "[" + position + " " + differential + "]"; }
+                else { TheirLosses += "[" + position + " " + differential + "]"; }
+            }
         }
 
         public override int GetHashCode()
