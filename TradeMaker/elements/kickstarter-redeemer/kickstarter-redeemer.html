@@ -53,16 +53,25 @@
 
                 if (filteredCodes != null && filteredCodes.length == 1) {
                     var code = filteredCodes[0];
+                    var index = this.codes.indexOf(code);
                     var expirationDate
 
-                    if (this.subscription.length > 0) {
-                        expirationDate = new Date(this.subscription[0].value);
+                    if (code.redeemed) {
+                        this.$.error.innerText = "this code has already been redeemed";
+                    } else if (this.subscription.length > 0) {
+                        expirationDate = new Date(this.subscription[this.subscription.length - 1].value);
                         var postDate = expirationDate.getMonth() + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
-                        this.subscription = postDate;
+                        code.redeemed = true;
+
+                        this.push('subscription', postDate);
+                        this.set('codes.#' + index, code);
                     } else {
                         expirationDate = new Date();
                         var postDate = expirationDate.getMonth() + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
+                        code.redeemed = true;
+
                         this.push('subscription', postDate);
+                        this.set('codes.#' + index, code);
                     }
                 } else {
                     if (input.length == 0) {
