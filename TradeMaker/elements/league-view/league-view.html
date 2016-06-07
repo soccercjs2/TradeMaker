@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../elements/trade-filter/trade-filter.html">
 <link rel="import" href="../../elements/trade-container/trade-container.html">
 
@@ -28,6 +29,13 @@
             paper-material {
                 padding: 10px;
                 background-color: #f5f5f5;
+            }
+
+            .moreTrades {
+                background-color: #3f51b5;
+                color: white;
+                width: 90%;
+                margin: 10px;
             }
         </style>
         <!-- local DOM goes here -->
@@ -87,10 +95,11 @@
             </paper-material>
         </template>
 
-        <template is="dom-if" if="[[trades]]">
-            <template is="dom-repeat" items="[[trades]]" as="trade">
+        <template is="dom-if" if="[[displayTrades]]">
+            <template is="dom-repeat" items="[[displayTrades]]" as="trade">
                 <trade-container trade="[[trade]]" show-trade></trade-container>
             </template>
+            <center><paper-button class="moreTrades" on-tap="_showMoreTrades">SHOW MORE TRADES</paper-button></center>
         </template>
 
         <template is="dom-if" if="[[noTradesFound]]">
@@ -127,6 +136,16 @@
                 trades: {
                     type: Array,
                     notify: true
+                },
+                displayTradesNumber: {
+                    type: Number,
+                    notify: true,
+                    value: 0
+                },
+                displayTrades: {
+                    type: Array,
+                    notify: true,
+                    computed: '_getDisplayTrades(displayTradesNumber)'
                 },
                 noTradesFound: {
                     type: Boolean,
@@ -206,10 +225,24 @@
                 this.$['dialog'].close();
                 this.trades = e.detail.response;
 
+                if (this.trades.length < 10) { this.displayTradesNumber = this.trades.length; }
+                else { this.displayTradesNumber = 10; }
+
                 if (this.trades.length == 0) {
                     this.noTradesFound = true;
                 } else {
                     this.noTradesFound = false;
+                }
+            },
+            _showMoreTrades: function() {
+                if (this.trades.length < (this.displayTradesNumber + 10)) { this.displayTradesNumber = this.trades.length; }
+                else { this.displayTradesNumber = this.displayTradesNumber + 10; }
+            },
+            _getDisplayTrades: function (displayTradeNumber) {
+                if (displayTradeNumber > 0) {
+                    return this.trades.slice(0, displayTradeNumber);
+                } else {
+                    return null;
                 }
             },
             _buttonClass: function(cantFindTrades) {

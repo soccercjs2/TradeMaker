@@ -3,15 +3,16 @@
 
 <dom-module id="subscription-data">
     <template>
-        <firebase-collection data="{{subscription}}"
+        <firebase-collection id="collection"
+                             data="{{subscriptions}}"
                              location="{{subscriptionLocation}}"></firebase-collection>
     </template>
     <script>
         Polymer({
             is: 'subscription-data',
             properties: {
-                subscription: {
-                    type: String,
+                subscriptions: {
+                    type: Array,
                     notify: true
                 },
                 user: {
@@ -28,7 +29,7 @@
             // Setup user ref in firebase if auth succeeds
             _userChanged: function(user) {
                 if (user) {
-                    this.subscriptionLocation = [this.location, 'users', this.user.uid, 'subscription'].join('/');
+                    this.subscriptionLocation = [this.location, 'users', this.user.uid, 'subscriptions'].join('/');
                 }
             }
         });

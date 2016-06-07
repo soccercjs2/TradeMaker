@@ -41,8 +41,8 @@
                     type: Array,
                     notify: true
                 },
-                subscription: {
-                    type: String,
+                subscriptions: {
+                    type: Array,
                     notify: true
                 }
             },
@@ -58,19 +58,21 @@
 
                     if (code.redeemed) {
                         this.$.error.innerText = "this code has already been redeemed";
-                    } else if (this.subscription.length > 0) {
-                        expirationDate = new Date(this.subscription[this.subscription.length - 1].value);
-                        var postDate = expirationDate.getMonth() + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
+                    } else if (this.subscriptions.length > 0) {
+                        expirationDate = new Date(this.subscriptions[this.subscriptions.length - 1].value);
+                        var postDate = (expirationDate.getMonth() + 1) + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
                         code.redeemed = true;
 
-                        this.push('subscription', postDate);
+                        this.push('subscriptions', postDate);
                         this.set('codes.#' + index, code);
                     } else {
                         expirationDate = new Date();
-                        var postDate = expirationDate.getMonth() + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
+                        var postDate = (expirationDate.getMonth() + 1) + '/' + expirationDate.getDate() + '/' + (expirationDate.getFullYear() + parseInt(code.years));
                         code.redeemed = true;
 
-                        this.push('subscription', postDate);
+                        console.log(postDate);
+
+                        this.push('subscriptions', postDate);
                         this.set('codes.#' + index, code);
                     }
                 } else {

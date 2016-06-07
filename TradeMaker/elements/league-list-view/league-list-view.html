@@ -1,8 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../league-list-item/league-list-item.html">
 <link rel="import" href="../league-editor/league-editor.html">
 
@@ -15,15 +16,36 @@
                 right: 25px;
                 bottom: 25px;
             }
+
+            paper-material {
+                background-color: white;
+                padding: 10px;
+            }
+
+            paper-button {
+                background-color: #3f51b5;
+                color: white;
+            }
         </style>
         <!-- local DOM goes here -->
-        <section id="league-list">
-            <template class="vertical layout" is="dom-repeat" items="{{leagues}}" as="league">
-                <league-list-item league="{{league}}" on-edit-league="_onEdit" on-delete-league="_onDelete" kick="{{kick}}"></league-list-item>
-            </template>
-            <paper-fab icon="add" on-tap="_onShowCreate"></paper-fab>
-            <league-editor id="league-creator" on-save-league="_onAdd"></league-editor>
-        </section>
+        <template is="dom-if" if="{{!isRegistered}}">
+            <section id="no-subscription">
+                <paper-material elevation="1">
+                    <p>In order to start finding trades, you must first pay for a subscription. It's only $10!</p>
+                    <p><paper-button>PAY HERE!</paper-button></p>
+                </paper-material>
+            </section>
+        </template>
+
+        <template is="dom-if" if="{{isRegistered}}">
+            <section id="league-list">
+                <template class="vertical layout" is="dom-repeat" items="{{leagues}}" as="league">
+                    <league-list-item league="{{league}}" on-edit-league="_onEdit" on-delete-league="_onDelete" kick="{{kick}}"></league-list-item>
+                </template>
+                <paper-fab icon="add" on-tap="_onShowCreate"></paper-fab>
+                <league-editor id="league-creator" on-save-league="_onAdd"></league-editor>
+            </section>
+        </template>
         
     </template>
     <script>
@@ -33,6 +55,14 @@
                 leagues: {
                     type: Array,
                     notify: true
+                },
+                subscriptions: {
+                    type: Array,
+                    notify: true
+                },
+                isRegistered: {
+                    type: String,
+                    computed: '_isRegistered(subscriptions.*)'
                 },
                 kick: {
                     type: Number,
@@ -48,10 +78,23 @@
             },
             _onEdit: function (e) {
                 this.set('leagues.#' + (e.model.index), e.detail.league);
-                //this.set('leagues.#' + (e.model.index + 1), e.detail.league);
             },
             _onDelete: function(e) {
                 this.arrayDelete('leagues', e.detail.league);
+            },
+            _isRegistered: function (subscriptions) {
+                if (subscriptions.base.length > 0) {
+                    var today = new Date();
+
+                    for (i = 0; i < subscriptions.base.length; i++) {
+                        var subscription = new Date(subscriptions.base[i].value);
+                        if (subscription > today) { return true; }
+                    }
+
+                    return false;
+                }
+
+                return false;
             }
         });
     </script>
