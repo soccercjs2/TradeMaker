@@ -46,15 +46,15 @@
             <template is="dom-if" if="{{selectedTeam}}">
                 <table class="fill">
                     <thead>
-                    <th></th>
-                    <th class="min-width">Required</th>
-                    <th class="min-width">Exclude</th>
+                        <th></th>
+                        <th class="min-width">Required</th>
+                        <th class="min-width">Exclude</th>
                     </thead>
                     <template is="dom-repeat" items="{{selectedTeam.Players}}" as="player">
                         <tr>
                             <td>{{player.Name}}</td>
-                            <td class="min-width"><center><paper-checkbox checked="{{player.Required}}"></center></paper-checkbox></td>
-                            <td class="min-width"><center><paper-checkbox checked="{{player.Excluded}}"></center></paper-checkbox></td>
+                            <td class="min-width"><paper-checkbox checked="{{player.Required}}"></paper-checkbox></td>
+                            <td class="min-width"><paper-checkbox checked="{{player.Excluded}}"></paper-checkbox></td>
                         </tr>
                     </template>
                 </table>
@@ -71,7 +71,8 @@
             is: 'trade-filter',
             properties: {
                 leagueData: {
-                    type: Object
+                    type: Object,
+                    observer: '_leagueDataChanged'
                 },
                 primary: {
                     type: Boolean,
@@ -147,6 +148,22 @@
                     this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
 
                     this.selectedTeam = null;
+                }
+            },
+            _leagueDataChanged: function (newValue, oldValue) {
+                if (newValue == null) {
+                    this.selection = null;
+                    this.selectedTeam = null;
+                    this.selectedTeamCache = null;
+                    this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
+                    
+                    if (this.primary && this.selectedTeam == null) {
+                        this.$.button.innerText = "SELECT YOUR TEAM";
+                    }
+
+                    if (!this.primary && this.selectedTeam == null) {
+                        this.$.button.innerText = "SELECT TRADE PARTNER";
+                    }
                 }
             }
         });

@@ -1194,6 +1194,7 @@
     <Content Include="bower_components\webcomponentsjs\webcomponents.min.js" />
     <Content Include="elements\account-badge\account-badge.html" />
     <Content Include="elements\elements.html" />
+    <Content Include="elements\fairness-meter\fairness-meter.html" />
     <Content Include="elements\kickstarter-data\kickstarter-data.html" />
     <Content Include="elements\kickstarter-redeemer\kickstarter-redeemer.html" />
     <Content Include="elements\league-editor\league-editor.html" />

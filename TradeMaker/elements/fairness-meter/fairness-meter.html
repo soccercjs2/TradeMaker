@@ -1,0 +1,28 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+
+<dom-module id="fairness-meter">
+    <template>
+        <style is="custom-style">
+            /* local DOM styles go here */
+            paper-slider {
+                --paper-slider-knob-start-color: --google-blue-700;
+                --paper-slider-knob-start-border-color: --google-blue-700;
+                --paper-slider-pin-start-color: --google-blue-700;
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <paper-slider pin min="-5" max="5" value="0"></paper-slider>
+    </template>
+    <script>
+        Polymer({
+            is: 'fairness-meter',
+            properties: {
+                fairness: {
+                    type: Number,
+                    notify: true
+                }
+            }
+        });
+    </script>
+</dom-module>

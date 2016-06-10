@@ -7,6 +7,7 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../elements/trade-filter/trade-filter.html">
 <link rel="import" href="../../elements/trade-container/trade-container.html">
+<link rel="import" href="../../elements/fairness-meter/fairness-meter.html">
 
 <dom-module id="league-view">
     <template>
@@ -36,6 +37,15 @@
                 color: white;
                 width: 90%;
                 margin: 10px;
+            }
+
+            fairness-meter {
+                display: inline-block;
+            }
+
+            .fairness-meter-container {
+                display:flex;
+                align-items:center;
             }
         </style>
         <!-- local DOM goes here -->
@@ -86,6 +96,11 @@
                 <div class="block margined">
                     Trade partner:
                     <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
+                </div>
+
+                <div class="block margined fairness-meter-container">
+                    <span>Fairness:</span>
+                    <fairness-meter></fairness-meter>
                 </div>
 
                 <paper-button id="findTrades" raised on-tap="_findTrades" class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}">FIND TRADES</paper-button>
@@ -162,6 +177,9 @@
                 this.league = null;
                 this.leagueData = null;
                 this.trades = null;
+                this.displayTradesNumber = 0;
+                this.cantFindTrades = true;
+                this.noTradesFound = false;
 
                 var filteredLeagues = leagues.filter(function (league) { return (league.__firebaseKey__ == leagueid); });
                 var leagueFirebase;
