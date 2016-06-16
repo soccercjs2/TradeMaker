@@ -100,7 +100,7 @@
 
                 <div class="block margined fairness-meter-container">
                     <span>Fairness:</span>
-                    <fairness-meter></fairness-meter>
+                    <fairness-meter fairness="{{leagueData.Fairness}}"></fairness-meter>
                 </div>
 
                 <paper-button id="findTrades" raised on-tap="_findTrades" class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}">FIND TRADES</paper-button>

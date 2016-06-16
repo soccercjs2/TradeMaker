@@ -51,7 +51,7 @@ namespace TradeMakerScraper.Controllers
                 FindTrades(ref trades, leagueData, myTeamPlayerPool, otherTeamPlayerPool, myTeamPlayerPool.ThreePlayerTradePool, otherTeamPlayerPool.ThreePlayerTradePool); //3 for 3
             }
 
-            return trades.OrderByDescending(t => (t.MyDifferential * t.TheirDifferential)).Distinct().ToList();
+            return trades.OrderByDescending(t => ((t.MyDifferential + leagueData.Fairness) * (t.TheirDifferential - leagueData.Fairness))).Distinct().ToList();
         }
 
         private void FindTrades(ref List<Trade> allTrades, LeagueData leagueData,

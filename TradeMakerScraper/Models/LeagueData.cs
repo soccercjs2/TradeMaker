@@ -14,6 +14,7 @@ namespace TradeMakerScraper.Models
         public Team TheirTeam { get; set; }
         public bool UseAllTeams { get; set; }
         public List<Trade> Trades { get; set; }
+        public int Fairness { get; set; }
 
         public LeagueData()
         {

@@ -12,7 +12,7 @@
             }
         </style>
         <!-- local DOM goes here -->
-        <paper-slider pin min="-5" max="5" value="0"></paper-slider>
+        <paper-slider id="slider" pin min="-5" max="5" value="{{fairness}}" on-change="_change"></paper-slider>
     </template>
     <script>
         Polymer({
@@ -20,8 +20,12 @@
             properties: {
                 fairness: {
                     type: Number,
-                    notify: true
+                    notify: true,
+                    value: 0
                 }
+            },
+            _change: function () {
+                this.fire('fairness-change')
             }
         });
     </script>
