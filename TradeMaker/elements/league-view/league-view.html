@@ -39,7 +39,7 @@
                 margin: 10px;
             }
 
-            fairness-meter {
+            .fairness-meter {
                 display: inline-block;
             }
 
@@ -98,9 +98,11 @@
                     <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
                 </div>
 
+                <span>Fairness: </span>
                 <div class="block margined fairness-meter-container">
-                    <span>Fairness:</span>
+                    [Me]
                     <fairness-meter fairness="{{leagueData.Fairness}}"></fairness-meter>
+                    [Them]
                 </div>
 
                 <paper-button id="findTrades" raised on-tap="_findTrades" class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}">FIND TRADES</paper-button>
@@ -234,6 +236,7 @@
                 }
             },
             _findTrades: function () {
+                this.displayTradesNumber = 0;
                 this.$['dialogText'].innerText = "Finding trades...";
                 this.$['dialog'].open();
                 this.$['tradeAjax'].body = this.leagueData;
