@@ -16,6 +16,7 @@ namespace TradeMakerScraper.Controllers
     {
         private const string NumberFireProjectionTable = "projection-data";
         private const string PffProjectionTable = "datatable";
+        private const string FantasyProsProjectionTable = "data";
 
         // GET api/projectionscraper
         [EnableCors(origins: "*", headers: "*", methods: "*")]
@@ -33,159 +34,139 @@ namespace TradeMakerScraper.Controllers
 
         private void GetQuarterbacks(ref Projections projections)
         {
-            //get qb data
-            string html = "";
-
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            String path = Directory.GetCurrentDirectory() + "\\Html\\PffQbProjections.html";
-            html = File.ReadAllText(path);
-
-            //create html object and load html into it
-            HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(html);
+            WebScraper scraper = new WebScraper(null, null, null);
+            HtmlDocument seasonProjectionDocument = scraper.Scrape("https://www.fantasypros.com/nfl/projections/qb.php?week=draft");
 
             //get projection-data table from html
-            HtmlNode projectionTable = document.GetElementbyId(PffProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
+            HtmlNode seasonProjectionTable = seasonProjectionDocument.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
 
             //loop through rows in projection table
-            foreach (HtmlNode row in projectionTable.SelectNodes("./tr"))
+            foreach (HtmlNode row in seasonProjectionTable.SelectNodes("./tr"))
             {
                 //create new datarow
                 Player player = new Player();
 
+                //parse name and team out of player cell
+                FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
+
                 //set row values
                 player.Id = projections.Players.Count + 1;
-                player.Name = row.SelectSingleNode("./td[2]").InnerText;
-                player.AlternateNames = GetAlternateNames(row.SelectSingleNode("./td[2]").InnerText);
+                player.Name = parser.Player;
+                player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "QB";
-                player.NflTeam = row.SelectSingleNode("./td[3]").InnerText;
-                player.NflAlternateTeams = GetAlternateTeam(row.SelectSingleNode("./td[3]").InnerText);
-                player.PassingYards = decimal.Parse(row.SelectSingleNode("./td[8]").InnerText);
-                player.PassingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[9]").InnerText);
-                player.Interceptions = decimal.Parse(row.SelectSingleNode("./td[10]").InnerText);
-                player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[13]").InnerText);
-                player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[14]").InnerText);
+                player.NflTeam = parser.Team;
+                player.NflAlternateTeams = GetAlternateTeam(parser.Team);
+                player.PassingYards = decimal.Parse(row.SelectSingleNode("./td[4]").InnerText);
+                player.PassingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[5]").InnerText);
+                player.Interceptions = decimal.Parse(row.SelectSingleNode("./td[6]").InnerText);
+                player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[8]").InnerText);
+                player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[9]").InnerText);
 
                 //add datarow to datatable
-                projections.Players.Add(player);
+                projections.SeasonProjectionPlayers.Add(player);
             }
         }
 
         private void GetRunningBacks(ref Projections projections)
         {
-            //get rb data
-            string html = "";
-
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            String path = Directory.GetCurrentDirectory() + "\\Html\\PffRbProjections.html";
-            html = File.ReadAllText(path);
-
-            //create html object and load html into it
-            HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(html);
+            WebScraper scraper = new WebScraper(null, null, null);
+            HtmlDocument seasonProjectionDocument = scraper.Scrape("https://www.fantasypros.com/nfl/projections/rb.php?week=draft");
 
             //get projection-data table from html
-            HtmlNode projectionTable = document.GetElementbyId(PffProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
+            HtmlNode seasonProjectionTable = seasonProjectionDocument.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
 
             //loop through rows in projection table
-            foreach (HtmlNode row in projectionTable.SelectNodes("./tr"))
+            foreach (HtmlNode row in seasonProjectionTable.SelectNodes("./tr"))
             {
                 //create new datarow
                 Player player = new Player();
 
+                //parse name and team out of player cell
+                FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
+
                 //set row values
                 player.Id = projections.Players.Count + 1;
-                player.Name = row.SelectSingleNode("./td[2]").InnerText;
-                player.AlternateNames = GetAlternateNames(row.SelectSingleNode("./td[2]").InnerText);
+                player.Name = parser.Player;
+                player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "RB";
-                player.NflTeam = row.SelectSingleNode("./td[3]").InnerText;
-                player.NflAlternateTeams = GetAlternateTeam(row.SelectSingleNode("./td[3]").InnerText);
-                player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[7]").InnerText);
-                player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[8]").InnerText);
-                player.Receptions = decimal.Parse(row.SelectSingleNode("./td[10]").InnerText);
-                player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[11]").InnerText);
-                player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[12]").InnerText);
+                player.NflTeam = parser.Team;
+                player.NflAlternateTeams = GetAlternateTeam(parser.Team);
+                player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[3]").InnerText);
+                player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[4]").InnerText);
+                player.Receptions = decimal.Parse(row.SelectSingleNode("./td[5]").InnerText);
+                player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[6]").InnerText);
+                player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[7]").InnerText);
 
                 //add datarow to datatable
-                projections.Players.Add(player);
+                projections.SeasonProjectionPlayers.Add(player);
             }
         }
 
         private void GetWideReceivers(ref Projections projections)
         {
-            //get rb data
-            string html = "";
-
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            String path = Directory.GetCurrentDirectory() + "\\Html\\PffWrProjections.html";
-            html = File.ReadAllText(path);
-
-            //create html object and load html into it
-            HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(html);
+            WebScraper scraper = new WebScraper(null, null, null);
+            HtmlDocument seasonProjectionDocument = scraper.Scrape("https://www.fantasypros.com/nfl/projections/wr.php?week=draft");
 
             //get projection-data table from html
-            HtmlNode projectionTable = document.GetElementbyId(PffProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
+            HtmlNode seasonProjectionTable = seasonProjectionDocument.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
 
             //loop through rows in projection table
-            foreach (HtmlNode row in projectionTable.SelectNodes("./tr"))
+            foreach (HtmlNode row in seasonProjectionTable.SelectNodes("./tr"))
             {
                 //create new datarow
                 Player player = new Player();
 
+                //parse name and team out of player cell
+                FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
+
                 //set row values
                 player.Id = projections.Players.Count + 1;
-                player.Name = row.SelectSingleNode("./td[2]").InnerText;
-                player.AlternateNames = GetAlternateNames(row.SelectSingleNode("./td[2]").InnerText);
+                player.Name = parser.Player;
+                player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "WR";
-                player.NflTeam = row.SelectSingleNode("./td[3]").InnerText;
-                player.NflAlternateTeams = GetAlternateTeam(row.SelectSingleNode("./td[3]").InnerText);
-                player.Receptions = decimal.Parse(row.SelectSingleNode("./td[7]").InnerText);
-                player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[8]").InnerText);
-                player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[9]").InnerText);
-                player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[11]").InnerText);
-                player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[12]").InnerText);
+                player.NflTeam = parser.Team;
+                player.NflAlternateTeams = GetAlternateTeam(parser.Team);
+                player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[3]").InnerText);
+                player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[4]").InnerText);
+                player.Receptions = decimal.Parse(row.SelectSingleNode("./td[5]").InnerText);
+                player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[6]").InnerText);
+                player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[7]").InnerText);
 
                 //add datarow to datatable
-                projections.Players.Add(player);
+                projections.SeasonProjectionPlayers.Add(player);
             }
         }
 
         private void GetTightEnds(ref Projections projections)
         {
-            //get rb data
-            string html = "";
-
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            String path = Directory.GetCurrentDirectory() + "\\Html\\PffTeProjections.html";
-            html = File.ReadAllText(path);
-
-            //create html object and load html into it
-            HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(html);
+            WebScraper scraper = new WebScraper(null, null, null);
+            HtmlDocument seasonProjectionDocument = scraper.Scrape("https://www.fantasypros.com/nfl/projections/te.php?week=draft");
 
             //get projection-data table from html
-            HtmlNode projectionTable = document.GetElementbyId(PffProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
+            HtmlNode seasonProjectionTable = seasonProjectionDocument.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
 
             //loop through rows in projection table
-            foreach (HtmlNode row in projectionTable.SelectNodes("./tr"))
+            foreach (HtmlNode row in seasonProjectionTable.SelectNodes("./tr"))
             {
                 //create new datarow
                 Player player = new Player();
 
+                //parse name and team out of player cell
+                FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
+
                 //set row values
                 player.Id = projections.Players.Count + 1;
-                player.Name = row.SelectSingleNode("./td[2]").InnerText;
-                player.AlternateNames = GetAlternateNames(row.SelectSingleNode("./td[2]").InnerText);
+                player.Name = parser.Player;
+                player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "TE";
-                player.NflTeam = row.SelectSingleNode("./td[3]").InnerText;
-                player.NflAlternateTeams = GetAlternateTeam(row.SelectSingleNode("./td[3]").InnerText);
-                player.Receptions = decimal.Parse(row.SelectSingleNode("./td[7]").InnerText);
-                player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[8]").InnerText);
-                player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[9]").InnerText);
+                player.NflTeam = parser.Team;
+                player.NflAlternateTeams = GetAlternateTeam(parser.Team);
+                player.Receptions = decimal.Parse(row.SelectSingleNode("./td[2]").InnerText);
+                player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[3]").InnerText);
+                player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[4]").InnerText);
 
                 //add datarow to datatable
-                projections.Players.Add(player);
+                projections.SeasonProjectionPlayers.Add(player);
             }
         }
 
@@ -227,60 +208,5 @@ namespace TradeMakerScraper.Controllers
                 default: return new List<string> { name };
             }
         }
-
-        //[EnableCors(origins: "*", headers: "*", methods: "*")]
-        //public Projections Get()
-        //{
-        //    HashSet<Player> players = new HashSet<Player>();
-
-        //    //get qb data
-        //    string html = "";
-        //    //Thread qbThread = new Thread(() => html = ScrapeBrowser(qbProjectionUrl));
-        //    //qbThread.SetApartmentState(ApartmentState.STA);
-        //    //qbThread.Start();
-        //    //qbThread.Join();
-
-        //    Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-        //    String path = Directory.GetCurrentDirectory() + "\\Html\\NumberFireProjections.html";
-        //    html = File.ReadAllText(path);
-
-        //    //create html object and load html into it
-        //    HtmlDocument document = new HtmlDocument();
-        //    document.LoadHtml(html);
-
-        //    //get projection-data table from html
-        //    HtmlNode projectionTable = document.GetElementbyId(NumberFireProjectionTable);
-
-        //    //loop through rows in projection-data
-        //    foreach (HtmlNode row in projectionTable.SelectNodes("./tr"))
-        //    {
-        //        //create new datarow
-        //        Player player = new Player();
-        //        NumberFireParser numberFireParser = new NumberFireParser(row.SelectSingleNode("./td[1]").InnerText);
-
-        //        //set row values
-        //        player.Id = players.Count + 1;
-        //        player.Name = numberFireParser.Player;
-        //        player.Position = numberFireParser.Position;
-        //        player.NflTeam = numberFireParser.Team;
-        //        player.NflAlternateTeam = numberFireParser.AlternateTeam;
-        //        player.PassingYards = decimal.Parse(row.SelectSingleNode("./td[5]").InnerText);
-        //        player.PassingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[6]").InnerText);
-        //        player.Interceptions = decimal.Parse(row.SelectSingleNode("./td[7]").InnerText);
-        //        player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[9]").InnerText);
-        //        player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[10]").InnerText);
-        //        player.Receptions = decimal.Parse(row.SelectSingleNode("./td[11]").InnerText);
-        //        player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[12]").InnerText);
-        //        player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[13]").InnerText);
-        //        player.FantasyPoints = 0;
-
-        //        //add datarow to datatable
-        //        players.Add(player);
-        //    }
-
-        //    Projections projections = new Projections();
-        //    projections.Players = players;
-        //    return projections;
-        //}
     }
 }
