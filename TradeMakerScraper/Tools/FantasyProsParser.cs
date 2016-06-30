@@ -27,8 +27,10 @@ namespace TradeMakerScraper.Tools
         public string GetTeamFromFantasyProPlayer(HtmlNode playerData)
         {
             List<HtmlNode> nodes = playerData.Descendants().ToList<HtmlNode>();
-            HtmlNode anchor = playerData.Descendants().Where(t => t.Name == "small").FirstOrDefault<HtmlNode>();
-            return anchor.InnerText;
+            HtmlNode small = playerData.Descendants().Where(t => t.Name == "small").FirstOrDefault<HtmlNode>();
+
+            if (small == null) { return null; }
+            else { return small.InnerText; }
         }
     }
 }
