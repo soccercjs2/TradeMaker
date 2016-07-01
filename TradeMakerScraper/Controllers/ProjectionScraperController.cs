@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using IronPython.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -182,7 +183,10 @@ namespace TradeMakerScraper.Controllers
 
         private void GetSeasonQbStatistics(ref Projections projections)
         {
-            
+            var py = Python.CreateRuntime();
+            dynamic test = py.UseFile("helloworld.py");
+            string asdf = test.helloworld();
+            asdf += "?";
         }
 
         private void GetNextWeekQbProjections(ref Projections projections)
