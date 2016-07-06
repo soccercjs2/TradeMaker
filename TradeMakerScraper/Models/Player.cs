@@ -22,6 +22,7 @@ namespace TradeMakerScraper.Models
         public decimal ReceivingYards { get; set; }
         public decimal ReceivingTouchdowns { get; set; }
         public decimal FantasyPoints { get; set; }
+        public int GamesPlayed { get; set; }
         public bool Required { get; set; }
         public bool Excluded { get; set; }
         public decimal TradeValue { get; set; }

@@ -52,9 +52,7 @@ namespace TradeMakerScraper.Tools
                 WebResponse authResponse = webRequest.GetResponse();
                 authResponse.Close();
             }
-            catch (Exception e) {
-                string asdf = "asdf";
-            }
+            catch { }
 
             return cookies;
         }
