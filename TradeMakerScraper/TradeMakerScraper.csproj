@@ -2569,6 +2569,7 @@
     <Content Include="nflgame\update_sched.py" />
     <Content Include="nflgame\version.py" />
     <Content Include="nflgame\__init__.py" />
+    <Content Include="helloworld.py" />
     <None Include="Properties\PublishProfiles\TradeMakerScraper %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\TradeMakerScraper.pubxml" />
     <None Include="Web.Debug.config">
