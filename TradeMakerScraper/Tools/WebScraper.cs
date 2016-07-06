@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -82,6 +83,30 @@ namespace TradeMakerScraper.Tools
             catch { }
 
             return document;
+        }
+
+        public JObject ScrapeJson(string url)
+        {
+            HttpWebRequest webRequest;
+            StreamReader responseReader;
+            string responseData;
+            JObject json = null;
+
+            try
+            {
+                //now we get the authenticated page
+                webRequest = (HttpWebRequest)WebRequest.Create(url);
+                webRequest.CookieContainer = Cookies;
+                responseReader = new StreamReader(webRequest.GetResponse().GetResponseStream());
+                responseData = responseReader.ReadToEnd();
+                responseReader.Close();
+
+                //load html into htmlagilitypack
+                json = JObject.Parse(responseData);
+            }
+            catch { }
+
+            return json;
         }
     }
 }

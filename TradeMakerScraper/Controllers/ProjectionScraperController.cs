@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +19,15 @@ namespace TradeMakerScraper.Controllers
         private const string PffProjectionTable = "datatable";
         private const string FantasyProsProjectionTable = "data";
 
+        private const string PassingYards = "5";
+        private const string PassingTouchdowns = "6";
+        private const string Interceptions = "7";
+        private const string RushingYards = "14";
+        private const string RushingTouchdowns = "15";
+        private const string Receptions = "20";
+        private const string ReceivingYards = "21";
+        private const string ReceivingTouchdowns = "22";
+
         // GET api/projectionscraper
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         public Projections Get()
@@ -31,13 +41,16 @@ namespace TradeMakerScraper.Controllers
             GetSeasonTeProjections(ref projections);
 
             //get season statistics
-            GetSeasonQbStatistics(ref projections);
+            GetSeasonStatistics(ref projections);
 
             //get next week projections
             GetNextWeekQbProjections(ref projections);
             GetNextWeekRbProjections(ref projections);
             GetNextWeekWrProjections(ref projections);
             GetNextWeekTeProjections(ref projections);
+
+            //calculate rest of season statistics
+            CalculateROSProjections(ref projections);
 
             return projections;
         }
@@ -60,7 +73,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //set row values
-                player.Id = projections.Players.Count + 1;
+                player.Id = projections.SeasonProjectionPlayers.Count + 1;
                 player.Name = parser.Player;
                 player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "QB";
@@ -95,7 +108,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //set row values
-                player.Id = projections.Players.Count + 1;
+                player.Id = projections.SeasonProjectionPlayers.Count + 1;
                 player.Name = parser.Player;
                 player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "RB";
@@ -130,7 +143,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //set row values
-                player.Id = projections.Players.Count + 1;
+                player.Id = projections.SeasonProjectionPlayers.Count + 1;
                 player.Name = parser.Player;
                 player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "WR";
@@ -165,7 +178,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //set row values
-                player.Id = projections.Players.Count + 1;
+                player.Id = projections.SeasonProjectionPlayers.Count + 1;
                 player.Name = parser.Player;
                 player.AlternateNames = GetAlternateNames(parser.Player);
                 player.Position = "TE";
@@ -180,9 +193,74 @@ namespace TradeMakerScraper.Controllers
             }
         }
 
-        private void GetSeasonQbStatistics(ref Projections projections)
+        private void GetSeasonStatistics(ref Projections projections)
         {
-            
+            WebScraper scraper = new WebScraper(null, null, null);
+            //JObject json = scraper.ScrapeJson("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2016&format=json");
+            JObject json = scraper.ScrapeJson("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2015&format=json");
+
+            var players =
+                from player in json["players"]
+                select player;
+
+            //loop through rows in projection table
+            foreach (JObject jPlayer in players)
+            {
+                //create new datarow
+                Player player = new Player();
+
+                //create fantasy pro converter
+                FantasyProConverter converter = new FantasyProConverter(jPlayer["name"].ToString(), jPlayer["teamAbbr"].ToString());
+
+                //set row values
+                player.Id = projections.StatisticsPlayers.Count + 1;
+                player.Name = converter.Name;
+                player.NflTeam = converter.NflTeam;
+                player.Position = jPlayer["position"].ToString().ToUpper();
+
+                if (player.Position == "QB")
+                {
+                    player.PassingYards = decimal.Parse(IsNullStat(jPlayer["stats"][PassingYards]));
+                    player.PassingTouchdowns = decimal.Parse(IsNullStat(jPlayer["stats"][PassingTouchdowns]));
+                    player.Interceptions = decimal.Parse(IsNullStat(jPlayer["stats"][Interceptions]));
+                    player.RushingYards = decimal.Parse(IsNullStat(jPlayer["stats"][RushingYards]));
+                    player.RushingTouchdowns = decimal.Parse(IsNullStat(jPlayer["stats"][RushingTouchdowns]));
+
+                    //add datarow to datatable
+                    projections.StatisticsPlayers.Add(player);
+                }
+                if (player.Position == "RB")
+                {
+                    player.RushingYards = decimal.Parse(IsNullStat(jPlayer["stats"][RushingYards]));
+                    player.RushingTouchdowns = decimal.Parse(IsNullStat(jPlayer["stats"][RushingTouchdowns]));
+                    player.Receptions = decimal.Parse(IsNullStat(jPlayer["stats"][Receptions]));
+                    player.ReceivingYards = decimal.Parse(IsNullStat(jPlayer["stats"][ReceivingYards]));
+                    player.ReceivingTouchdowns = decimal.Parse(IsNullStat(jPlayer["stats"][ReceivingTouchdowns]));
+
+                    //add datarow to datatable
+                    projections.StatisticsPlayers.Add(player);
+                }
+                if (player.Position == "WR")
+                {
+                    player.RushingYards = decimal.Parse(IsNullStat(jPlayer["stats"][RushingYards]));
+                    player.RushingTouchdowns = decimal.Parse(IsNullStat(jPlayer["stats"][RushingTouchdowns]));
+                    player.Receptions = decimal.Parse(IsNullStat(jPlayer["stats"][Receptions]));
+                    player.ReceivingYards = decimal.Parse(IsNullStat(jPlayer["stats"][ReceivingYards]));
+                    player.ReceivingTouchdowns = decimal.Parse(IsNullStat(jPlayer["stats"][ReceivingTouchdowns]));
+
+                    //add datarow to datatable
+                    projections.StatisticsPlayers.Add(player);
+                }
+                if (player.Position == "TE")
+                {
+                    player.Receptions = decimal.Parse(IsNullStat(jPlayer["stats"][Receptions]));
+                    player.ReceivingYards = decimal.Parse(IsNullStat(jPlayer["stats"][ReceivingYards]));
+                    player.ReceivingTouchdowns = decimal.Parse(IsNullStat(jPlayer["stats"][ReceivingTouchdowns]));
+
+                    //add datarow to datatable
+                    projections.StatisticsPlayers.Add(player);
+                }
+            }
         }
 
         private void GetNextWeekQbProjections(ref Projections projections)
@@ -345,6 +423,19 @@ namespace TradeMakerScraper.Controllers
             }
         }
 
+        private void CalculateROSProjections(ref Projections projections)
+        {
+            foreach (Player player in projections.SeasonProjectionPlayers)
+
+            Player player = new Player();
+
+            int weightSeasonProjection;
+            int weightInSeason;
+            int pointsPerGameDivisor;
+
+
+        }
+
         private List<string> GetAlternateTeam(string team)
         {
             switch (team)
@@ -382,6 +473,12 @@ namespace TradeMakerScraper.Controllers
                 case "Ted Ginn": return new List<string> { "Ted Ginn Jr." };
                 default: return new List<string> { name };
             }
+        }
+
+        private string IsNullStat(object o)
+        {
+            if (o == null) { return "0"; }
+            else { return o.ToString(); }
         }
     }
 }
