@@ -164,11 +164,14 @@ namespace TradeMakerScraper.Controllers
                 //parse name and team out of player cell
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
+                //convert to nfl values
+                NflConverter converter = new NflConverter(parser.Player, parser.Team);
+
                 //set row values
                 player.Id = projections.SeasonProjectionPlayers.Count + 1;
-                player.Name = parser.Player;
+                player.Name = converter.Name;
                 player.Position = "WR";
-                player.NflTeam = parser.Team;
+                player.NflTeam = converter.NflTeam;
                 player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[3]").InnerText) / 16;
                 player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[4]").InnerText) / 16;
                 player.Receptions = decimal.Parse(row.SelectSingleNode("./td[5]").InnerText) / 16;
@@ -197,11 +200,14 @@ namespace TradeMakerScraper.Controllers
                 //parse name and team out of player cell
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
+                //convert to nfl values
+                NflConverter converter = new NflConverter(parser.Player, parser.Team);
+
                 //set row values
                 player.Id = projections.SeasonProjectionPlayers.Count + 1;
-                player.Name = parser.Player;
+                player.Name = converter.Name;
                 player.Position = "TE";
-                player.NflTeam = parser.Team;
+                player.NflTeam = converter.NflTeam;
                 player.Receptions = decimal.Parse(row.SelectSingleNode("./td[2]").InnerText) / 16;
                 player.ReceivingYards = decimal.Parse(row.SelectSingleNode("./td[3]").InnerText) / 16;
                 player.ReceivingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[4]").InnerText) / 16;
@@ -232,8 +238,8 @@ namespace TradeMakerScraper.Controllers
 
                 //set row values
                 player.Id = projections.StatisticsPlayers.Count + 1;
-                player.Name = converter.Name;
-                player.NflTeam = converter.NflTeam;
+                player.Name = jPlayer["name"].ToString();
+                player.NflTeam = jPlayer["teamAbbr"].ToString();
                 player.Position = jPlayer["position"].ToString().ToUpper();
                 player.GamesPlayed = int.Parse(IsNullStat(jPlayer["stats"][GamesPlayed]));
 
@@ -512,7 +518,7 @@ namespace TradeMakerScraper.Controllers
                     weekProjectionPlayers.Remove(weekProjectionPlayer);
                 }
 
-                int bye = Byes[match.NflTeam];
+                int bye = (match.NflTeam == null) ? 17 : Byes[match.NflTeam];
                 int gamesRemaining = 17 - CurrentWeek + ((bye >= CurrentWeek) ? 0 : 1);
 
                 //turn combination of stats into ROS projections
