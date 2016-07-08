@@ -220,8 +220,10 @@ namespace TradeMakerScraper.Controllers
         private void GetSeasonStatistics(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            JObject json = scraper.ScrapeJson("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2016&format=json");
+            //JObject json = scraper.ScrapeJson("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2016&format=json");
             //JObject json = scraper.ScrapeJson("http://api.fantasy.nfl.com/v1/players/stats?statType=seasonStats&season=2015&format=json");
+            JObject json = scraper.ScrapeJson("http://api.fantasy.nfl.com/v1/players/stats?statType=weekStats&season=2015&week=1&format=json");
+            //http://api.fantasy.nfl.com/v1/players/stats?statType=weekStats&season=2015&week=1&format=json
 
             var players =
                 from player in json["players"]
@@ -291,7 +293,8 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekQbProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/qb.php?week=" + CurrentWeek);
+            //HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/qb.php?week=" + CurrentWeek);
+            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150917054840/http://www.fantasypros.com/nfl/projections/qb.php");
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -329,7 +332,9 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekRbProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/rb.php?week=" + CurrentWeek);
+            //HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/rb.php?week=" + CurrentWeek);
+            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150917084206/http://www.fantasypros.com/nfl/projections/rb.php");
+            //https://web.archive.org/web/20150917084206/http://www.fantasypros.com/nfl/projections/rb.php
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -367,7 +372,9 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekWrProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/wr.php?week=" + CurrentWeek);
+            //HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/wr.php?week=" + CurrentWeek);
+            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150918083129/http://www.fantasypros.com/nfl/projections/wr.php");
+            //https://web.archive.org/web/20150918083129/http://www.fantasypros.com/nfl/projections/wr.php
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -406,7 +413,8 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekTeProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/te.php?week=" + CurrentWeek);
+            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150916061220/http://www.fantasypros.com/nfl/projections/te.php");
+            //https://web.archive.org/web/20150916061220/http://www.fantasypros.com/nfl/projections/te.php
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -518,7 +526,7 @@ namespace TradeMakerScraper.Controllers
                     weekProjectionPlayers.Remove(weekProjectionPlayer);
                 }
 
-                int bye = (match.NflTeam == null) ? 17 : Byes[match.NflTeam];
+                int bye = (match.NflTeam == null || match.NflTeam == "") ? 17 : Byes[match.NflTeam];
                 int gamesRemaining = 17 - CurrentWeek + ((bye >= CurrentWeek) ? 0 : 1);
 
                 //turn combination of stats into ROS projections
@@ -583,7 +591,7 @@ namespace TradeMakerScraper.Controllers
                     weekProjectionPlayers.Remove(weekProjectionPlayer);
                 }
 
-                int bye = Byes[match.NflTeam];
+                int bye = (match.NflTeam == null || match.NflTeam == "") ? 17 : Byes[match.NflTeam];
                 int gamesRemaining = 17 - CurrentWeek + ((bye >= CurrentWeek) ? 0 : 1);
 
                 //turn combination of stats into ROS projections

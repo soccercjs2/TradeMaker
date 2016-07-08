@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using TradeMakerScraper.Models;
+using TradeMakerScraper.Tools;
 
 namespace TradeMakerScraper.HostParsers
 {
@@ -90,10 +91,12 @@ namespace TradeMakerScraper.HostParsers
                         string playerPosition = teamPositionSpan.InnerText.Substring(positionStart);
                         string playerTeam = teamPositionSpan.InnerText.Substring(0, teamLength).ToUpper();
 
+                        //convert name and team to nfl values
+                        NflConverter converter = new NflConverter(playerName, playerTeam);
+
+                        //find player
                         Player player = projections.Players.Where(
-                            p => (p.Name == playerName || p.AlternateNames.Contains(playerName)) &&
-                                p.Position == playerPosition &&
-                                (p.NflTeam == playerTeam || p.NflAlternateTeams.Contains(playerTeam))
+                            p => p.Name == converter.Name && p.Position == playerPosition && p.NflTeam == converter.NflTeam
                         ).FirstOrDefault<Player>();
 
                         if (player != null)

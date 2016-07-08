@@ -62,18 +62,18 @@ namespace TradeMakerScraper.HostParsers
 
             foreach (HtmlNode row in rows)
             {
-                HtmlNode nameCell = row.SelectSingleNode("./td[1]");
-                HtmlNode positionCell = row.SelectSingleNode("./td[2]");
-                HtmlNode teamCell = row.SelectSingleNode("./td[3]");
+                HtmlNode cell = row.SelectSingleNode("./td[1]").FirstChild;
 
-                string playerName = nameCell.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>().InnerText;
-                string playerPosition = positionCell.Descendants().Where(s => s.Name == "span").FirstOrDefault<HtmlNode>().InnerText;
-                string playerTeam = teamCell.Descendants().Where(s => s.Name == "span").FirstOrDefault<HtmlNode>().InnerText.ToUpper();
+                string playerName = cell.FirstChild.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>().InnerText;
+                string playerPosition = cell.LastChild.Descendants().Where(s => s.Name == "span" && s.Attributes["class"].Value == "position").FirstOrDefault<HtmlNode>().InnerText;
+                string playerTeam = cell.LastChild.Descendants().Where(s => s.Name == "span" && s.Attributes["class"].Value == "player-team").FirstOrDefault<HtmlNode>().InnerText.ToUpper();
 
+                //convert name and team to nfl values
+                NflConverter converter = new NflConverter(playerName, playerTeam);
+
+                //find player
                 Player player = projections.Players.Where(
-                    p => (p.Name == playerName || p.AlternateNames.Contains(playerName)) &&
-                        p.Position == playerPosition &&
-                        (p.NflTeam == playerTeam || p.NflAlternateTeams.Contains(playerTeam))
+                    p => p.Name == converter.Name && p.Position == playerPosition && p.NflTeam == converter.NflTeam
                 ).FirstOrDefault<Player>();
 
                 if (player != null) {

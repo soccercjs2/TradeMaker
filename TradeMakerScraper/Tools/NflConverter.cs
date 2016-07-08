@@ -21,17 +21,11 @@ namespace TradeMakerScraper.Tools
         {
             switch (name)
             {
-                //case "Adrian L. Peterson": return "Adrian Peterson";
-                //case "Ben Watson": return "Benjamin Watson";
-                //case "David A. Johnson": return "David Johnson";
-                //case "Duke Johnson": return "Duke Johnson Jr.";
-                //case "Jonathan C. Stewart": return "Jonathan Stewart";
-                //case "Odell Beckham Jr.": return "Odell Beckham";
-                //case "Robert Griffin III": return "Robert Griffin";
-                //case "Ted Ginn": return "Ted Ginn Jr.";
                 case "A.J. McCarron": return "AJ McCarron";
                 case "DeVante Parker": return "Devante Parker";
+                case "Duke Johnson Jr.": return "Duke Johnson";
                 case "Odell Beckham Jr.": return "Odell Beckham";
+                case "Steve Smith Sr.": return "Steve Smith";
                 case "Ted Ginn Jr.": return "Ted Ginn";
                 default: return name;
             }
@@ -43,10 +37,6 @@ namespace TradeMakerScraper.Tools
 
             switch (nflTeam)
             {
-                //case "ARZ": return "ARI";
-                //case "BLT": return "BAL";
-                //case "CLV": return "CLE";
-                //case "HST": return "HOU";
                 case "NEP": return "NE";
                 case "TBB": return "TB";
                 case "SFO": return "SF";
@@ -56,6 +46,7 @@ namespace TradeMakerScraper.Tools
                 case "GBP": return "GB";
                 case "JAC": return "JAX";
                 case "SDC": return "SD";
+                case "WSH": return "WAS";
                 default: return nflTeam;
             }
         }
