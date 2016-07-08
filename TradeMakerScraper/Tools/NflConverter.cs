@@ -46,6 +46,7 @@ namespace TradeMakerScraper.Tools
                 case "GBP": return "GB";
                 case "JAC": return "JAX";
                 case "SDC": return "SD";
+                case "STL": return "LA";
                 case "WSH": return "WAS";
                 default: return nflTeam;
             }

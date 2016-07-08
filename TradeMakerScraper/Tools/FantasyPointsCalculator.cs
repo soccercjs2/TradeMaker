@@ -13,7 +13,8 @@ namespace TradeMakerScraper.Tools
         {
             FantasyPoints = Math.Round(player.PassingYards / league.YardsPerFantasyPoint +
                             player.PassingTouchdowns * league.PointsPerPassingTouchdown -
-                            player.Interceptions * league.PointsLostPerInterception +
+                            //player.Interceptions * league.PointsLostPerInterception +
+                            player.Interceptions * 2 +
                             player.RushingYards / 10 +
                             player.RushingTouchdowns * 6 +
                             player.Receptions * league.PointsPerReception +

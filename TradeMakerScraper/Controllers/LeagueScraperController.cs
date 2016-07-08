@@ -59,10 +59,15 @@ namespace TradeMakerScraper.Controllers
             }
 
             leagueData.Waivers = package.Projections.Players;
-            Player waiverQuarterback = leagueData.GetWaiver("QB", 0);
-            Player waiverRunningBack = leagueData.GetWaiver("RB", 0);
-            Player waiverWideReceiver = leagueData.GetWaiver("WR", 0);
-            Player waiverTightEnd = leagueData.GetWaiver("TE", 0);
+            //Player waiverQuarterback = leagueData.GetWaiver("QB", 0);
+            //Player waiverRunningBack = leagueData.GetWaiver("RB", 0);
+            //Player waiverWideReceiver = leagueData.GetWaiver("WR", 0);
+            //Player waiverTightEnd = leagueData.GetWaiver("TE", 0);
+
+            Player waiverQuarterback = leagueData.GetWaiver("QB", 2);
+            Player waiverRunningBack = leagueData.GetWaiver("RB", 7);
+            Player waiverWideReceiver = leagueData.GetWaiver("WR", 7);
+            Player waiverTightEnd = leagueData.GetWaiver("TE", 4);
 
             foreach (Team team in leagueData.Teams)
             {
