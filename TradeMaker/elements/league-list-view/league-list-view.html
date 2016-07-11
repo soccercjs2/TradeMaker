@@ -28,24 +28,13 @@
             }
         </style>
         <!-- local DOM goes here -->
-        <template is="dom-if" if="{{!isRegistered}}">
-            <section id="no-subscription">
-                <paper-material elevation="1">
-                    <p>In order to start finding trades, you must first pay for a subscription. It's only $10!</p>
-                    <p><paper-button>PAY HERE!</paper-button></p>
-                </paper-material>
-            </section>
-        </template>
-
-        <template is="dom-if" if="{{isRegistered}}">
-            <section id="league-list">
-                <template class="vertical layout" is="dom-repeat" items="{{leagues}}" as="league">
-                    <league-list-item league="{{league}}" on-edit-league="_onEdit" on-delete-league="_onDelete" kick="{{kick}}"></league-list-item>
-                </template>
-                <paper-fab icon="add" on-tap="_onShowCreate"></paper-fab>
-                <league-editor id="league-creator" on-save-league="_onAdd"></league-editor>
-            </section>
-        </template>
+        <section id="league-list">
+            <template class="vertical layout" is="dom-repeat" items="{{leagues}}" as="league">
+                <league-list-item league="{{league}}" on-edit-league="_onEdit" on-delete-league="_onDelete" kick="{{kick}}"></league-list-item>
+            </template>
+            <paper-fab icon="add" on-tap="_onShowCreate"></paper-fab>
+            <league-editor id="league-creator" on-save-league="_onAdd"></league-editor>
+        </section>
         
     </template>
     <script>
@@ -69,7 +58,7 @@
                     notify: true
                 }
             },
-            _onShowCreate: function() {
+            _onShowCreate: function () {
                 this.$['league-creator'].clearFields();
                 this.$['league-creator'].showEditor();
             },

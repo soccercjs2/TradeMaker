@@ -118,10 +118,14 @@
             showEditor: function() {
                 this.$['dialog'].open();
             },
-            clearFields: function() {
+            clearFields: function () {
+                console.log('asdf');
                 this.$['league-name'].value = "";
+                console.log('qwer');
                 this.$['league-url'].value = "";
+                console.log('zxcv');
                 this.$['league-requires-login'].checked = false;
+                console.log('1234');
             },
             _accept: function () {
                 this.fire('save-league', { league: this.league });

@@ -34,6 +34,7 @@ namespace TradeMakerScraper.Controllers
             else if (package.League.Url.Contains("www60.myfantasyleague.com")) { parser = new MFLParser(); }
             else if (package.League.Url.Contains("games.espn.go.com")) { parser = new EspnParser(); }
             else if (package.League.Url.Contains("football.fantasysports.yahoo.com")) { parser = new YahooParser(); }
+            else if (package.League.Url.Contains("http://fantasy.nfl.com/")) { parser = new NflParser(); }
             else
             { 
                 //throw exceptions saying league host not supported

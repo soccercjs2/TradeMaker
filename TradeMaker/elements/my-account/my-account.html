@@ -28,24 +28,7 @@
         <!-- local DOM goes here -->
         <h1>{{name}}</h1>
 
-        <template is="dom-if" if="{{maxSubscription}}">
-            <paper-material elevation="1">
-                Subscription Ends: <strong>{{maxSubscription}}</strong>
-            </paper-material>
-        </template>
-
-        <template is="dom-if" if="{{!maxSubscription}}">
-            <kickstarter-redeemer user="{{user}}" codes="{{codes}}" subscriptions="{{subscriptions}}" leagues="{{leagues}}"></kickstarter-redeemer>
-        </template>
-
         <paper-button class="signOut" on-tap="_signOut">Sign Out</paper-button>
-
-        <!--<template is="dom-if" if="{{isAdmin}}">
-            <paper-material elevation="1">
-                <paper-input id="txtYears" label="reward years"></paper-input>
-                <paper-button class="redeem" on-tap="_addCode">Add</paper-button>
-            </paper-material>
-        </template>-->
     </template>
     <script>
         Polymer({
@@ -58,22 +41,6 @@
                 name: {
                     type: String,
                     computed: '_getDisplayName(user)'
-                },
-                codes: {
-                    type: Array,
-                    notify: true
-                },
-                subscriptions: {
-                    type: Array,
-                    notify: true
-                },
-                maxSubscription: {
-                    type: String,
-                    computed: '_maxSubscription(subscriptions.*)'
-                },
-                isAdmin: {
-                    type: Boolean,
-                    computed: '_isAdmin(user)'
                 }
             },
             _getDisplayName: function (user) {
@@ -86,30 +53,6 @@
             _signOut: function() {
                 if (this.user.provider == "google") { this.fire('google-sign-out'); }
                 else if (this.user.provider == "facebook") { this.fire('facebook-sign-out'); }
-            },
-            _maxSubscription: function (subscriptions) {
-                if (subscriptions.base.length > 0) {
-                    var maxSubscription = new Date();
-
-                    for (i = 0; i < subscriptions.base.length; i++) {
-                        var subscription = new Date(subscriptions.base[i].value);
-                        if (subscription > maxSubscription) { maxSubscription = subscription; }
-                    }
-
-                    return (maxSubscription.getMonth() + 1) + '/' + maxSubscription.getDate() + '/' + maxSubscription.getFullYear();
-                }
-
-                return null;
-            },
-            _isAdmin: function (user) {
-                if (user != null && user.uid == 'google:108994655411219549574') {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            _addCode: function () {
-                this.push('codes', { 'years': this.$$('#txtYears').value, 'redeemed': false });
             }
         });
     </script>
