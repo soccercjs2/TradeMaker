@@ -78,7 +78,10 @@ namespace TradeMakerScraper.Tools
                 document = new HtmlDocument();
                 document.LoadHtml(responseData);
             }
-            catch { }
+            catch (Exception e)
+            {
+                string asdf = "";
+            }
 
             return document;
         }

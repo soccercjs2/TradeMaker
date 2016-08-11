@@ -27,14 +27,12 @@ namespace TradeMakerScraper.HostParsers
 
         public string GetPostData(string username, string password)
         {
-            //return string.Format("""loginValue"":""soccercjs2@gmail.com"",""password"":""Unitednumber2.""", username, password);
-            return "{ \"loginValue\":\"soccercjs2@gmail.com\",\"password\":\"Unitednumber2.\"}";
+            return "";
         }
 
         public void ParseLeague(HtmlDocument document, ref LeagueData leagueData)
         {
             //get table containing team names and team urls
-            //HtmlNodeCollection leagueTables = document.DocumentNode.SelectNodes("//table[contains(@class,'" + LeagueTableClass + "')]");
             List<HtmlNode> leagueTables = document.DocumentNode.Descendants().Where(t => t.Name == "table" && t.Attributes["class"] != null && t.Attributes["class"].Value.Contains(LeagueTableClass)).Skip(1).ToList<HtmlNode>();
 
             List<HtmlNode> rows = new List<HtmlNode>();
@@ -55,7 +53,6 @@ namespace TradeMakerScraper.HostParsers
             //loop through rows and get anchors with url and team name
             foreach (HtmlNode row in rows)
             {
-                //HtmlNode anchor = row.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>();
                 HtmlNode anchor = row.Descendants().Where(a => a.Name == "a").Skip(1).FirstOrDefault<HtmlNode>();
                 Team team = new Team();
                 team.Id = leagueData.Teams.Count + 1;
@@ -69,7 +66,6 @@ namespace TradeMakerScraper.HostParsers
         public void ParseTeam(HtmlDocument document, League league, Team team, Projections projections)
         {
             //get table containing players of teams
-            //HtmlNode teamTable = document.DocumentNode.SelectNodes("//table[contains(@class,'" + LeagueTableClass + "')]").FirstOrDefault<HtmlNode>();
             HtmlNode teamTable = document.DocumentNode.Descendants().Where(t => t.Name == "table" && t.Attributes["class"] != null && t.Attributes["class"].Value.Contains(TeamTableClass)).FirstOrDefault<HtmlNode>(); // 
 
             //get all rows with id's because they are the rows that have players
@@ -79,7 +75,6 @@ namespace TradeMakerScraper.HostParsers
             foreach (HtmlNode row in rows)
             {
                 //HtmlNode playerCell = row.SelectSingleNode("./td[4]").FirstChild;
-                //List<HtmlNode> nodes = row.Descendants().Where(c => c.Name == "td" && row.Attributes["class"] != null && row.Attributes["class"].Value.Contains(PlayerCellClass)).ToList<HtmlNode>();
                 HtmlNode playerCell = row.Descendants().Where(c => c.Name == "td" && c.Attributes["class"] != null && c.Attributes["class"].Value == PlayerCellClass).FirstOrDefault();
 
                 if (playerCell != null && playerCell.Id != null)

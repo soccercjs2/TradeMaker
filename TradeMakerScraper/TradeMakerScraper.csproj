@@ -212,6 +212,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HostParsers\CbsSportsParser.cs" />
     <Compile Include="HostParsers\NflParser.cs" />
     <Compile Include="HostParsers\EspnParser.cs" />
     <Compile Include="HostParsers\FleaflickerLeagueParser.cs" />
