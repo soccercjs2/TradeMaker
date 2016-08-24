@@ -8,13 +8,13 @@ namespace TradeMakerScraper.Tools
 {
     public class FantasyProsParser
     {
-        public string Player { get; set; }
+        public string Name { get; set; }
         public string Team { get; set; }
 
         public FantasyProsParser(HtmlNode player)
         {
-            Player = GetNameFromFantasyProPlayer(player);
-            Team = GetTeamFromFantasyProPlayer(player);
+            Name = GetNameFromFantasyProPlayer(player);
+            Team = GetTeamFromFantasyProPlayer(player, Name);
         }
 
         public string GetNameFromFantasyProPlayer(HtmlNode playerData)
@@ -24,13 +24,13 @@ namespace TradeMakerScraper.Tools
             return anchor.InnerText;
         }
 
-        public string GetTeamFromFantasyProPlayer(HtmlNode playerData)
+        public string GetTeamFromFantasyProPlayer(HtmlNode playerData, string name)
         {
             List<HtmlNode> nodes = playerData.Descendants().ToList<HtmlNode>();
-            HtmlNode small = playerData.Descendants().Where(t => t.Name == "small").FirstOrDefault<HtmlNode>();
+            HtmlNode team = playerData.Descendants().Where(t => t.Name == "#text" && t.InnerText != name).FirstOrDefault<HtmlNode>();
 
-            if (small == null) { return null; }
-            else { return small.InnerText; }
+            if (team == null) { return null; }
+            else { return team.InnerText.Trim(); }
         }
     }
 }

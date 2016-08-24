@@ -65,7 +65,10 @@ namespace TradeMakerScraper.Controllers
             HashSet<Trade> uniqueTrades = new HashSet<Trade>();
             foreach (Trade trade in trades)
             {
-                uniqueTrades.Add(trade);
+                if (Math.Abs(trade.Fairness) <= 5)
+                {
+                    uniqueTrades.Add(trade);
+                }
             }
 
             //get required players and excluded players
@@ -76,8 +79,8 @@ namespace TradeMakerScraper.Controllers
 
             foreach (Trade trade in uniqueTrades)
             {
-                if (Math.Abs(trade.Fairness) <= 5)
-                {
+                //if (Math.Abs(trade.Fairness) <= 5)
+                //{
                     trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool);
                     if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
                         bool isValidTrade =
@@ -88,7 +91,7 @@ namespace TradeMakerScraper.Controllers
 
                         if (isValidTrade) { allTrades.Add(trade); }
                     }
-                }
+                //}
             }
         }
 

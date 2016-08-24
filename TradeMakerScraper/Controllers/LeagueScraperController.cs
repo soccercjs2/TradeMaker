@@ -61,6 +61,7 @@ namespace TradeMakerScraper.Controllers
             }
 
             leagueData.Waivers = package.Projections.Players;
+
             //Player waiverQuarterback = leagueData.GetWaiver("QB", 0);
             //Player waiverRunningBack = leagueData.GetWaiver("RB", 0);
             //Player waiverWideReceiver = leagueData.GetWaiver("WR", 0);

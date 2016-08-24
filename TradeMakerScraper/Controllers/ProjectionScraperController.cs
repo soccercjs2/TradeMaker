@@ -95,7 +95,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //convert to nfl values
-                NflConverter converter = new NflConverter(parser.Player, parser.Team);
+                NflConverter converter = new NflConverter(parser.Name, parser.Team);
 
                 //set row values
                 player.Id = projections.SeasonProjectionPlayers.Count + 1;
@@ -132,7 +132,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //convert to nfl values
-                NflConverter converter = new NflConverter(parser.Player, parser.Team);
+                NflConverter converter = new NflConverter(parser.Name, parser.Team);
 
                 //set row values
                 player.Id = projections.SeasonProjectionPlayers.Count + 1;
@@ -169,7 +169,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //convert to nfl values
-                NflConverter converter = new NflConverter(parser.Player, parser.Team);
+                NflConverter converter = new NflConverter(parser.Name, parser.Team);
 
                 //set row values
                 player.Id = projections.SeasonProjectionPlayers.Count + 1;
@@ -206,7 +206,7 @@ namespace TradeMakerScraper.Controllers
                 FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
 
                 //convert to nfl values
-                NflConverter converter = new NflConverter(parser.Player, parser.Team);
+                NflConverter converter = new NflConverter(parser.Name, parser.Team);
 
                 //set row values
                 player.Id = projections.SeasonProjectionPlayers.Count + 1;
@@ -319,7 +319,7 @@ namespace TradeMakerScraper.Controllers
 
                     //set row values
                     player.Id = projections.WeekProjectionPlayers.Count + 1;
-                    player.Name = parser.Player;
+                    player.Name = parser.Name;
                     player.Position = "QB";
                     player.NflTeam = parser.Team;
                     player.PassingYards = decimal.Parse(row.SelectSingleNode("./td[4]").InnerText);
@@ -359,7 +359,7 @@ namespace TradeMakerScraper.Controllers
 
                     //set row values
                     player.Id = projections.WeekProjectionPlayers.Count + 1;
-                    player.Name = parser.Player;
+                    player.Name = parser.Name;
                     player.Position = "RB";
                     player.NflTeam = parser.Team;
                     player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[3]").InnerText);
@@ -400,7 +400,7 @@ namespace TradeMakerScraper.Controllers
 
                     //set row values
                     player.Id = projections.WeekProjectionPlayers.Count + 1;
-                    player.Name = parser.Player;
+                    player.Name = parser.Name;
                     player.Position = "WR";
                     player.NflTeam = parser.Team;
                     player.RushingYards = decimal.Parse(row.SelectSingleNode("./td[3]").InnerText);
@@ -440,7 +440,7 @@ namespace TradeMakerScraper.Controllers
 
                     //set row values
                     player.Id = projections.WeekProjectionPlayers.Count + 1;
-                    player.Name = parser.Player;
+                    player.Name = parser.Name;
                     player.Position = "TE";
                     player.NflTeam = parser.Team;
                     player.Receptions = decimal.Parse(row.SelectSingleNode("./td[2]").InnerText);
@@ -462,6 +462,10 @@ namespace TradeMakerScraper.Controllers
 
             CalculateROSProjectionsFromSeasonProjections(ref projections, ref seasonProjectionPlayers, ref statisticsPlayers, ref weekProjectionPlayers);
             CalculateROSProjectionsFromStatistics(ref projections, ref statisticsPlayers, ref weekProjectionPlayers);
+
+            projections.SeasonProjectionPlayers.Clear();
+            projections.StatisticsPlayers.Clear();
+            projections.WeekProjectionPlayers.Clear();
         }
 
         private void CalculateROSProjectionsFromSeasonProjections(ref Projections projections, 
