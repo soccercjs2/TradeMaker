@@ -47,13 +47,47 @@
                 display:flex;
                 align-items:center;
             }
+
+            @media (max-width: 1000px) {
+                .donation-box {
+                    background-color: cadetblue;
+                    width: 100%;
+                    height: 199px;
+                }
+
+                .donation-box-container {
+                    margin-top: 10px;
+                }
+            }
+
+            @media (min-width: 1001px) {
+                .filter-box {
+                    display: inline-block;
+                }
+                
+                .donation-box-container {
+                    float: right;
+                }
+
+                .donation-box {
+                    background-color: cadetblue;
+                    width: 200px;
+                    height: 199px;
+                }
+            }
+
+            .ad-box {
+                margin: 10px 0;
+                height: 150px;
+                background-color: cadetblue;
+            }
         </style>
         <!-- local DOM goes here -->
         <!--url="http://localhost:36880/api/projectionscraper"-->
         <!--url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"-->
         <iron-ajax
             id="projectionAjax"
-            url="http://trademakerscraper.azurewebsites.net/api/projectionscraper"
+            url="http://localhost:36880/api/projectionscraper"
             handle-as="json"
             on-response="_projectionResponse"
             method="GET">
@@ -63,7 +97,7 @@
         <!--url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"-->
         <iron-ajax 
             id="leagueAjax"
-            url="http://trademakerscraper.azurewebsites.net/api/leaguescraper"
+            url="http://localhost:36880/api/leaguescraper"
             handle-as="json"
             content-type="application/json"
             on-response="_leagueResponse"
@@ -73,7 +107,7 @@
         <!--url="http://localhost:36880/api/trade"-->
         <!--url="http://trademakerscraper.azurewebsites.net/api/trade"-->
         <iron-ajax id="tradeAjax"
-                   url="http://trademakerscraper.azurewebsites.net/api/trade"
+                   url="http://localhost:36880/api/trade"
                    handle-as="json"
                    content-type="application/json"
                    on-response="_findTradesResponse"
@@ -89,26 +123,33 @@
         
         <template is="dom-if" if="[[leagueData]]">
             <paper-material elevation="2">
-                <div class="block margined">
-                    Your team:
-                    <trade-filter id="myTeamFilter" league-data="[[leagueData]]" primary on-set-my-team="_setMyTeam"></trade-filter>
-                </div>
-                <div class="block margined">
-                    Trade partner:
-                    <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
-                </div>
+                <div class="filter-box">
+                    <div class="block margined">
+                        Your team:
+                        <trade-filter id="myTeamFilter" league-data="[[leagueData]]" primary on-set-my-team="_setMyTeam"></trade-filter>
+                    </div>
+                    <div class="block margined">
+                        Trade partner:
+                        <trade-filter id="theirTeamFilter" league-data="[[leagueData]]" on-set-their-team="_setTheirTeam" on-set-their-teams="_setTheirTeams"></trade-filter>
+                    </div>
 
-                <span>Fairness: </span>
-                <div class="block margined fairness-meter-container">
-                    [Me]
-                    <fairness-meter fairness="{{leagueData.Fairness}}"></fairness-meter>
-                    [Them]
-                </div>
+                    <span>Fairness: </span>
+                    <div class="block margined fairness-meter-container">
+                        [Me]
+                        <fairness-meter fairness="{{leagueData.Fairness}}"></fairness-meter>
+                        [Them]
+                    </div>
 
-                <paper-button id="findTrades" raised on-tap="_findTrades" class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}">FIND TRADES</paper-button>
-                <template is="dom-if" if="{{trades}}">
-                    {{trades.length}} trade(s) found
-                </template>
+                    <paper-button id="findTrades" raised on-tap="_findTrades" class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}">FIND TRADES</paper-button>
+                    <template is="dom-if" if="{{trades}}">
+                        {{trades.length}} trade(s) found
+                    </template>
+                </div>
+                <div class="donation-box-container filter-box">
+                    <div class="donation-box">
+                        Donation Box
+                    </div>
+                </div>
             </paper-material>
         </template>
 
@@ -118,6 +159,8 @@
             </template>
             <center><paper-button class="moreTrades" on-tap="_showMoreTrades">SHOW MORE TRADES</paper-button></center>
         </template>
+
+        <paper-material class="ad-box" elevation="2"></paper-material>
 
         <template is="dom-if" if="[[noTradesFound]]">
             <p>

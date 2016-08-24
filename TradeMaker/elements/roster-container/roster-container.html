@@ -13,31 +13,29 @@
         </style>
         <!-- local DOM goes here -->
         <paper-tabs selected="{{selected}}">
-            <paper-tab>NEW TEAMS</paper-tab>
-            <paper-tab>OLD TEAMS</paper-tab>
+            <paper-tab>{{trade.MyTeamName}}</paper-tab>
+            <paper-tab>{{trade.TheirTeamName}}</paper-tab>
         </paper-tabs>
 
         <iron-pages selected="{{selected}}">
             <div>
                 <roster-view on-tap="_showTrade"
-                             my-name="[[trade.MyTeamName]]"
-                             their-name="[[trade.TheirTeamName]]"
+                             my-name="NEW ROSTER"
+                             their-name="OLD ROSTER"
                              my-roster="[[trade.MyNewStartingRoster]]"
                              my-gains="[[trade.MyGains]]"
                              my-losses="[[trade.MyLosses]]"
-                             their-gains="[[trade.TheirGains]]"
-                             their-losses="[[trade.TheirLosses]]"
-                             their-roster="[[trade.TheirNewStartingRoster]]"></roster-view>
+                             their-roster="[[trade.MyOldStartingRoster]]"
+                             their-gains="[[trade.MyGains]]"
+                             their-losses="[[trade.MyLosses]]"></roster-view>
             </div>
             <div>
                 <roster-view on-tap="_showTrade"
-                             my-name="[[trade.MyTeamName]]"
-                             their-name="[[trade.TheirTeamName]]"
-                             my-roster="[[trade.MyOldStartingRoster]]"
-                             my-gains="[[trade.MyGains]]"
-                             my-losses="[[trade.MyLosses]]"
-                             their-gains="[[trade.TheirGains]]"
-                             their-losses="[[trade.TheirLosses]]"
+                             my-name="NEW ROSTER"
+                             their-name="OLD ROSTER"
+                             my-roster="[[trade.TheirNewStartingRoster]]"
+                             my-gains="[[trade.TheirGains]]"
+                             my-losses="[[trade.TheirLosses]]"
                              their-roster="[[trade.TheirOldStartingRoster]]"></roster-view>
             </div>
         </iron-pages>
