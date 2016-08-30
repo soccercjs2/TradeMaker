@@ -81,8 +81,9 @@ namespace TradeMakerScraper.Controllers
             {
                 //if (Math.Abs(trade.Fairness) <= 5)
                 //{
-                    trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool);
-                    if (trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
+                    if (trade.CalculateDifferentials(leagueData, myTeamPlayerPool, theirTeamPlayerPool)
+                            && trade.MyDifferential > 0 && trade.TheirDifferential > 0) {
+
                         bool isValidTrade =
                                 HasRequiredPlayers(trade.MyPlayers, myRequiredPlayers) &&
                                 HasRequiredPlayers(trade.TheirPlayers, theirRequiredPlayers) &&
