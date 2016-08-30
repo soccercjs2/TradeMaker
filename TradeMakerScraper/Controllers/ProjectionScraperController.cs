@@ -298,8 +298,8 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekQbProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            //HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/qb.php?week=" + CurrentWeek);
-            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150917054840/http://www.fantasypros.com/nfl/projections/qb.php");
+            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/qb.php?week=" + CurrentWeek);
+            //HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150917054840/http://www.fantasypros.com/nfl/projections/qb.php");
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -337,9 +337,8 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekRbProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            //HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/rb.php?week=" + CurrentWeek);
-            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150917084206/http://www.fantasypros.com/nfl/projections/rb.php");
-            //https://web.archive.org/web/20150917084206/http://www.fantasypros.com/nfl/projections/rb.php
+            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/rb.php?week=" + CurrentWeek);
+            //HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150917084206/http://www.fantasypros.com/nfl/projections/rb.php");
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -377,9 +376,8 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekWrProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            //HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/wr.php?week=" + CurrentWeek);
-            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150918083129/http://www.fantasypros.com/nfl/projections/wr.php");
-            //https://web.archive.org/web/20150918083129/http://www.fantasypros.com/nfl/projections/wr.php
+            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/wr.php?week=" + CurrentWeek);
+            //HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150918083129/http://www.fantasypros.com/nfl/projections/wr.php");
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -418,8 +416,8 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekTeProjections(ref Projections projections)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150916061220/http://www.fantasypros.com/nfl/projections/te.php");
-            //https://web.archive.org/web/20150916061220/http://www.fantasypros.com/nfl/projections/te.php
+            HtmlDocument document = scraper.Scrape("https://www.fantasypros.com/nfl/projections/te.php?week=" + CurrentWeek);
+            //HtmlDocument document = scraper.Scrape("https://web.archive.org/web/20150916061220/http://www.fantasypros.com/nfl/projections/te.php");
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsProjectionTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();

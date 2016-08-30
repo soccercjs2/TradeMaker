@@ -63,26 +63,31 @@ namespace TradeMakerScraper.HostParsers
             foreach (HtmlNode row in rows)
             {
                 HtmlNode cell = row.SelectSingleNode("./td[1]").FirstChild;
+                HtmlNode nameAnchor = cell.FirstChild.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>();
 
-                string playerName = cell.FirstChild.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>().InnerText;
-                string playerPosition = cell.LastChild.Descendants().Where(s => s.Name == "span" && s.Attributes["class"].Value == "position").FirstOrDefault<HtmlNode>().InnerText;
-                string playerTeam = cell.LastChild.Descendants().Where(s => s.Name == "span" && s.Attributes["class"].Value == "player-team").FirstOrDefault<HtmlNode>().InnerText.ToUpper();
-
-                //convert name and team to nfl values
-                NflConverter converter = new NflConverter(playerName, playerTeam);
-
-                //find player
-                Player player = projections.Players.Where(
-                    p => p.Name == converter.Name && p.Position == playerPosition && p.NflTeam == converter.NflTeam
-                ).FirstOrDefault<Player>();
-
-                if (player != null) {
-                    projections.Players.Remove(player);
-                    team.Players.Add(player);
-                }
-                else if (playerPosition == "QB" || playerPosition == "RB" || playerPosition == "WR" || playerPosition == "TE")
+                if (nameAnchor != null)
                 {
-                    projections.UnMatchedPlayers.Add(playerName + ";" + playerPosition + ";" + playerTeam);
+                    string playerName = cell.FirstChild.Descendants().Where(a => a.Name == "a").FirstOrDefault<HtmlNode>().InnerText;
+                    string playerPosition = cell.LastChild.Descendants().Where(s => s.Name == "span" && s.Attributes["class"].Value == "position").FirstOrDefault<HtmlNode>().InnerText;
+                    string playerTeam = cell.LastChild.Descendants().Where(s => s.Name == "span" && s.Attributes["class"].Value == "player-team").FirstOrDefault<HtmlNode>().InnerText.ToUpper();
+
+                    //convert name and team to nfl values
+                    NflConverter converter = new NflConverter(playerName, playerTeam);
+
+                    //find player
+                    Player player = projections.Players.Where(
+                        p => p.Name == converter.Name && p.Position == playerPosition && p.NflTeam == converter.NflTeam
+                    ).FirstOrDefault<Player>();
+
+                    if (player != null)
+                    {
+                        projections.Players.Remove(player);
+                        team.Players.Add(player);
+                    }
+                    else if (playerPosition == "QB" || playerPosition == "RB" || playerPosition == "WR" || playerPosition == "TE")
+                    {
+                        projections.UnMatchedPlayers.Add(playerName + ";" + playerPosition + ";" + playerTeam);
+                    }
                 }
             }
         }
