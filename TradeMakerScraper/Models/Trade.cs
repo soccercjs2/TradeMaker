@@ -24,6 +24,7 @@ namespace TradeMakerScraper.Models
         public decimal TheirDifferential { get; set; }
         public decimal CompositeDifferential { get; set; }
         public decimal Fairness { get; set; }
+        public bool HasLamePlayers { get; set; }
 
         public Trade()
         {
@@ -41,7 +42,7 @@ namespace TradeMakerScraper.Models
             Fairness = theirPlayers.Players.Sum(p => p.TradeValue) - myPlayers.Players.Sum(p => p.TradeValue);
         }
 
-        public void CalculateDifferentials(LeagueData leagueData, TeamPlayerPool myTeamPlayerPool, TeamPlayerPool theirTeamPlayerPool)
+        public bool CalculateDifferentials(LeagueData leagueData, TeamPlayerPool myTeamPlayerPool, TeamPlayerPool theirTeamPlayerPool)
         {
             //get new original rosters
             MyOldStartingRoster = myTeamPlayerPool.OptimalLineUp(leagueData, MyPlayers);
@@ -55,6 +56,36 @@ namespace TradeMakerScraper.Models
             MyDifferential = MyNewStartingRoster.Points - MyOldStartingRoster.Points;
             TheirDifferential = TheirNewStartingRoster.Points - TheirOldStartingRoster.Points;
             CompositeDifferential = MyDifferential + TheirDifferential;
+
+            //my positional differentials
+            decimal myQbDifferential = MyNewStartingRoster.QbPoints - MyOldStartingRoster.QbPoints;
+            decimal myRbDifferential = MyNewStartingRoster.RbPoints - MyOldStartingRoster.RbPoints;
+            decimal myWrDifferential = MyNewStartingRoster.WrPoints - MyOldStartingRoster.WrPoints;
+            decimal myTeDifferential = MyNewStartingRoster.TePoints - MyOldStartingRoster.TePoints;
+            decimal myFlexDifferential = MyNewStartingRoster.FlexPoints - MyOldStartingRoster.FlexPoints;
+
+            //their positional differentials
+            decimal theirQbDifferential = TheirNewStartingRoster.QbPoints - TheirOldStartingRoster.QbPoints;
+            decimal theirRbDifferential = TheirNewStartingRoster.RbPoints - TheirOldStartingRoster.RbPoints;
+            decimal theirWrDifferential = TheirNewStartingRoster.WrPoints - TheirOldStartingRoster.WrPoints;
+            decimal theirTeDifferential = TheirNewStartingRoster.TePoints - TheirOldStartingRoster.TePoints;
+            decimal theirFlexDifferential = TheirNewStartingRoster.FlexPoints - TheirOldStartingRoster.FlexPoints;
+
+            foreach (Player player in TheirPlayers)
+            {
+                if (player.Position == "QB" && myQbDifferential < 10) { return false; }
+                else if (player.Position == "RB" && myRbDifferential > 0 && myRbDifferential < 10) { return false; }
+                else if (player.Position == "WR" && myWrDifferential > 0 && myWrDifferential < 10) { return false; }
+                else if (player.Position == "TE" && myTeDifferential < 10) { return false; }
+            }
+
+            foreach (Player player in MyPlayers)
+            {
+                if (player.Position == "QB" && theirQbDifferential > 0 && theirQbDifferential < 10) { return false; }
+                else if (player.Position == "RB" && theirRbDifferential > 0 && theirRbDifferential < 10) { return false; }
+                else if (player.Position == "WR" && theirWrDifferential > 0 && theirWrDifferential < 10) { return false; }
+                else if (player.Position == "TE" && theirTeDifferential > 0 && theirTeDifferential < 10) { return false; }
+            }
 
             //calculate my positional differentials and add them to the proper change string
             AddMyChange("QB", MyNewStartingRoster.QbPoints - MyOldStartingRoster.QbPoints);
@@ -75,6 +106,8 @@ namespace TradeMakerScraper.Models
             MyOldStartingRoster.Differential = "-" + MyDifferential;
             TheirNewStartingRoster.Differential = "+" + TheirDifferential;
             TheirOldStartingRoster.Differential = "-" + TheirDifferential;
+
+            return true;
         }
 
         private void AddMyChange(string position, decimal differential)
