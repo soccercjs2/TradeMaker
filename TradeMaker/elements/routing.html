@@ -48,6 +48,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page('/leagues', function () {
       app.route = 'leagues';
     });
+
+    page('/dfs', function () {
+      app.route = 'dfs';
+    });
     
     page('/contact', function () {
       app.route = 'contact';
@@ -83,7 +87,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     //});
 
     // 404
-    page('*', function() {
+    page('*', function () {
+        alert(window.location.href);
       app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
       app.$.toast.show();
       page.redirect(app.baseUrl);

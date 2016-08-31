@@ -84,6 +84,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <span>Leagues</span>
                     </a>
 
+                    <a data-route="dfs" href="{{baseUrl}}dfs">
+                        <iron-icon icon="editor:attach-money"></iron-icon>
+                        <span>DFS Lineups</span>
+                    </a>
+
                     <a data-route="about" href="{{baseUrl}}about">
                         <iron-icon icon="info"></iron-icon>
                         <span>About</span>
@@ -154,6 +159,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         
                         <section data-route="leagues">
                             <league-list-view leagues="{{leagues}}" subscriptions="{{subscriptions}}" kick="{{kick}}"></league-list-view>
+                        </section>
+
+                        <section data-route="dfs">
+                            <dfs-view></dfs-view>
                         </section>
                         
                         <section data-route="about">

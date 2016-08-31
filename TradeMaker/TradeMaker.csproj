@@ -1202,11 +1202,13 @@
     <Content Include="elements\league-list-view\league-list-view.html" />
     <Content Include="elements\league-view\league-view.html" />
     <Content Include="elements\my-account\my-account.html" />
+    <Content Include="elements\dfs-view\dfs-view.html" />
     <Content Include="elements\roster-container\roster-container.html" />
     <Content Include="elements\roster-side\roster-side.html" />
     <Content Include="elements\roster-view\roster-view.html" />
     <Content Include="elements\subscription-data\subscription-data.html" />
     <Content Include="elements\trade-container\trade-container.html" />
+    <Content Include="elements\dfs-filter\dfs-filter.html" />
     <Content Include="elements\trade-filter\trade-filter.html" />
     <Content Include="elements\leagues-view\leagues-view.html" />
     <Content Include="elements\routing.html" />

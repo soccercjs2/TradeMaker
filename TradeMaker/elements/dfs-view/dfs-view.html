@@ -1,0 +1,100 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+
+<dom-module id="dfs-view">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            paper-material {
+                padding: 10px;
+                background-color: #f5f5f5;
+            }
+            
+            .margined {
+                margin: 5px;
+            }
+
+            @media (max-width: 1000px) {
+                .donation-box {
+                    background-color: cadetblue;
+                    width: 100%;
+                    height: 199px;
+                }
+
+                .donation-box-container {
+                    margin-top: 10px;
+                }
+            }
+
+            @media (min-width: 1001px) {
+                .filter-box {
+                    display: inline-block;
+                }
+                
+                .donation-box-container {
+                    float: right;
+                }
+
+                .donation-box {
+                    background-color: cadetblue;
+                    width: 200px;
+                    height: 199px;
+                }
+            }
+        </style>
+        <!-- local DOM goes here -->
+        <!--url="http://localhost:36880/api/dfsscraper"-->
+        <!--url="http://trademakerscraper.azurewebsites.net/api/dfsscraper"-->
+        <iron-ajax id="projectionAjax"
+                   url="http://localhost:36880/api/dfsscraper"
+                   handle-as="json"
+                   on-response="_projectionResponse"
+                   method="GET">
+        </iron-ajax>
+        
+        <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
+            <center><h3 id="dialogText"></h3></center>
+            <center><img src="../../images/ring.gif" /></center>
+        </paper-dialog>
+
+        <paper-material elevation="2">
+            <div class="filter-box">
+                <div class="block margined">
+                    Quarterbacks:
+                    <dfs-filter id="qbFilter" players="{{quarterbacks}}"></dfs-filter>
+                </div>
+
+                <div class="block margined">
+                    Running Backs:
+                    <dfs-filter id="rbFilter" players="{{runningbacks}}"></dfs-filter>
+                </div>
+
+                <div class="block margined">
+                    Wide Receivers:
+                    <dfs-filter id="wrFilter" players="{{widereceivers}}"></dfs-filter>
+                </div>
+
+                <div class="block margined">
+                    Tight Ends:
+                    <dfs-filter id="teFilter" players="{{tightends}}"></dfs-filter>
+                </div>
+
+                <paper-button id="findLineupds" raised on-tap="_findLineups">FIND LINEUPS</paper-button>
+                <!--class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}"-->
+            </div>
+            <div class="donation-box-container filter-box">
+                <div class="donation-box">
+                    Donation Box
+                </div>
+            </div>
+        </paper-material>
+    </template>
+    <script>
+        Polymer({
+            is: 'dfs-view',
+            properties: {
+                
+            }
+        });
+    </script>
+</dom-module>

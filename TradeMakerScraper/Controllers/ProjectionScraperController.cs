@@ -29,6 +29,8 @@ namespace TradeMakerScraper.Controllers
         private const string ReceivingYards = "21";
         private const string ReceivingTouchdowns = "22";
 
+        private int CurrentWeek;
+
         private Dictionary<string, int> Byes = new Dictionary<string, int>()
         {
             { "GB", 4 }, { "PHI", 4 },
@@ -42,9 +44,6 @@ namespace TradeMakerScraper.Controllers
             { "CLE", 13 }, { "TEN", 13 }
         };
 
-
-        private int CurrentWeek;
-
         // GET api/projectionscraper
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         public Projections Get()
@@ -53,7 +52,6 @@ namespace TradeMakerScraper.Controllers
 
             //calculate the current week
             CurrentWeek = GetCurrentWeek();
-            //CurrentWeek = 2;
 
             //get full season projections
             GetSeasonQbProjections(ref projections);
