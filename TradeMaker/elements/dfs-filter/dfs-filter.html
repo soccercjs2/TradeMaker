@@ -84,16 +84,16 @@
             },
             _openDialog: function () {
                 this.$['dialog'].open();
-                this.playersCache = app.clone(this.player);
-                //console.log(this.players);
-                //console.log(this.playersCache);
+                this.playersCache = JSON.parse(JSON.stringify(this.players));
+                console.log(this.players);
+                console.log(this.playersCache);
             },
             _accept: function () {
-                this.playersCache = app.clone(this.player);
+                this.playersCache = JSON.parse(JSON.stringify(this.players));
                 this.fire('set-players', { players: this.players });
             },
             _cancel: function() {
-                this.players = app.clone(this.playersCache);
+                this.players = JSON.parse(JSON.stringify(this.playersCache));
             }
         });
     </script>

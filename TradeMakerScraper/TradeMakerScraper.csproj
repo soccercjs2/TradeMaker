@@ -206,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DFSLineupController.cs" />
     <Compile Include="Controllers\DFSScraperController.cs" />
     <Compile Include="Controllers\LeagueScraperController.cs" />
     <Compile Include="Controllers\ProjectionScraperController.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="HostParsers\MFLParser.cs" />
     <Compile Include="HostParsers\YahooParser.cs" />
     <Compile Include="Models\DfsData.cs" />
+    <Compile Include="Models\DfsLineup.cs" />
     <Compile Include="Models\League.cs" />
     <Compile Include="Models\LeagueData.cs" />
     <Compile Include="Models\Player.cs" />
@@ -230,6 +232,7 @@
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\Trade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\DFSLineupPackage.cs" />
     <Compile Include="Tools\DFSScraperPackage.cs" />
     <Compile Include="Tools\FantasyPointsCalculator.cs" />
     <Compile Include="Tools\NflConverter.cs" />
