@@ -11,5 +11,13 @@ namespace TradeMakerScraper.Models
         public HashSet<Player> RunningBacks { get; set; }
         public HashSet<Player> WideReceivers { get; set; }
         public HashSet<Player> TightEnds { get; set; }
+
+        public DfsData()
+        {
+            Quarterbacks = new HashSet<Player>();
+            RunningBacks = new HashSet<Player>();
+            WideReceivers = new HashSet<Player>();
+            TightEnds = new HashSet<Player>();
+        }
     }
 }

@@ -230,6 +230,7 @@
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\Trade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\DFSScraperPackage.cs" />
     <Compile Include="Tools\FantasyPointsCalculator.cs" />
     <Compile Include="Tools\NflConverter.cs" />
     <Compile Include="Tools\LeagueScraperPackage.cs" />

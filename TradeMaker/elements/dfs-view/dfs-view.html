@@ -11,9 +11,22 @@
                 padding: 10px;
                 background-color: #f5f5f5;
             }
+
+            dfs-selector {
+                display: block;
+            }
             
             .margined {
                 margin: 5px;
+            }
+
+            .filters {
+                padding-bottom: 10px;
+            }
+
+            .blue {
+                background-color: #3f51b5;
+                color: #FFFFFF;
             }
 
             @media (max-width: 1000px) {
@@ -47,11 +60,12 @@
         <!-- local DOM goes here -->
         <!--url="http://localhost:36880/api/dfsscraper"-->
         <!--url="http://trademakerscraper.azurewebsites.net/api/dfsscraper"-->
-        <iron-ajax id="projectionAjax"
+        <iron-ajax id="dfsAjax"
                    url="http://localhost:36880/api/dfsscraper"
                    handle-as="json"
-                   on-response="_projectionResponse"
-                   method="GET">
+                   content-type="application/json"
+                   on-response="_dfsResponse"
+                   method="POST">
         </iron-ajax>
         
         <paper-dialog id="dialog" class="vertical" modal autoFitOnAttach>
@@ -63,15 +77,16 @@
             <div class="filter-box">
                 <dfs-selector dfs-site="{{dfsSite}}"></dfs-selector>
 
-                <div>
-                    <dfs-filter id="qbFilter" position="QUARTERBACKS"></dfs-filter>
-                    <dfs-filter id="rbFilter" position="RUNNING BACKS"></dfs-filter>
-                    <dfs-filter id="wrFilter" position="WIDE RECEIVERS"></dfs-filter>
-                    <dfs-filter id="teFilter" position="TIGHT ENDS"></dfs-filter>
-                </div>
+                <template is="dom-if" if="{{playersLoaded}}">
+                    <div class="filters">
+                        <dfs-filter id="qbFilter" position="QUARTERBACKS" players="[[Quarterbacks]]" on-set-players="_setQuarterbacks"></dfs-filter>
+                        <dfs-filter id="rbFilter" position="RUNNING BACKS" players="[[RunningBacks]]" on-set-players="_setRunningBacks"></dfs-filter>
+                        <dfs-filter id="wrFilter" position="WIDE RECEIVERS" players="[[WideReceivers]]" on-set-players="_setWideReceivers"></dfs-filter>
+                        <dfs-filter id="teFilter" position="TIGHT ENDS" players="[[TightEnds]]" on-set-players="_setTightEnds"></dfs-filter>
+                    </div>
+                </template>
 
-                <paper-button id="findLineupds" raised on-tap="_findLineups">FIND LINEUPS</paper-button>
-                <!--class$="{{ _buttonClass(cantFindTrades) }}" disabled$="{{cantFindTrades}}"-->
+                <paper-button id="findLineupds" raised on-tap="_findLineups" class$="{{ _buttonClass(playersLoaded) }}" disabled$="{{!playersLoaded}}">FIND LINEUPS</paper-button>
             </div>
             <div class="donation-box-container filter-box">
                 <div class="donation-box">
@@ -85,21 +100,53 @@
             is: 'dfs-view',
             properties: {
                 dfsSite: {
-                    type: String
+                    type: String,
+                    observer: '_dfsSiteChanged'
                 },
-                quarterbacks: {
-                    type: Array
+                playersLoaded: {
+                    type: Boolean,
+                    value: false
                 },
-                runningbacks: {
-                    type: Array
+                Quarterbacks: {
+                    type: Array,
+                    notify: true
                 },
-                widereceivers: {
-                    type: Array
+                RunningBacks: {
+                    type: Array,
+                    notify: true
                 },
-                tightends: {
-                    type: Array
+                WideReceivers: {
+                    type: Array,
+                    notify: true
+                },
+                TightEnds: {
+                    type: Array,
+                    notify: true
                 }
-            }
+            },
+            _buttonClass: function (playersLoaded) {
+                if (playersLoaded) { return 'blue'; }
+                else { return ''; }
+            },
+            _dfsSiteChanged: function (newValue, oldValue) {
+                this.$['dialogText'].innerText = "Loading data from " + newValue + "...";
+                this.$['dialog'].open();
+                this.$['dfsAjax'].body = { dfssite: newValue };
+                this.$['dfsAjax'].generateRequest();
+            },
+            _dfsResponse: function (e) {
+                this.$['dialog'].close();
+                
+                this.playersLoaded = true;
+                this.Quarterbacks = e.detail.response.Quarterbacks;
+                this.RunningBacks = e.detail.response.RunningBacks;
+                this.WideReceivers = e.detail.response.WideReceivers;
+                this.TightEnds = e.detail.response.TightEnds;
+            },
+            _setQuarterbacks: function (e) { this.Quarterbacks = e.detail.players; },
+            _setRunningBacks: function (e) { this.RunningBacks = e.detail.players; },
+            _setWideReceivers: function (e) { this.WideReceivers = e.detail.players; },
+            _setTightEnds: function (e) { this.TightEnds = e.detail.players; }
         });
     </script>
 </dom-module>

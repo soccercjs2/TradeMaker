@@ -15,7 +15,7 @@
                 padding-top: 10px;
             }
 
-            /*.white {
+            .white {
                 background-color: white;
             }
 
@@ -37,12 +37,12 @@
 
             .scroll {
                 overflow-y: auto;
-            }*/
+            }
         </style>
         <!-- local DOM goes here -->
         <paper-button id="button" class="white" on-tap="_openDialog" raised>{{position}}</paper-button>
 
-        <paper-dialog id="dialog" class="vertical dialog-width" modal autoFitOnAttach>
+        <paper-dialog id="dialog" class="vertical dialog-width scroll" modal autoFitOnAttach>
             <span class="title">{{position}}</span>
 
             <template is="dom-if" if="{{players}}">
@@ -76,45 +76,25 @@
                     type: String
                 },
                 players: {
-                    type: Array,
-                    notify: true
+                    type: Array
+                },
+                playersCache: {
+                    type: Array
                 }
             },
             _openDialog: function () {
                 this.$['dialog'].open();
+                this.playersCache = app.clone(this.player);
+                //console.log(this.players);
+                //console.log(this.playersCache);
+            },
+            _accept: function () {
+                this.playersCache = app.clone(this.player);
+                this.fire('set-players', { players: this.players });
+            },
+            _cancel: function() {
+                this.players = app.clone(this.playersCache);
             }
-            //_accept: function () {
-            //    if (this.selection == 0) {
-            //        this.selectedTeam = null;
-            //        this.selectedTeamCache = null;
-            //        this.$.button.innerText = "ALL TEAMS";
-
-            //        if (!this.primary) {
-            //            this.fire('set-their-teams', { });
-            //        }
-            //    }
-            //    else if (this.selectedTeam != null)
-            //    {
-            //        this.selectedTeamCache = this.selectedTeam;
-            //        this.$.button.innerText = this.selectedTeam.Name;
-
-            //        if (this.primary) {
-            //            this.fire('set-my-team', { league: this.selectedTeam });
-            //        }
-            //        else {
-            //            this.fire('set-their-team', { league: this.selectedTeam });
-            //        }
-            //    }
-            //},
-            //_cancel: function() {
-            //    this.selectedTeam = this.selectedTeamCache;
-
-            //    if (this.selectedTeamCache != null) {
-            //        this.selection = this.selectedTeamCache.Id;
-            //    } else {
-            //        this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
-            //    }
-            //}
         });
     </script>
 </dom-module>
