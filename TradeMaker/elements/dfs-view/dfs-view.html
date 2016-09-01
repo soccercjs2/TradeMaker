@@ -1,5 +1,7 @@
 ﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../elements/dfs-selector/dfs-selector.html">
+<link rel="import" href="../../elements/dfs-filter/dfs-filter.html">
 
 <dom-module id="dfs-view">
     <template>
@@ -59,24 +61,13 @@
 
         <paper-material elevation="2">
             <div class="filter-box">
-                <div class="block margined">
-                    Quarterbacks:
-                    <dfs-filter id="qbFilter" players="{{quarterbacks}}"></dfs-filter>
-                </div>
+                <dfs-selector dfs-site="{{dfsSite}}"></dfs-selector>
 
-                <div class="block margined">
-                    Running Backs:
-                    <dfs-filter id="rbFilter" players="{{runningbacks}}"></dfs-filter>
-                </div>
-
-                <div class="block margined">
-                    Wide Receivers:
-                    <dfs-filter id="wrFilter" players="{{widereceivers}}"></dfs-filter>
-                </div>
-
-                <div class="block margined">
-                    Tight Ends:
-                    <dfs-filter id="teFilter" players="{{tightends}}"></dfs-filter>
+                <div>
+                    <dfs-filter id="qbFilter" position="QUARTERBACKS"></dfs-filter>
+                    <dfs-filter id="rbFilter" position="RUNNING BACKS"></dfs-filter>
+                    <dfs-filter id="wrFilter" position="WIDE RECEIVERS"></dfs-filter>
+                    <dfs-filter id="teFilter" position="TIGHT ENDS"></dfs-filter>
                 </div>
 
                 <paper-button id="findLineupds" raised on-tap="_findLineups">FIND LINEUPS</paper-button>
@@ -93,7 +84,21 @@
         Polymer({
             is: 'dfs-view',
             properties: {
-                
+                dfsSite: {
+                    type: String
+                },
+                quarterbacks: {
+                    type: Array
+                },
+                runningbacks: {
+                    type: Array
+                },
+                widereceivers: {
+                    type: Array
+                },
+                tightends: {
+                    type: Array
+                }
             }
         });
     </script>

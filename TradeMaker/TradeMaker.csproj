@@ -1193,6 +1193,7 @@
     <Content Include="bower_components\webcomponentsjs\webcomponents.js" />
     <Content Include="bower_components\webcomponentsjs\webcomponents.min.js" />
     <Content Include="elements\account-badge\account-badge.html" />
+    <Content Include="elements\dfs-selector\dfs-selector.html" />
     <Content Include="elements\elements.html" />
     <Content Include="elements\fairness-meter\fairness-meter.html" />
     <Content Include="elements\kickstarter-data\kickstarter-data.html" />

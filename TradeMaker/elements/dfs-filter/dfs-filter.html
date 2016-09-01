@@ -1,13 +1,21 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 
-<dom-module id="trade-filter">
+<dom-module id="dfs-filter">
     <template>
         <style>
             /* local DOM styles go here */
-            .white {
+            .title {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            paper-dialog {
+                padding-top: 10px;
+            }
+
+            /*.white {
                 background-color: white;
             }
 
@@ -29,28 +37,22 @@
 
             .scroll {
                 overflow-y: auto;
-            }
+            }*/
         </style>
         <!-- local DOM goes here -->
-        <paper-button id="button" class="white" raised on-tap="_openDialog"></paper-button>
+        <paper-button id="button" class="white" on-tap="_openDialog" raised>{{position}}</paper-button>
 
         <paper-dialog id="dialog" class="vertical dialog-width" modal autoFitOnAttach>
-            <paper-dropdown-menu id="teamDropdown" class="content-width" label="Select a Team">
-                <paper-listbox id="teamList" class="dropdown-content" selected="{{selection}}" on-iron-select="_select" attr-for-selected="value">
-                    <template is="dom-repeat" items="[[leagueData.Teams]]" as="team">
-                        <paper-item value="[[team.Id]]">[[team.Name]]</paper-item>
-                    </template>
-                </paper-listbox>
-            </paper-dropdown-menu>
+            <span class="title">{{position}}</span>
 
-            <template is="dom-if" if="{{selectedTeam}}">
+            <template is="dom-if" if="{{players}}">
                 <table class="fill">
                     <thead>
                         <th></th>
                         <th class="min-width">Required</th>
                         <th class="min-width">Exclude</th>
                     </thead>
-                    <template is="dom-repeat" items="{{selectedTeam.Players}}" as="player">
+                    <template is="dom-repeat" items="{{players}}" as="player">
                         <tr>
                             <td>{{player.Name}}</td>
                             <td class="min-width"><paper-checkbox checked="{{player.Required}}"></paper-checkbox></td>
@@ -64,108 +66,55 @@
                 <paper-button class="white" dialog-dismiss on-tap="_cancel">Cancel</paper-button>
                 <paper-button class="white" dialog-confirm on-tap="_accept">Accept</paper-button>
             </div>
-</paper-dialog>
+        </paper-dialog>
     </template>
     <script>
         Polymer({
-            is: 'trade-filter',
+            is: 'dfs-filter',
             properties: {
-                leagueData: {
-                    type: Object,
-                    observer: '_leagueDataChanged'
+                position: {
+                    type: String
                 },
-                primary: {
-                    type: Boolean,
-                    value: false
-                },
-                selectedTeam: {
-                    type: Object,
+                players: {
+                    type: Array,
                     notify: true
-                },
-                selectedTeamCache: {
-                    type: Object,
-                    notify: true
-                }
-            },
-            ready: function() {
-                if (this.primary && this.selectedTeam == null) {
-                    this.$.button.innerText = "SELECT YOUR TEAM";
-                }
-
-                if (!this.primary && this.selectedTeam == null) {
-                    this.$.button.innerText = "SELECT TRADE PARTNER";
-
-                    var paperItem = document.createElement("paper-item");
-                    paperItem.setAttribute("value", "0");
-                    paperItem.innerText = "All Teams";
-
-                    Polymer.dom(this.$.teamList).insertBefore(paperItem, this.$.teamList.firstElementChild);
                 }
             },
             _openDialog: function () {
                 this.$['dialog'].open();
-            },
-            _accept: function () {
-                if (this.selection == 0) {
-                    this.selectedTeam = null;
-                    this.selectedTeamCache = null;
-                    this.$.button.innerText = "ALL TEAMS";
-
-                    if (!this.primary) {
-                        this.fire('set-their-teams', { });
-                    }
-                }
-                else if (this.selectedTeam != null)
-                {
-                    this.selectedTeamCache = this.selectedTeam;
-                    this.$.button.innerText = this.selectedTeam.Name;
-
-                    if (this.primary) {
-                        this.fire('set-my-team', { league: this.selectedTeam });
-                    }
-                    else {
-                        this.fire('set-their-team', { league: this.selectedTeam });
-                    }
-                }
-            },
-            _cancel: function() {
-                this.selectedTeam = this.selectedTeamCache;
-
-                if (this.selectedTeamCache != null) {
-                    this.selection = this.selectedTeamCache.Id;
-                } else {
-                    this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
-                }
-            },
-            _select: function () {
-                if (this.selection != 0)
-                {
-                    this.$.dialog.className += " scroll";
-                    this.selectedTeam = JSON.parse(JSON.stringify(this.leagueData.Teams[this.selection - 1]));
-                }
-                else
-                {
-                    this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
-
-                    this.selectedTeam = null;
-                }
-            },
-            _leagueDataChanged: function (newValue, oldValue) {
-                if (newValue == null) {
-                    this.selection = null;
-                    this.selectedTeam = null;
-                    this.selectedTeamCache = null;
-                    this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
-                    
-                    if (this.primary && this.selectedTeam == null) {
-                        this.$.button.innerText = "SELECT YOUR TEAM";
-                    }
-
-                    if (!this.primary && this.selectedTeam == null) {
-                        this.$.button.innerText = "SELECT TRADE PARTNER";
-                    }
-                }
             }
+            //_accept: function () {
+            //    if (this.selection == 0) {
+            //        this.selectedTeam = null;
+            //        this.selectedTeamCache = null;
+            //        this.$.button.innerText = "ALL TEAMS";
+
+            //        if (!this.primary) {
+            //            this.fire('set-their-teams', { });
+            //        }
+            //    }
+            //    else if (this.selectedTeam != null)
+            //    {
+            //        this.selectedTeamCache = this.selectedTeam;
+            //        this.$.button.innerText = this.selectedTeam.Name;
+
+            //        if (this.primary) {
+            //            this.fire('set-my-team', { league: this.selectedTeam });
+            //        }
+            //        else {
+            //            this.fire('set-their-team', { league: this.selectedTeam });
+            //        }
+            //    }
+            //},
+            //_cancel: function() {
+            //    this.selectedTeam = this.selectedTeamCache;
+
+            //    if (this.selectedTeamCache != null) {
+            //        this.selection = this.selectedTeamCache.Id;
+            //    } else {
+            //        this.$.dialog.className = this.$.dialog.className.replace("scroll", "");
+            //    }
+            //}
         });
     </script>
 </dom-module>

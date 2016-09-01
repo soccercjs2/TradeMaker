@@ -1,0 +1,31 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+
+<dom-module id="dfs-selector">
+    <template>
+        <style>
+            /* local DOM styles go here */
+            
+        </style>
+        <!-- local DOM goes here -->
+        <paper-radio-group selected="{{dfsSite}}">
+            <paper-radio-button name="FanDuel">FanDuel</paper-radio-button>
+            <paper-radio-button name="DraftKings">DraftKings</paper-radio-button>
+            <paper-radio-button name="FantasyAces">FantasyAces</paper-radio-button>
+            <paper-radio-button name="Draftpot">Draftpot</paper-radio-button>
+            <paper-radio-button name="Yahoo">Yahoo</paper-radio-button>
+        </paper-radio-group>
+    </template>
+    <script>
+        Polymer({
+            is: 'dfs-selector',
+            properties: {
+                dfsSite: {
+                    type: String,
+                    notify: true
+                }
+            }
+        });
+    </script>
+</dom-module>

@@ -23,6 +23,13 @@ namespace TradeMakerScraper.Controllers
         private const string FantasyDraftUrl = "https://www.fantasypros.com/nfl/fantasydraft-cheatsheet.php";
         private const string YahooUrl = "https://www.fantasypros.com/nfl/yahoo-cheatsheet.php";
 
+        private const string QbSuffix = "?position=QB";
+        private const string RbSuffix = "?position=RB";
+        private const string WrSuffix = "?position=WR";
+        private const string TeSuffix = "?position=TE";
+        private const string KSuffix = "?position=K";
+        private const string DSTSuffix = "?position=DST";
+
         private const string OldFanDuelUrl = "https://web.archive.org/web/20150909224821/http://www.fantasypros.com/nfl/fanduel-cheatsheet.php";
         private const string OldDraftKingsUrl = "https://web.archive.org/web/20150913113405/http://www.fantasypros.com/nfl/draftkings-cheatsheet.php";
         private const string OldFantasyAcesUrl = "https://web.archive.org/web/20150905061618/http://www.fantasypros.com/nfl/fantasyaces-cheatsheet.php";
@@ -30,7 +37,7 @@ namespace TradeMakerScraper.Controllers
         //private const string OldFantasyDraftUrl = "https://www.fantasypros.com/nfl/fantasydraft-cheatsheet.php";
         private const string OldYahooUrl = "https://web.archive.org/web/20150905170413/http://www.fantasypros.com/nfl/yahoo-cheatsheet.php";
 
-        private int CurrentWeek;
+        //private int CurrentWeek;
 
         [EnableCors(origins: "*", headers: "*", methods: "*")]
         public DfsData Get(string dfsSite)
@@ -67,7 +74,7 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekQbData(ref DfsData dfsData, string url)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape(url);
+            HtmlDocument document = scraper.Scrape(url + QbSuffix);
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsDataTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -97,7 +104,7 @@ namespace TradeMakerScraper.Controllers
                     player.RushingTouchdowns = decimal.Parse(row.SelectSingleNode("./td[9]").InnerText);
 
                     //add datarow to datatable
-                    dfsData.WeekProjectionPlayers.Add(player);
+                    dfsData.Quarterbacks.Add(player);
                 }
             }
         }
@@ -105,7 +112,7 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekRbData(ref DfsData dfsData, string url)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape(url);
+            HtmlDocument document = scraper.Scrape(url + RbSuffix);
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsDataTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -143,7 +150,7 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekWrData(ref DfsData dfsData, string url)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape(url);
+            HtmlDocument document = scraper.Scrape(url + WrSuffix);
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsDataTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -181,7 +188,7 @@ namespace TradeMakerScraper.Controllers
         private void GetNextWeekTeData(ref DfsData dfsData, string url)
         {
             WebScraper scraper = new WebScraper(null, null, null);
-            HtmlDocument document = scraper.Scrape(url);
+            HtmlDocument document = scraper.Scrape(url + TeSuffix);
 
             //get projection-data table from html
             HtmlNode table = document.GetElementbyId(FantasyProsDataTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
@@ -215,45 +222,45 @@ namespace TradeMakerScraper.Controllers
             }
         }
 
-        private int GetCurrentWeek()
-        {
-            DateTime today = DateTime.Today;
-            DateTime endWeekOne = new DateTime(2016, 9, 12);
-            DateTime endWeekTwo = new DateTime(2016, 9, 19);
-            DateTime endWeekThree = new DateTime(2016, 9, 26);
-            DateTime endWeekFour = new DateTime(2016, 10, 3);
-            DateTime endWeekFive = new DateTime(2016, 10, 10);
-            DateTime endWeekSix = new DateTime(2016, 10, 17);
-            DateTime endWeekSeven = new DateTime(2016, 10, 24);
-            DateTime endWeekEight = new DateTime(2016, 10, 31);
-            DateTime endWeekNine = new DateTime(2016, 11, 7);
-            DateTime endWeekTen = new DateTime(2016, 11, 14);
-            DateTime endWeekEleven = new DateTime(2016, 11, 21);
-            DateTime endWeekTwelve = new DateTime(2016, 11, 28);
-            DateTime endWeekThirteen = new DateTime(2016, 12, 5);
-            DateTime endWeekFourteen = new DateTime(2016, 12, 12);
-            DateTime endWeekFifteen = new DateTime(2016, 12, 19);
-            DateTime endWeekSixteen = new DateTime(2016, 12, 26);
-            DateTime endWeekSeventeen = new DateTime(2017, 1, 1);
+        //private int GetCurrentWeek()
+        //{
+        //    DateTime today = DateTime.Today;
+        //    DateTime endWeekOne = new DateTime(2016, 9, 12);
+        //    DateTime endWeekTwo = new DateTime(2016, 9, 19);
+        //    DateTime endWeekThree = new DateTime(2016, 9, 26);
+        //    DateTime endWeekFour = new DateTime(2016, 10, 3);
+        //    DateTime endWeekFive = new DateTime(2016, 10, 10);
+        //    DateTime endWeekSix = new DateTime(2016, 10, 17);
+        //    DateTime endWeekSeven = new DateTime(2016, 10, 24);
+        //    DateTime endWeekEight = new DateTime(2016, 10, 31);
+        //    DateTime endWeekNine = new DateTime(2016, 11, 7);
+        //    DateTime endWeekTen = new DateTime(2016, 11, 14);
+        //    DateTime endWeekEleven = new DateTime(2016, 11, 21);
+        //    DateTime endWeekTwelve = new DateTime(2016, 11, 28);
+        //    DateTime endWeekThirteen = new DateTime(2016, 12, 5);
+        //    DateTime endWeekFourteen = new DateTime(2016, 12, 12);
+        //    DateTime endWeekFifteen = new DateTime(2016, 12, 19);
+        //    DateTime endWeekSixteen = new DateTime(2016, 12, 26);
+        //    DateTime endWeekSeventeen = new DateTime(2017, 1, 1);
 
-            if (today <= endWeekOne) { return 1; } //week 1
-            else if (endWeekOne <= endWeekTwo) { return 2; } //week 2
-            else if (endWeekOne <= endWeekTwo) { return 3; } //week 3
-            else if (endWeekOne <= endWeekTwo) { return 4; } //week 4
-            else if (endWeekOne <= endWeekTwo) { return 5; } //week 5
-            else if (endWeekOne <= endWeekTwo) { return 6; } //week 6
-            else if (endWeekOne <= endWeekTwo) { return 7; } //week 7
-            else if (endWeekOne <= endWeekTwo) { return 8; } //week 8
-            else if (endWeekOne <= endWeekTwo) { return 9; } //week 9
-            else if (endWeekOne <= endWeekTwo) { return 10; } //week 10
-            else if (endWeekOne <= endWeekTwo) { return 11; } //week 11
-            else if (endWeekOne <= endWeekTwo) { return 12; } //week 12
-            else if (endWeekOne <= endWeekTwo) { return 13; } //week 13
-            else if (endWeekOne <= endWeekTwo) { return 14; } //week 14
-            else if (endWeekOne <= endWeekTwo) { return 15; } //week 15
-            else if (endWeekOne <= endWeekTwo) { return 16; } //week 16
-            else if (endWeekOne <= endWeekTwo) { return 17; } //week 17
-            else { return 0; } //after season
-        }
+        //    if (today <= endWeekOne) { return 1; } //week 1
+        //    else if (endWeekOne <= endWeekTwo) { return 2; } //week 2
+        //    else if (endWeekOne <= endWeekTwo) { return 3; } //week 3
+        //    else if (endWeekOne <= endWeekTwo) { return 4; } //week 4
+        //    else if (endWeekOne <= endWeekTwo) { return 5; } //week 5
+        //    else if (endWeekOne <= endWeekTwo) { return 6; } //week 6
+        //    else if (endWeekOne <= endWeekTwo) { return 7; } //week 7
+        //    else if (endWeekOne <= endWeekTwo) { return 8; } //week 8
+        //    else if (endWeekOne <= endWeekTwo) { return 9; } //week 9
+        //    else if (endWeekOne <= endWeekTwo) { return 10; } //week 10
+        //    else if (endWeekOne <= endWeekTwo) { return 11; } //week 11
+        //    else if (endWeekOne <= endWeekTwo) { return 12; } //week 12
+        //    else if (endWeekOne <= endWeekTwo) { return 13; } //week 13
+        //    else if (endWeekOne <= endWeekTwo) { return 14; } //week 14
+        //    else if (endWeekOne <= endWeekTwo) { return 15; } //week 15
+        //    else if (endWeekOne <= endWeekTwo) { return 16; } //week 16
+        //    else if (endWeekOne <= endWeekTwo) { return 17; } //week 17
+        //    else { return 0; } //after season
+        //}
     }
 }
