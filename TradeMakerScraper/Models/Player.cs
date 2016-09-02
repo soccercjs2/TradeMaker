@@ -26,7 +26,7 @@ namespace TradeMakerScraper.Models
         public bool Required { get; set; }
         public bool Excluded { get; set; }
         public decimal TradeValue { get; set; }
-        public decimal Salary { get; set; }
+        public int Salary { get; set; }
         public decimal CostPerPoint { get; set; }
 
         public Player()

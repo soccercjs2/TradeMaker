@@ -1,5 +1,6 @@
 ﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../elements/dfs-selector/dfs-selector.html">
 <link rel="import" href="../../elements/dfs-filter/dfs-filter.html">
 
@@ -14,6 +15,10 @@
 
             dfs-selector {
                 display: block;
+            }
+
+            paper-input {
+                padding-left: 5px;
             }
             
             .margined {
@@ -60,8 +65,18 @@
         <!-- local DOM goes here -->
         <!--url="http://localhost:36880/api/dfsscraper"-->
         <!--url="http://trademakerscraper.azurewebsites.net/api/dfsscraper"-->
-        <iron-ajax id="dfsAjax"
+        <iron-ajax id="dfsScraperAjax"
                    url="http://localhost:36880/api/dfsscraper"
+                   handle-as="json"
+                   content-type="application/json"
+                   on-response="_dfsResponse"
+                   method="POST">
+        </iron-ajax>
+
+        <!--url="http://localhost:36880/api/dfslineup"-->
+        <!--url="http://trademakerscraper.azurewebsites.net/api/dfslineup"-->
+        <iron-ajax id="dfsLineupAjax"
+                   url="http://localhost:36880/api/dfslineup"
                    handle-as="json"
                    content-type="application/json"
                    on-response="_dfsResponse"
@@ -85,6 +100,8 @@
                         <dfs-filter id="teFilter" position="TIGHT ENDS" players="[[TightEnds]]" on-set-players="_setTightEnds"></dfs-filter>
                     </div>
                 </template>
+
+                <paper-input label="salary cap" value="{{SalaryCap}}"><div prefix>$</div></paper-input>
 
                 <paper-button id="findLineupds" raised on-tap="_findLineups" class$="{{ _buttonClass(playersLoaded) }}" disabled$="{{!playersLoaded}}">FIND LINEUPS</paper-button>
             </div>
@@ -122,6 +139,19 @@
                 TightEnds: {
                     type: Array,
                     notify: true
+                },
+                Kickers: {
+                    type: Array,
+                    notify: true
+                },
+                Defenses: {
+                    type: Array,
+                    notify: true
+                },
+                SalaryCap: {
+                    type: Number,
+                    notify: true,
+                    value: 60000
                 }
             },
             _buttonClass: function (playersLoaded) {
@@ -131,8 +161,8 @@
             _dfsSiteChanged: function (newValue, oldValue) {
                 this.$['dialogText'].innerText = "Loading data from " + newValue + "...";
                 this.$['dialog'].open();
-                this.$['dfsAjax'].body = { dfssite: newValue };
-                this.$['dfsAjax'].generateRequest();
+                this.$['dfsScraperAjax'].body = { dfssite: newValue };
+                this.$['dfsScraperAjax'].generateRequest();
             },
             _dfsResponse: function (e) {
                 this.$['dialog'].close();
@@ -146,7 +176,21 @@
             _setQuarterbacks: function (e) { this.Quarterbacks = e.detail.players; },
             _setRunningBacks: function (e) { this.RunningBacks = e.detail.players; },
             _setWideReceivers: function (e) { this.WideReceivers = e.detail.players; },
-            _setTightEnds: function (e) { this.TightEnds = e.detail.players; }
+            _setTightEnds: function (e) { this.TightEnds = e.detail.players; },
+            _findLineups: function () {
+                this.$['dialogText'].innerText = "Finding the best DFS lineups...";
+                this.$['dialog'].open();
+                this.$['dfsLineupAjax'].body = {
+                    quarterbacks: this.Quarterbacks,
+                    runningbacks: this.RunningBacks,
+                    widereceivers: this.WideReceivers,
+                    tightends: this.TightEnds,
+                    kickers: null,
+                    defenses: null,
+                    salarycap: this.SalaryCap
+                };
+                this.$['dfsLineupAjax'].generateRequest();
+            }
         });
     </script>
 </dom-module>

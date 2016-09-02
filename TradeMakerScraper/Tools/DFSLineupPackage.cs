@@ -14,5 +14,6 @@ namespace TradeMakerScraper.Tools
         public IEnumerable<Player> TightEnds { get; set; }
         public IEnumerable<Player> Kickers { get; set; }
         public IEnumerable<Player> Defenses { get; set; }
+        public int SalaryCap { get; set; }
     }
 }

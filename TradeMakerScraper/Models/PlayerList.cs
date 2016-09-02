@@ -8,6 +8,8 @@ namespace TradeMakerScraper.Models
     public class PlayerList : IEquatable<PlayerList>
     {
         public HashSet<Player> Players { get; set; }
+        public int Salary { get; set; }
+        public decimal FantasyPoints { get; set; }
 
         public PlayerList()
         {

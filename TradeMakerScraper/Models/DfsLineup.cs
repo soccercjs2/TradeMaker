@@ -8,11 +8,18 @@ namespace TradeMakerScraper.Models
 {
     public class DfsLineup
     {
-        public List<IEnumerable> Quarterbacks { get; set; }
-        public List<IEnumerable> RunningBacks { get; set; }
-        public List<IEnumerable> WideReceivers { get; set; }
-        public List<IEnumerable> TightEnds { get; set; }
-        public List<IEnumerable> Kickers { get; set; }
-        public List<IEnumerable> Defenses { get; set; }
+        public PlayerList Quarterbacks { get; set; }
+        public PlayerList RunningBacks { get; set; }
+        public PlayerList WideReceivers { get; set; }
+        public PlayerList TightEnds { get; set; }
+        public PlayerList Kickers { get; set; }
+        public PlayerList Defenses { get; set; }
+        public int Salary { get; set; }
+        public decimal FantasyPoints { get; set; }
+
+        public void CalculateSalary()
+        {
+
+        }
     }
 }
