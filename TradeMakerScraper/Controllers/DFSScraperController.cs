@@ -60,6 +60,8 @@ namespace TradeMakerScraper.Controllers
             dfsData.RunningBacks.OrderByDescending(p => p.FantasyPoints);
             dfsData.WideReceivers.OrderByDescending(p => p.FantasyPoints);
             dfsData.TightEnds.OrderByDescending(p => p.FantasyPoints);
+            dfsData.Kickers.OrderByDescending(p => p.FantasyPoints);
+            dfsData.Defenses.OrderByDescending(p => p.FantasyPoints);
 
             return dfsData;
         }
@@ -70,6 +72,8 @@ namespace TradeMakerScraper.Controllers
             GetNextWeekRbData(ref dfsData, url);
             GetNextWeekWrData(ref dfsData, url);
             GetNextWeekTeData(ref dfsData, url);
+            GetNextWeekKData(ref dfsData, url);
+            GetNextWeekDefData(ref dfsData, url);
         }
 
         private void GetNextWeekQbData(ref DfsData dfsData, string url)
@@ -201,7 +205,6 @@ namespace TradeMakerScraper.Controllers
             HtmlNode table = document.GetElementbyId(FantasyProsDataTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
 
             //loop through rows in projection table
-            //loop through rows in projection table
             List<HtmlNode> rows = table.SelectNodes("./tr").ToList<HtmlNode>();
 
             if (rows.Count > 1)
@@ -228,6 +231,86 @@ namespace TradeMakerScraper.Controllers
 
                         //add datarow to datatable
                         dfsData.TightEnds.Add(player);
+                    }
+                }
+            }
+        }
+
+        private void GetNextWeekKData(ref DfsData dfsData, string url)
+        {
+            WebScraper scraper = new WebScraper(null, null, null);
+            HtmlDocument document = scraper.Scrape(url + KSuffix);
+
+            //get projection-data table from html
+            HtmlNode table = document.GetElementbyId(FantasyProsDataTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
+
+            //loop through rows in projection table
+            List<HtmlNode> rows = table.SelectNodes("./tr").ToList<HtmlNode>();
+
+            if (rows.Count > 1)
+            {
+                foreach (HtmlNode row in rows)
+                {
+                    //if player has cost per point for this week
+                    if (row.SelectSingleNode("./td[13]").InnerText.Length > 0)
+                    {
+                        //create new datarow
+                        Player player = new Player();
+
+                        //parse name and team out of player cell
+                        FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
+
+                        //set row values
+                        player.Id = dfsData.Kickers.Count + 1;
+                        player.Name = parser.Name;
+                        player.Position = "K";
+                        player.NflTeam = parser.Team;
+                        player.FantasyPoints = decimal.Parse(row.SelectSingleNode("./td[11]").InnerText.Replace("pts", ""));
+                        player.Salary = int.Parse(row.SelectSingleNode("./td[12]").InnerText.Replace("$", "").Replace(",", ""));
+                        player.CostPerPoint = int.Parse(row.SelectSingleNode("./td[13]").InnerText.Replace("$", ""));
+
+                        //add datarow to datatable
+                        dfsData.Kickers.Add(player);
+                    }
+                }
+            }
+        }
+
+        private void GetNextWeekDefData(ref DfsData dfsData, string url)
+        {
+            WebScraper scraper = new WebScraper(null, null, null);
+            HtmlDocument document = scraper.Scrape(url + DSTSuffix);
+
+            //get projection-data table from html
+            HtmlNode table = document.GetElementbyId(FantasyProsDataTable).Descendants().Where(t => t.Name == "tbody").FirstOrDefault<HtmlNode>();
+
+            //loop through rows in projection table
+            List<HtmlNode> rows = table.SelectNodes("./tr").ToList<HtmlNode>();
+
+            if (rows.Count > 1)
+            {
+                foreach (HtmlNode row in rows)
+                {
+                    //if player has cost per point for this week
+                    if (row.SelectSingleNode("./td[13]").InnerText.Length > 0)
+                    {
+                        //create new datarow
+                        Player player = new Player();
+
+                        //parse name and team out of player cell
+                        FantasyProsParser parser = new FantasyProsParser(row.SelectSingleNode("./td[1]"));
+
+                        //set row values
+                        player.Id = dfsData.Defenses.Count + 1;
+                        player.Name = parser.Name;
+                        player.Position = "DST";
+                        player.NflTeam = parser.Team;
+                        player.FantasyPoints = decimal.Parse(row.SelectSingleNode("./td[11]").InnerText.Replace("pts", ""));
+                        player.Salary = int.Parse(row.SelectSingleNode("./td[12]").InnerText.Replace("$", "").Replace(",", ""));
+                        player.CostPerPoint = int.Parse(row.SelectSingleNode("./td[13]").InnerText.Replace("$", ""));
+
+                        //add datarow to datatable
+                        dfsData.Defenses.Add(player);
                     }
                 }
             }

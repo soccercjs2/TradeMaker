@@ -11,6 +11,8 @@ namespace TradeMakerScraper.Models
         public HashSet<Player> RunningBacks { get; set; }
         public HashSet<Player> WideReceivers { get; set; }
         public HashSet<Player> TightEnds { get; set; }
+        public HashSet<Player> Kickers { get; set; }
+        public HashSet<Player> Defenses { get; set; }
 
         public DfsData()
         {
@@ -18,6 +20,8 @@ namespace TradeMakerScraper.Models
             RunningBacks = new HashSet<Player>();
             WideReceivers = new HashSet<Player>();
             TightEnds = new HashSet<Player>();
+            Kickers = new HashSet<Player>();
+            Defenses = new HashSet<Player>();
         }
     }
 }

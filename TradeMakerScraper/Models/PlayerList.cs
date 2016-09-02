@@ -10,6 +10,7 @@ namespace TradeMakerScraper.Models
         public HashSet<Player> Players { get; set; }
         public int Salary { get; set; }
         public decimal FantasyPoints { get; set; }
+        public decimal CostPerPoint { get; set; }
 
         public PlayerList()
         {

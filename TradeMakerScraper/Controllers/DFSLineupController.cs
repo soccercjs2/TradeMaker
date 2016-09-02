@@ -20,17 +20,24 @@ namespace TradeMakerScraper.Controllers
         private const int FanDuelDefs = 1;
 
         [EnableCors(origins: "*", headers: "*", methods: "*")]
-        public HashSet<DfsLineup> Post(DFSLineupPackage package)
+        public IEnumerable<DfsLineup> Post(DFSLineupPackage package)
         {
             //create lineup list to store each lineup 
             HashSet<DfsLineup> dfsLineups = new HashSet<DfsLineup>();
 
-            HashSet<PlayerList> qbCombos = GetPositionCombos(package.Quarterbacks, FanDuelQbs);
-            HashSet<PlayerList> rbCombos = GetPositionCombos(package.RunningBacks, FanDuelRbs);
-            HashSet<PlayerList> wrCombos = GetPositionCombos(package.WideReceivers, FanDuelWrs);
-            HashSet<PlayerList> teCombos = GetPositionCombos(package.TightEnds, FanDuelTes);
-            HashSet<PlayerList> kCombos = GetPositionCombos(package.Kickers, FanDuelKs);
-            HashSet<PlayerList> defCombos = GetPositionCombos(package.Defenses, FanDuelDefs);
+            IEnumerable<PlayerList> qbCombos = GetPositionCombos(package.Quarterbacks, FanDuelQbs);
+            IEnumerable<PlayerList> rbCombos = GetPositionCombos(package.RunningBacks, FanDuelRbs);
+            IEnumerable<PlayerList> wrCombos = GetPositionCombos(package.WideReceivers, FanDuelWrs);
+            IEnumerable<PlayerList> teCombos = GetPositionCombos(package.TightEnds, FanDuelTes);
+            IEnumerable<PlayerList> kCombos = GetPositionCombos(package.Kickers, FanDuelKs);
+            IEnumerable<PlayerList> defCombos = GetPositionCombos(package.Defenses, FanDuelDefs);
+
+            qbCombos = qbCombos.OrderBy(c => c.CostPerPoint).Take(15);
+            rbCombos = rbCombos.OrderBy(c => c.CostPerPoint).Take(30);
+            wrCombos = wrCombos.OrderBy(c => c.CostPerPoint).Take(45);
+            teCombos = teCombos.OrderBy(c => c.CostPerPoint).Take(15);
+            kCombos = kCombos.OrderBy(c => c.CostPerPoint).Take(15);
+            defCombos = defCombos.OrderBy(c => c.CostPerPoint).Take(15);
 
             foreach (PlayerList qbCombo in qbCombos)
             {
@@ -66,7 +73,7 @@ namespace TradeMakerScraper.Controllers
                                         kCombo.FantasyPoints +
                                         defCombo.FantasyPoints;
 
-                                    if (dfsLineup.Salary < package.SalaryCap)
+                                    if ((package.SalaryCap * 0.99) < dfsLineup.Salary && dfsLineup.Salary < package.SalaryCap) //(package.SalaryCap * 0.95) < dfsLineup.Salary && 
                                     {
                                         dfsLineups.Add(dfsLineup);
                                     }
@@ -77,7 +84,8 @@ namespace TradeMakerScraper.Controllers
                 }
             }
 
-            return (HashSet<DfsLineup>)dfsLineups.OrderByDescending(l => l.FantasyPoints);
+            IEnumerable<DfsLineup> result = dfsLineups.OrderByDescending(l => l.FantasyPoints);
+            return result;
         }
 
         private HashSet<PlayerList> GetPositionCombos(IEnumerable<Player> players, int numberOfPlayers)
@@ -106,6 +114,8 @@ namespace TradeMakerScraper.Controllers
                     positionCombo.FantasyPoints += player.FantasyPoints;
                 }
 
+                positionCombo.CostPerPoint = positionCombo.Salary / positionCombo.FantasyPoints;
+
                 efficientPositionCombos.Add(positionCombo);
             }
 
@@ -128,6 +138,8 @@ namespace TradeMakerScraper.Controllers
                     positionCombo.Salary += player.Salary;
                     positionCombo.FantasyPoints += player.FantasyPoints;
                 }
+
+                positionCombo.CostPerPoint = positionCombo.Salary / positionCombo.FantasyPoints;
 
                 efficientPositionCombos.Add(positionCombo);
             }
@@ -152,6 +164,8 @@ namespace TradeMakerScraper.Controllers
                     positionCombo.Salary += player.Salary;
                     positionCombo.FantasyPoints += player.FantasyPoints;
                 }
+
+                positionCombo.CostPerPoint = positionCombo.Salary / positionCombo.FantasyPoints;
 
                 efficientPositionCombos.Add(positionCombo);
             }

@@ -98,6 +98,8 @@
                         <dfs-filter id="rbFilter" position="RUNNING BACKS" players="[[RunningBacks]]" on-set-players="_setRunningBacks"></dfs-filter>
                         <dfs-filter id="wrFilter" position="WIDE RECEIVERS" players="[[WideReceivers]]" on-set-players="_setWideReceivers"></dfs-filter>
                         <dfs-filter id="teFilter" position="TIGHT ENDS" players="[[TightEnds]]" on-set-players="_setTightEnds"></dfs-filter>
+                        <dfs-filter id="kFilter" position="KICKERS" players="[[Kickers]]" on-set-players="_setKickers"></dfs-filter>
+                        <dfs-filter id="defFilter" position="DEFENSES" players="[[Defenses]]" on-set-players="_setDefenses"></dfs-filter>
                     </div>
                 </template>
 
@@ -172,11 +174,15 @@
                 this.RunningBacks = e.detail.response.RunningBacks;
                 this.WideReceivers = e.detail.response.WideReceivers;
                 this.TightEnds = e.detail.response.TightEnds;
+                this.Kickers = e.detail.response.Kickers;
+                this.Defenses = e.detail.response.Defenses;
             },
             _setQuarterbacks: function (e) { this.Quarterbacks = e.detail.players; },
             _setRunningBacks: function (e) { this.RunningBacks = e.detail.players; },
             _setWideReceivers: function (e) { this.WideReceivers = e.detail.players; },
             _setTightEnds: function (e) { this.TightEnds = e.detail.players; },
+            _setKickers: function (e) { this.Kickers = e.detail.players; },
+            _setDefenses: function (e) { this.Defenses = e.detail.players; },
             _findLineups: function () {
                 this.$['dialogText'].innerText = "Finding the best DFS lineups...";
                 this.$['dialog'].open();
@@ -185,8 +191,8 @@
                     runningbacks: this.RunningBacks,
                     widereceivers: this.WideReceivers,
                     tightends: this.TightEnds,
-                    kickers: null,
-                    defenses: null,
+                    kickers: this.Kickers,
+                    defenses: this.Defenses,
                     salarycap: this.SalaryCap
                 };
                 this.$['dfsLineupAjax'].generateRequest();
